@@ -1,5 +1,5 @@
 /*default form css start*/
-.form-view{font-family:Tahoma,Geneva,sans-serif;width:99%;background:#fff;font-size: 14px;padding:10px;}.agile-group{margin-bottom:15px}.agile-label{float:left;overflow:hidden;padding:7px 25px 4px 0;text-align:left;word-wrap:break-word;width:100%;font-size:15px}.agile-group label{font-weight:400;font-size: 15px;}.agile-label::first-letter{text-transform:capitalize}.agile-field{display:inline-block}.agile-field-small{width:100px}.agile-field-medium{width:150px}.agile-field-large{width:200px}.agile-field-xlarge{width:250px}.agile-height-small{padding:5px 10px!important}.agile-height-default{padding:6px 12px!important}.agile-height-large{padding:10px 16px!important}.agile-field input[type=email],.agile-field input[type=text]{padding:6px 12px}.agile-field select{border-radius:4px;border:1px solid #ccc;width:100%;box-shadow:0 1px 1px rgba(0,0,0,.075) inset}.agile-input-group{border-collapse:separate;display:table;position:relative}.agile-input-group input[type=email],.agile-input-group input[type=text]{display:table-cell;box-sizing: border-box;}.agile-input-group .agile-group-addon:first-child,.agile-input-group input[type=email]:first-child,.agile-input-group input[type=text]:first-child{border-bottom-right-radius:0;border-top-right-radius:0}.agile-input-group .agile-group-addon:last-child,.agile-input-group input[type=email]:last-child,.agile-input-group input[type=text]:last-child{border-bottom-left-radius:0;border-top-left-radius:0}.agile-group-addon:first-child,.agile-input-group input[type=email]:first-child,.agile-input-group input[type=text]:first-child{border-right:0 none}.agile-group-addon{background:#eee;border:1px solid #ccc;display:table-cell;font-size:14px;padding:3px 12px;text-align:center}.agile-group-addon-append{border-bottom-right-radius:4px;border-top-right-radius:4px}.agile-group-addon-prepend{border-top-left-radius:4px;border-bottom-left-radius:4px}input[type=email],input[type=password],input[type=url],input[type=text],textarea{border:1px solid #ccc;border-radius:4px;box-shadow:0 1px 1px rgba(0,0,0,.075) inset;color:#555;font-size:14px;line-height:1.42857;transition:border-color .15s ease-in-out 0s,box-shadow .15s ease-in-out 0s;width:100%;margin:0}input[type=email]:focus,input[type=url]:focus,input[type=password]:focus,input[type=text]:focus,textarea:focus{border:1px solid #66afe9}.agile-btn-red{background:#ff604f!important;margin-left:10px}.help-block{color:#999;margin:0;font-size:14px;text-transform:capitalize}legend{border-bottom:1px solid #eee;margin-bottom:18px;padding-bottom:6px;width:100%;font-weight:700;font-size:20px}fieldset{border:none}.agile-custom-clear{clear:both}#agile-error-msg{position:relative;top:2px;left:8px;color:red;font-size:12px}.error{color:red}.agile-group-addon{vertical-align: middle;}
+.form-view{font-family:Tahoma,Geneva,sans-serif;width:99%;background:#fff;font-size: 14px;padding:10px;}.agile-group{margin-bottom:15px}.agile-label{float:left;overflow:hidden;padding:7px 25px 4px 0;text-align:left;word-wrap:break-word;width:100%;font-size:15px}.agile-group label{font-weight:400;font-size: 15px;}.agile-label::first-letter{text-transform:capitalize}.agile-field{display:inline-block}.agile-field-small{width:100px}.agile-field-medium{width:150px}.agile-field-large{width:200px}.agile-field-xlarge{width:250px}.agile-height-small{padding:5px 10px!important}.agile-height-default{padding:6px 12px!important}.agile-height-large{padding:10px 16px!important}.agile-field input[type=email],.agile-field input[type=text]{padding:6px 12px}.agile-field select{border-radius:4px;border:1px solid #ccc;width:100%;box-shadow:0 1px 1px rgba(0,0,0,.075) inset}.agile-input-group{border-collapse:separate;display:table;position:relative}.agile-input-group input[type=email],.agile-input-group input[type=text]{display:table-cell;box-sizing: border-box;}.agile-input-group .agile-group-addon:first-child,.agile-input-group input[type=email]:first-child,.agile-input-group input[type=text]:first-child{border-bottom-right-radius:0;border-top-right-radius:0}.agile-input-group .agile-group-addon:last-child,.agile-input-group input[type=email]:last-child,.agile-input-group input[type=text]:last-child{border-bottom-left-radius:0;border-top-left-radius:0}.agile-group-addon:first-child,.agile-input-group input[type=email]:first-child,.agile-input-group input[type=text]:first-child{border-right:0 none}.agile-group-addon{background:#eee;border:1px solid #ccc;display:table-cell;font-size:14px;padding:3px 12px;text-align:center}.agile-group-addon-append{border-bottom-right-radius:4px;border-top-right-radius:4px}.agile-group-addon-prepend{border-top-left-radius:4px;border-bottom-left-radius:4px}input[type=email],input[type=password],input[type=url],input[type=text],textarea{border:1px solid #ccc;border-radius:4px;box-shadow:0 1px 1px rgba(0,0,0,.075) inset;color:#555;font-size:14px;line-height:1.42857;transition:border-color .15s ease-in-out 0s,box-shadow .15s ease-in-out 0s;width:100%;margin:0}input[type=email]:focus,input[type=url]:focus,input[type=password]:focus,input[type=text]:focus,textarea:focus{border:1px solid #66afe9}.agile-btn-red{background:#ff604f!important;margin-left:10px}.help-block{color:#999;margin:0;font-size:14px;text-transform:capitalize}legend{/*border-bottom:1px solid #eee;margin-bottom:18px;padding-bottom:6px;*/width:100%;font-weight:700;font-size:20px}fieldset{border:none}.agile-custom-clear{clear:both}#agile-error-msg{position:relative;top:2px;left:8px;color:red;font-size:12px}.error{color:red}.agile-group-addon{vertical-align: middle;}
 .form-view textarea::-webkit-input-placeholder {font-family: Tahoma,Geneva,sans-serif;}
 .form-view textarea::-webkit-input-placeholder {font-family: Tahoma,Geneva,sans-serif;}
 .form-view textarea::-webkit-input-placeholder {font-family: Tahoma,Geneva,sans-serif;}
@@ -69,7 +69,7 @@
   height:119px;
 }
 .theme1 legend{
-  border-bottom: 3px solid #f6f6f6!important;
+  /*border-bottom: 3px solid #f6f6f6!important;*/
   text-align: center;
   font-size: 18px;
   font-weight: 600;
@@ -571,17 +571,20 @@ margin-left: 35px;
   appearance: none;
   background: url("https://agilecrm.s3.amazonaws.com/forms/select-down-arrow.png") no-repeat 98% 49% #fff!important;
 }
-
 /*new transparency css start */
 /*form:not(.theme1):not(.theme2):not(.theme3):not(.theme4) .agile-input-group>input {
     width: 86%;
 }*/
 .agile-form-transparent{
 background-color:transparent!important;
-color: #fff!important
+color: #fff!important;
 }
 .agile-form-transparent legend,.agile-form-transparent button{
-color: #fff!important
+color: #fff!important;
+}
+.agile-form-transparent .agile-form-description{
+background-color:transparent!important;
+color: #fff!important;
 }
 .agile-form-transparent .agile-group-addon,.agile-form-transparent input,.agile-form-transparent select,.agile-form-transparent textarea{
  background-color: rgba(255, 255, 255, 0.07)!important;
@@ -656,10 +659,14 @@ height:39px!important;
 /* new transparency with black text css start */
 .agile-form-blck-transparent{
 background-color:transparent!important;
-color: #333!important
+color: #333!important;
 }
 .agile-form-blck-transparent legend,.agile-form-blck-transparent button{
-color: #333!important
+color: #333!important;
+}
+.agile-form-blck-transparent .agile-form-description{
+color: #333!important;
+background-color:transparent!important;
 }
 .agile-form-blck-transparent .agile-group-addon,.agile-form-blck-transparent input,.agile-form-blck-transparent select,.agile-form-blck-transparent textarea{
  background-color: rgba(255, 255, 255, 0.07)!important;
@@ -747,3 +754,27 @@ height:39px!important;
     color: white;
     border-style: solid;
 }
+.form-view .agile-form-description{
+    border-bottom: 1px solid #eee;
+    margin-top: 0;
+}
+.theme1 .agile-form-description{
+  border-bottom: 3px solid #f6f6f6;
+  text-align: center;
+}
+.theme2 .agile-form-description{
+  text-align: center;
+  border-bottom: none;
+  background-color: #fbfbfb;
+  color: #333;
+}
+.theme3 .agile-form-description{
+  text-align: center;
+  border-bottom: none;
+}
+.theme4 .agile-form-description{
+  text-align: center;
+  background-color: #77c4d4;
+  color: #fff;
+}
+

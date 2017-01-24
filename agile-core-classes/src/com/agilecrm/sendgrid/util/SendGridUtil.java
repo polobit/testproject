@@ -695,7 +695,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 
 	
 	public static void main(String asd[]) throws ParseException{
-		System.out.println(isEmailDomainValid("mailme.net.in"));
+		System.out.println(isEmailDomainValid("hmrc-tax-service.co.uk"));
 		
 		//System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
@@ -884,6 +884,12 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			format = "dd/MM/yyyy";
 		}
 		
+		if(StringUtils.isBlank(creationDate))
+		{
+			creationDate = StringUtils.substringBetween(whoisData, "Registered on:", "Expiry date");
+			format = "dd-MMM-yyyy";
+		}
+		
 		if(StringUtils.isNotBlank(creationDate)){
 			DateFormat dateFormat = new SimpleDateFormat(format);
 			Date date = dateFormat.parse(creationDate.trim());
@@ -902,8 +908,4 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 	    }
 	return true;
 	}
-	
-	
-	
-	
 }

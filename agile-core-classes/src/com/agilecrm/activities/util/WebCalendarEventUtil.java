@@ -1020,7 +1020,7 @@ System.out.println(listOfLists.size());
 				String time = key.toString();
 				String newKey = time+"mins";
 				String title = js.getString(newKey);
-				if(title != null && !StringUtil.isEmpty(title)){
+				if(title != null && StringUtils.isNotEmpty(title)){
 				slot.put("time", time);
 				slot.put("title", title);
 				slots.add(slot.toString());

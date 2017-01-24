@@ -117,7 +117,7 @@ function handleObjects() {
                     $('#pbottom').val(parseInt(self.find('td:first').css('padding-bottom')));
                     $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                     $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
-
+                    $('#image-caption-position').val(self.find('.image-caption-column-text').attr('data-align'));
                 
                 hideAllSettings();
                 $('#common-settings').show();
@@ -172,6 +172,7 @@ function handleObjects() {
 
                         $('#video-link').val("");
                         $('#image-link').val("");
+                        $("#select_alignment").find('.image-align-picker').val(img.closest('td').attr('align'));
                         if(img.parent('a').length) {
                             $('#image-link').val(addhttp(img.parent('a').attr('href')));
                         }
@@ -181,7 +182,7 @@ function handleObjects() {
                         $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
                         $('#settings').show();
-                        //$("#select_alignment").show();
+                        $("#select_alignment").show();
 
                         break;
                     case 'video-record':
@@ -373,6 +374,7 @@ function handleObjects() {
                             $('input.social-check[name=pinterest]').prop('checked', false);
                         }
 
+
                         $('input.social-input[name="facebook"]').val(addhttp(self.find('a.facebook').attr('href')));
 
                         $('input.social-input[name="twitter"]').val(addhttp(self.find('a.twitter').attr('href')));
@@ -389,6 +391,51 @@ function handleObjects() {
                         $('#settings').show();
                         $('#social-links').show();
 
+
+
+                        break;
+
+
+                    case 'imgcaption':
+
+                         $('.selected-item').removeClass('selected-item').css('outline', 'none');
+                        //    $('#'+$('#path').val()).unbind('click');
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
+                        var img = self.find('tbody tr td table tbody tr td img');
+                        // devi mettere un each perchè ci sono piu di un immagine.
+
+
+                        var imageid = img.attr('id');
+
+                        if (typeof imageid === typeof undefined || imageid === false) {
+                            img.attr('id', guid());
+                            imageid = img.attr('id');
+                        }
+                        $('#imageid').val(imageid);
+
+                        $('#imageid').val(imageid);
+                        $('#image-url').val(img.attr('src'));
+                        $('#image-url').data('id', imageid );
+
+                        $('#image-w').val(parseFloat(0 + img.attr("width")));
+                        $('#image-h').val(parseFloat(0 + img.attr("height")));
+                        $('#image-alt-text').val(img.attr('alt'));
+
+                        $('#video-link').val("");
+                        $('#image-link').val("");
+                        if(img.parent('a').length) {
+                            $('#image-link').val(addhttp(img.parent('a').attr('href')));
+                        }
+
+                        $('#image-caption-position').val(self.find('.image-caption-column-text').attr('data-align'));
+
+                        hideAllSettings();
+                        $('#imageproperties').show();
+                        $("#imageHeaderId").html("Image");
+                        $('#image-link-holder').show();
+                        $('#settings').show();
+                        $('#image-caption-settings').show();
 
                         break;
 
@@ -584,6 +631,8 @@ function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
     hideAllSettings();
     $('#editor').show();
     $('#settings').show();
+    if(obj.data('type') == 'imgcaption') 
+        $('#image-caption-settings').show();
 
     obj.data('fontcolor', fontcolor);
     obj.data('text', text);
@@ -677,7 +726,8 @@ function getIndex(itm, list) {
 
 function hideAllSettings(exceptThisElement) {
 
-    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#video-record-btn-holder', '#image-link-holder', '#videoThumbnail', '#block-drag', '#settings'];
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#video-record-btn-holder',
+                                    '#image-link-holder', '#videoThumbnail', '#block-drag', '#settings', '#image-caption-settings'];
 
     if(typeof exceptThisElement != "undefined") {
         var index = settingsHolderSelectors.indexOf(exceptThisElement);
@@ -823,8 +873,27 @@ $(document).ready(function () {
         }
          else
          {
+            if($("#"+id).closest(".main").data('type') == "imgcaption")
+            {
+                var imageWidth = parseInt($("#"+id).closest(".main").find('.image-caption-column img').attr('width'));
+                var textWidth = parseInt($("#"+id).closest(".main").find('.image-caption-column-text').attr('width'));
+                var width = imageWidth - parseInt($('#image-w').val());
+
+                var textAlign = $("#"+id).closest(".main").find('.image-caption-column-text').attr('align'); 
+
+                if(textAlign == "left" || textAlign == "right")
+                {
+    
+                        $("#"+id).closest(".main").find('.image-caption-column').attr('width', parseInt($('#image-w').val()));
+                        $("#"+id).closest(".main").find('.image-caption-column-text').attr('width', textWidth + width);
+    
+                }
+               
+            }
+
             $('#'+id).attr('width', $('#image-w').val());
             $('#'+id).css('max-width', parseInt($('#image-w').val()));
+
         }
 
          $('#'+id).attr('height', $('#image-h').val());
@@ -846,37 +915,71 @@ $(document).ready(function () {
                 $('#'+id).wrap("<a target='_blank' class='imgLink' href='"+absolute_href+"'>");
             }
          }
-       /*adding new select-box for the image adjustment /alignment
-        *and creating an dropdown list with the default value center
-        * and whenever user will select any of the three align option 
-        *and click on apply button then it will adjust the image on the basis of the option 
-        */
-       /*
-         var select_alignment=document.getElementById("image-alt-text");
-        if(document.getElementById("select_alignment")==null){
-         var array = ["Center","Right","Left"];
-         var selectList = document.createElement("select");
-         selectList.id = "select_alignment";
-
-         for (var i = 0; i < array.length; i++) 
-         {
-               var option = document.createElement("option");
-               option.value = array[i];
-               option.text = array[i];
-               selectList.appendChild(option);
-        } 
-         var spaceAlignment = document.createElement("br");
-
-            $("#imageproperties div")[9].appendChild(selectList);
-            $("#imageproperties div")[9].appendChild(spaceAlignment);
-            $("#select_alignment").addClass("form-control");
-      
-      }
        
-        //for the alignment left/right/center
-        var align = $("#select_alignment").val();
-            $("#"+id).attr("align",align);*/
          
+    });
+
+    $(document).on('change', '.image-align-picker', function(e){
+        var id = $('#path').val();
+        $('#'+id).find('.image').attr('align', e.target.value);
+        var width = parseInt($('#'+id).find('.image img').attr('width'));
+        if(e.target.value == 'left' && width <= 520)
+            $('#'+id).find('.image').css('padding-left', '50px');
+        if(e.target.value == 'right' && width <= 520)
+            $('#'+id).find('.image').css('padding-right', '50px');
+        if(e.target.value == 'center')
+            $('#'+id).find('.image').css({'padding-right': '0px', 'padding-left': '0px'});
+    });
+
+    
+    $(document).on('change', '#image-caption-position', function(e){
+        var id = $('#path').val();
+        var width;
+        var textWidth = parseInt($('#'+id).closest('table').find(".image-caption-column-text").attr('width'));
+        var imageWidth = parseInt($("#"+id).closest(".main").find('.image-caption-column img').attr('width'));
+
+        if($('#'+id).closest('table').find(".image-caption-column-text").attr('width') != '100%')
+            width = textWidth;
+        else
+            width = 505 - imageWidth;
+        
+
+        if(e.target.value == "left"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "right");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({'align': 'left', 'data-align': 'left', 'width': width});
+            var image = $('#'+id).closest('table').find(".image-caption-column");
+            $('#'+id).closest('table').find(".image-caption-column").remove();
+            $('#'+id).closest('table').find(".image-caption-column-text").after(image);
+        }
+        else if(e.target.value == "right"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "left");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({'align': 'right',  'data-align': 'right', 'width': width});
+            var text = $('#'+id).closest('table').find(".image-caption-column-text");
+            $('#'+id).closest('table').find(".image-caption-column-text").remove();
+            $('#'+id).closest('table').find(".image-caption-column").after(text);
+        }
+        else if(e.target.value == "top"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "center");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({"align": "center", 'data-align': 'top', "width": "100%"});
+            var image = $('#'+id).closest('table').find(".image-caption-column");
+            $('#'+id).closest('table').find(".image-caption-column").remove();
+            $('#'+id).closest('table').find(".image-caption-column-text").after(image);
+        }
+        else if(e.target.value == "bottom"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "center");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({"align": "center", 'data-align': 'bottom', "width": "100%"});
+            var text = $('#'+id).closest('table').find(".image-caption-column-text");
+            $('#'+id).closest('table').find(".image-caption-column-text").remove();
+            $('#'+id).closest('table').find(".image-caption-column").after(text);
+        }
+    });
+
+    $(document).on('change', '#bg-image-url', function(e){
+        console.log("coming to background image link");
+        var id = $('#path').val();
+        $('#'+id).closest('table').css({ 'background-image' : 'url('+$('#bg-image-url').val()+')',
+                                         'background-repeat': 'repeat'
+                                     });
     });
 
     $(document).on('change', 'input.social-input', function(e){
@@ -1383,6 +1486,13 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     
     });
 
+    $("#uploadBgImageToS3ThroughBtn").change(function(){
+
+        var fileInput = document.getElementById('uploadBgImageToS3ThroughBtn');
+        uploadBgImageToS3ThroughBtn(fileInput.files[0]);
+    
+    });
+
     $('#settings').on('click', '.confirm', function(e){
         e.preventDefault();
     });
@@ -1416,6 +1526,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $("#imageHeaderId").html("Image");
         $('#image-link-holder').show();
         $('#settings').show();
+        if(img.closest('.main').data('type') == 'imgcaption') 
+            $('#image-caption-settings').show();
 
     });
 
@@ -1462,19 +1574,16 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     });
 
     $('.font-family-picker').on('change', function(){
-        console.log($(this));
         $('#tosave').find('.textFix').css('font-family', $(this).val());
         $('#tosave').find('.textbuttonsimg').css('font-family', $(this).val());
     });
 
     $('.font-size-picker').on('change', function(){
-        console.log($(this));
         $('#tosave').find('.textFix').css('font-size', $(this).find('option:selected').text());
         $('#tosave').find('.textbuttonsimg').css('font-size', $(this).find('option:selected').text());
     });
 
     $('.line-height-picker').on('change', function(){
-        console.log($(this));
         $('#tosave').find('.textFix').css('line-height', $(this).find('option:selected').text());
     });
 
@@ -1631,13 +1740,13 @@ function initializeEditor() {
         force_p_newlines: true,
         forced_root_block: '',
         selector: "#html5editor",
-        plugins: "autolink lists link charmap code paste textcolor colorpicker paste",
+        plugins: "autolink lists link charmap code paste textcolor colorpicker paste lineheight",
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
         relative_urls : false,
         convert_urls : false,
-        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields",
-        fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields ",
+        fontsize_formats: "8px 10px 12px 14px 16px 18px 24px 36px",
         height: "200px",
         statusbar: false,
         setup: function (editor) {
@@ -1699,6 +1808,73 @@ function uploadImageToS3ThroughBtn(file) {
         });
     }
 }
+
+
+var dataURLToBlob = function(dataURL) {
+    var BASE64_MARKER = ';base64,';
+    if (dataURL.indexOf(BASE64_MARKER) == -1) {
+        var parts = dataURL.split(',');
+        var contentType = parts[0].split(':')[1];
+        var raw = parts[1];
+
+        return new Blob([raw], {type: contentType});
+    }
+
+    var parts = dataURL.split(BASE64_MARKER);
+    var contentType = parts[0].split(':')[1];
+    var raw = window.atob(parts[1]);
+    var rawLength = raw.length;
+
+    var uInt8Array = new Uint8Array(rawLength);
+
+    for (var i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], {type: contentType});
+}
+
+
+
+function uploadBgImageToS3ThroughBtn(file) {
+    if(typeof file != "undefined") {
+        $("#bg-image-browseBtn").prop("disabled",true);
+        $("#bg-image-browseBtn").text(localeJSON['uploading'] + "...");
+
+        var uploadedFileName = file.name;
+        var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
+        formData = new FormData();
+        formData.append('key',  "editor/email/"+window.parent.CURRENT_DOMAIN_USER.domain+"/"+filename);
+        formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+        formData.append('acl', 'public-read');
+        formData.append('content-type', 'image/png');
+        formData.append('policy', 'CnsKICAiZXhwaXJhdGlvbiI6ICIyMDI1LTAxLTAxVDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJidWNrZXQiOiAiYWdpbGVjcm0iIH0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJlZGl0b3IvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiaW1hZ2UvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRzdWNjZXNzX2FjdGlvbl9zdGF0dXMiLCAiMjAxIl0sCiAgXQp9');
+        formData.append('signature', '59pSO5qgWElDA/pNt+mCxxzYC4g=');
+        formData.append('success_action_status', '201');
+        formData.append('file', file);
+
+        $.ajax({
+            data: formData,
+            dataType: 'xml',
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            url: "https://agilecrm.s3.amazonaws.com/",
+            success: function(data) {
+              // getting the url of the file from amazon and insert it into the editor
+              var url = $(data).find('Location').text();
+              $('#bg-image-url').val(decodeURIComponent(url));
+              $('#bg-image-url').trigger('change');
+              $("#bg-image-browseBtn").prop("disabled",false);
+              $("#bg-image-browseBtn").text(localeJSON['browse']);
+            }
+        });
+    }
+}
+
 
 function isValidTag(tag, showAlert) {
     
