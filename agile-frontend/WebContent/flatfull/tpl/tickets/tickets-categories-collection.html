@@ -69,17 +69,19 @@
                         <thead>
                             <tr>
                                 <th class="hide">Id</th>
-                                <th style="width:40%">{{agile_lng_translate 'category' 'name'}}</th>
-                                <th style="width:40%">&nbsp;</th>
+                                <th {{#isNewTheme}} style="width:30%"{{else}} style="width:40%"
+                                {{/isNewTheme}}>{{agile_lng_translate 'category' 'name'}}</th>
+                                <th {{#isNewTheme}} style="width:30%" {{else}} style="width:40%" 
+                                {{/isNewTheme}}>&nbsp;</th>
                                 {{#isNewTheme}}
-                                <th style="width:40%" class="header">
-                                <div class="pull-left m-r-sm">
-                                    <button href="#selectlandingpage"  class="btn select-landing-page-button btn-sm btn-default btn-addon access_kb">
+                                <th style="width:28%" class="category-buttons-left">
+                                <div class="inline-block m-r-sm">
+                                    <button href="#selectlandingpage"  class="btn select-landing-page-button btn-sm btn-default btn-mlg-imp btn-addon access_kb">
                                         {{agile_lng_translate 'preferences' 'settings'}}
                                     </button>
                                 </div> 
-                                <div class="pull-left" style="">
-                                    <button href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon select-landing-page-button">
+                                <div class="inline-block" style="">
+                                    <button href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon btn-mlg-imp select-landing-page-button">
                                         <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
                                     </button>
                                 </div>

@@ -56,6 +56,7 @@ function regenerate_api_key(url) {
          else
          {
              $("#empty_domain_message").addClass("hide");
+             whitelabel_domain = getValidEmailDomain(whitelabel_domain);
              validateSendgridWhitelabel(whitelabel_domain)
          }
     }
@@ -195,7 +196,7 @@ $(".data-clipboard-text-api").on('click', function(event) {
     $("#get_whitelabel_key").off('click');
     $("#get_whitelabel_key").on('click', function(e) {
         e.preventDefault();
-         $("#sendgrid-whitelabel-key-template").html("");
+         //$("#sendgrid-whitelabel-key-template").html("");
         var whitelabel_domain = $("#whitelabel-domain").val();
 
         var pattern = /^[a-z0-9-\.]+\.[a-z]{2,4}/;
@@ -204,6 +205,7 @@ $(".data-clipboard-text-api").on('click', function(event) {
          else
          {
              $("#empty_domain_message").addClass("hide");
+             whitelabel_domain = getValidEmailDomain(whitelabel_domain);
              getSendgridWhitelabel(whitelabel_domain)
          }
     });
@@ -234,23 +236,42 @@ $(".data-clipboard-text-api").on('click', function(event) {
         $("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
     }
 }
-
+var domain_for_dkim = '';
 function getSendgridWhitelabel(domainName)
-{   
+{ 
+    domain_for_dkim = domainName;
      var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel?emailDomain='+domainName,
      template : "admin-setting-sendgrid-whitelabel",
     });
-  $("#sendgrid-whitelabel-key-template").html(view.render().el);
+    $("#sendgrid-whitelabel-key-template").html(view.render().el);   
 }
 
-
 function validateSendgridWhitelabel(domainName)
-{   
+{   /*
    var view = new Base_Model_View({ url : '/core/api/emails/sendgrid/whitelabel/validate?emailDomain='+domainName,
      template : "admin-setting-sendgrid-whitelabel-validate",
     });
-  $("#sendgrid-whitelabel-key-template").html(view.render().el);
+  $("#sendgrid-whitelabel-key-template").html(view.render().el);  
+  */
+  $.ajax({
+    url : '/core/api/emails/sendgrid/whitelabel/validate?emailDomain='+domainName,
+    type : 'GET',
+    success : function(data){
+      $("#validate_whitelabel").hide();
+      $("#sendgrid-whitelabel-key-template").find(".dkim_valid").addClass("show");
+      $('#sendgrid-whitelabel-key-template').find('#mail_server').attr("title",data.mail_server.reason ? data.mail_server.reason : "{{agile_lng_translate 'other' 'mail-server-setings-verified-succefully'}}");
+      $('#sendgrid-whitelabel-key-template').find('#subdomain_spf').attr("title",data.subdomain_spf.reason ? data.subdomain_spf.reason : "{{agile_lng_translate 'other' 'mail-server-setings-verified-succefully'}}");
+      $('#sendgrid-whitelabel-key-template').find('#dkim_reason').attr("title",data.dkim.reason ? data.dkim.reason : "{{agile_lng_translate 'other' 'mail-server-setings-verified-succefully'}}");
+    },
+    error : function(){
+      console.log(data);
+      $("#validate_whitelabel").html("Verify");
+      $("#validate_whitelabel").attr("disabled",false);
+    }
+  });
 }
+
+
 //validate the web analytical code callback function
 function validateAnalyticalCode(websiteUrl)
  {   
@@ -290,3 +311,90 @@ function isUrlValid(url) {
     return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
 }
 
+// When enter on Send Email button
+$('body').on('keypress','#send-dkim-settings-input', function(e){
+  if(event.keyCode == 13){
+    sendSettings();
+  }
+});
+
+function sendSettings(){  
+  if(!isValidForm('#send-dkim-settings-form'))
+    return;
+  var email = $('#send-dkim-settings-form').find('input').val();
+  $('#send-dkim-settings-email').html('Sending...');
+  $('#send-dkim-settings-email').attr('disabled',true);
+  
+   $.ajax({
+      url : '/core/api/emails/sendgrid/whitelabel?emailDomain='+domain_for_dkim,
+      type : 'GET',
+      success : function(data){
+            $('#workflow-send-dkim-settings .close').click();
+            var json = {};
+            json.from_email="noreply@agilecrm.com";
+            json.from_name="Agile CRM";
+            json.to_email = email;
+            json.subject = "Domain Key settings"; 
+            json.html_email = getTemplate("admin-setting-email-settings-email",data);
+            
+            //sendEmail(json,function(){
+            sendDkimSettingsEmail(json);
+      },
+      error : function(data){
+        $('#workflow-send-dkim-settings').find('.close').click();
+        console.log(data);
+      }
+    });
+}
+
+
+// Sending email
+function sendDkimSettingsEmail(json){
+      $.ajax({
+      url : '/core/api/emails/send-email-new',
+      type : 'POST',
+      data : json,
+      success : function(data){  
+        $('#send_dkim_settings').before("<span class='clearfix' id='confirmation-text'style='top: -49px; display: inline-block;text-align: center;float: left;width: 70%; color: green;font-style: italic;margin-top: 6px;margin-bottom: 6px;'>Domain key settings sent to '"+json.to_email+"'.</span>");
+        $("#confirmation-text").fadeOut(5000,function(){
+        $('#confirmation-text').remove();
+        });
+        console.log(data);         
+      },
+      error : function(data){
+        console.log(data);
+      }
+    });
+}
+
+// Removing 'http://www' or www from given domain and return
+function getValidEmailDomain(domain){
+    var http_reg = /^((http|https|ftp):\/\/)/;
+    var www_reg = /^(www.)/;
+    var valid_email_domain = '';
+    if(http_reg.test(domain)){
+      valid_email_domain = domain.substr(domain.indexOf('.')+1);
+    }else if(www_reg.test(domain)){
+      valid_email_domain = domain.substr(domain.indexOf('.')+1);
+    }else{
+      valid_email_domain = domain;
+    }
+    return valid_email_domain;
+}
+
+// show popup for sending Domain keys(settings) through email
+function showSendDKIMSettingsPopup(){
+    $('#workflow-send-dkim-settings').remove();
+    window.parent.workflow_alerts("", undefined,
+        "workflow-email-settings-send-dkim-settings"
+        , function(modal) {
+          // Focus on input
+          modal.on('shown.bs.modal', function() {
+            $(this).find('input').focus();
+          });
+          modal.on('hidden.bs.modal', function () {
+              $(this).data('bs.modal', null);
+          });
+        });
+    return;
+}

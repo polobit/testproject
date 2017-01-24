@@ -40,12 +40,13 @@
 {{else}}
 
     <div class="col-md-9 row">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{agile_lng_translate 'tickets' 'knowledgebase_sectionlist'}}
-                <div class="pull-right" style="margin-top:-4px;">
-                    <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon">
-                        <span><i class="icon-plus-sign"></i></span>  {{agile_lng_translate 'tickets' 'add-section'}}
-                    </a>
+        <div class="panel newthemepanel panel-default">
+            <div class="panel-heading {{#isNewTheme}} hide {{/isNewTheme}} ">{{agile_lng_translate 'tickets' 'knowledgebase_sectionlist'}}
+                <div class="pull-right {{#isNewTheme}} hide {{/isNewTheme}}" style="margin-top:-4px;">
+                        <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon">
+                            <span><i class="icon-plus-sign"></i></span>  {{agile_lng_translate 'tickets' 'add-section'}}
+                        </a>
+
                 </div>
             </div>
             <div class="table-responsive b-n inline-block m-b-none">
@@ -56,7 +57,16 @@
                             <th class="hide">Id</th>
                             <th style="width:30%">Section Name</th>
                             <th style="width:50%">&nbsp;</th>
-                            <th></th>
+                            <th class="new-theme-table-heading">
+                            {{#isNewTheme}}
+                                <div class="pull-right" style="margin-top:-4px;">
+                                    <button href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon add-section-new-theme btn-mlg-imp">
+                                        <span><i class="icon-plus-sign"></i></span>  {{agile_lng_translate 'tickets' 'add-section'}}
+                                    </button>
+                                </div>
+                            {{else}}
+                            {{/isNewTheme}}
+                        </th>
                         </tr>
                     </thead>
                     <tbody id="ticket-helpcenter-sections-model-list"  class="c-p"> </tbody>

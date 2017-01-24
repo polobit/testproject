@@ -7,6 +7,7 @@
   <table class="table">
     <thead>
       <tr>
+      <th class="dkim_valid hide"> {{agile_lng_translate 'other' 'valid'}}</th>
        <th>{{agile_lng_translate 'dkim' 'type'}}</th>
         <th>{{agile_lng_translate 'other' 'host'}}</th>
         <th>{{agile_lng_translate 'other' 'data'}}</th>
@@ -14,6 +15,7 @@
     </thead>
     <tbody>
       <tr>
+      <td class="dkim_valid hide" id="mail_server">{{{validateSendgridWhitelabel mail_server.valid}}}</td>
       <td style="text-transform: uppercase;">{{mail_server.type}}</td>
         <td>
         <span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span">{{mail_server.host}}</span>
@@ -21,11 +23,13 @@
         <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{mail_server.data}}</span></td>
       </tr>
       <tr>
+      <td class="dkim_valid hide" id="subdomain_spf">{{{validateSendgridWhitelabel subdomain_spf.valid}}}</td>
       <td style="text-transform: uppercase;">{{subdomain_spf.type}}</td>
         <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{subdomain_spf.host}}</span></td>
         <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{subdomain_spf.data}}</span></td>
       </tr>
       <tr>
+      <td class="dkim_valid hide" id="dkim_reason">{{{validateSendgridWhitelabel dkim.valid}}}</td>
       <td style="text-transform: uppercase;">{{dkim.type}}</td>
         <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{dkim.host}}</span></td>
         <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{dkim.data}}</span></td>
@@ -34,9 +38,11 @@
   </table>
   </div>
   </div>
-   <div class="{{#is_mobile}} text-center {{/is_mobile}}">
-        <a href="javascript:void(0)" class="btn btn-sm btn-success" onclick="validateWhitelable();" style="margin: -8px 15px 8px 1px; float:right" id="validate_whitelabel">{{agile_lng_translate 'landing-pages' 'verify'}}</a>
+   <div class="{{#is_mobile}} text-center {{/is_mobile}} modal-footer">
+   <a href="javascript:void(0)" class="btn btn btn-primary" onclick="showSendDKIMSettingsPopup();" id="send_dkim_settings">{{agile_lng_translate 'contact-details' 'send-email'}}</a>
+        <a href="javascript:void(0)" class="btn btn btn-success" onclick="validateWhitelable();" id="validate_whitelabel">{{agile_lng_translate 'landing-pages' 'verify'}}</a>
      </div>
+
   {{else}}
   {{#if Error}}
   <div style="margin-left:15px; margin-bottom:10px; color:red">We need additional verification. Please contact our <a target="_blank" style="color: #19a9d5;!important" href="https://www.agilecrm.com/support">support</a> for DKIM & SPF settings.</div>
@@ -59,15 +65,15 @@
     </thead>
     <tbody>
       <tr>
-        <td>{{{validateSendgridWhitelabel mail_server.valid}}}</td>
+        <td id="mail_server">{{{validateSendgridWhitelabel mail_server.valid}}}</td>
         <td> <code class="prettyprint pull-left Api_span">{{#if mail_server.reason}}{{mail_server.reason}}{{else}} <span style="color:green;">{{agile_lng_translate 'other' 'mail-server-setings-verified-succefully'}} {{/if}}</span> </code> </td>
       </tr>
       <tr>
-        <td>{{{validateSendgridWhitelabel subdomain_spf.valid}}}</td>
+        <td id="subdomain_spf">{{{validateSendgridWhitelabel subdomain_spf.valid}}}</td>
         <td><code class="prettyprint pull-left Api_span" >{{#if subdomain_spf.reason}}{{subdomain_spf.reason}} {{else}}<span style="color:green;"> {{agile_lng_translate 'other' 'spf-settings-verified-successfully'}} {{/if}}</span></code></td>
       </tr>
       <tr>
-        <td>{{{validateSendgridWhitelabel dkim.valid}}}</td>
+        <td id="dkim_spf">{{{validateSendgridWhitelabel dkim.valid}}}</td>
         <td><code class="prettyprint pull-left Api_span" >{{#if dkim.reason}} {{dkim.reason}}{{else}}<span style="color:green;"> {{agile_lng_translate 'other' 'dkim-setting-is-verified-successfully'}} {{/if}}</span></code></td>
        
       </tr>
@@ -92,3 +98,123 @@
      undefined    
    {{/if}}     
  </script> 
+
+<!--Tempalate for Domain Keys for sending through email-->
+<script id="admin-setting-email-settings-email-template" type="text/html">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AgileCRM</title>
+    <style>
+      .datatable {border: 1px solid black;font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}
+      .datatable td,.datatable th{border: 1px solid black;text-align: left;padding: 8px;}
+    </style>
+    
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#edf1f2;padding:6% 10%">
+      <tr>
+        <td align="center">
+          <table border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#FFFFFF" style="border:1px solid #ccc;border-radius:2px;padding: 15px 25px 25px 25px">
+            <tr>
+              <td style="font-size: 0; line-height: 0; padding: 0 10px; border-bottom:1px solid #ccc" height="70" align="center" class="responsive-image">
+                <img width="150" alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/agile-crm-logo-1.png">
+              </td>
+            </tr><!--
+            <tr><td><br/>{{agile_lng_translate 'Admin-settings-users' 'copy-the-below-setting-and-update-in-web-domain'}} <br/><br/></td></tr>
+            -->
+
+            <tr><td><br/>Copy the below Domain keys and update in your Web domain DNS.<br/><br/></td></tr>
+            <tr>
+              <td>
+                <table class="table datatable">
+                  <thead>          
+                    <tr>
+                      <th>{{agile_lng_translate 'dkim' 'type'}}</th>
+                      <th>{{agile_lng_translate 'other' 'host'}}</th>
+                      <th>{{agile_lng_translate 'other' 'data'}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="text-transform: uppercase;">{{mail_server.type}}</td>
+                      <td><span class="prettyprint pull-left Api_span">{{mail_server.host}}</span></td>
+                      <td><span class="prettyprint pull-left Api_span" >{{mail_server.data}}</span></td>
+                    </tr>
+                    <tr>
+                      <td style="text-transform: uppercase;">{{subdomain_spf.type}}</td>
+                      <td><span class="prettyprint pull-left Api_span" >{{subdomain_spf.host}}</span></td>
+                      <td><span  class="prettyprint pull-left Api_span" >{{subdomain_spf.data}}</span></td>
+                    </tr>
+                    <tr>
+                      <td style="text-transform: uppercase;">{{dkim.type}}</td>
+                      <td><span class="prettyprint pull-left Api_span" >{{dkim.host}}</span></td>
+                      <td><span class="prettyprint pull-left Api_span" >{{dkim.data}}</span></td>
+                    </tr>
+                  </tbody>
+                </table></td></tr>
+                <tr><td>
+                  <table style="padding-top:10px">
+                    <tr>
+                      <td style="font-size:14px;font-family:sans-serif">
+                    {{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue">
+                    <a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
+                  </td></tr><tr>
+                  <td style="font-weight: bold; font-size: 12px;"><br/>
+                      {{agile_lng_translate 'welcome-email' 'crew-at-agile'}}  <br />
+                  </td></tr><tr>
+                  <td><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></td></tr>
+                  </table></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+</script>
+
+<!--Model for showing send DKIM settings(Keys) for DKIM varificaton-->
+<script id="workflow-email-settings-send-dkim-settings-template" type="text/html">
+  <div class="modal  fade" id="workflow-send-dkim-settings">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">Domain Key Settings</h3>
+        </div>
+        <div class="modal-body">        
+          <form id="send-dkim-settings-form">
+            <fieldset>            
+              <div class="control-group form-group m-t">
+                <div class="email-verification-fields">
+                  <label class="control-label  col-sm-3 m-t-xs text-right">
+                    <b>Enter Email</b> 
+                    <span class="field_req">*</span>
+                  </label>
+                  <div class="col-sm-7">
+                    <div class="control-group">
+                      <span class="controls">
+                        <input name="email" id="send-dkim-settings-input" class="form-control required requiredEmail multipleEmails" type="text" placeholder="Enter Email Address" autofocus>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <span id="alert-msg"></span>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <span class="m-r-xs"></span>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">{{agile_lng_translate 'contacts-view' 'ignore'}}</button>
+          <a href="javascript:void(0);" class="btn btn-sm btn-primary" id="send-dkim-settings-email" onclick="sendSettings();">{{agile_lng_translate 'contact-details' 'send-email'}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

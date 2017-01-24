@@ -800,8 +800,8 @@ function show_custom_fields_helper(custom_fields, properties){
 					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 						+field.field_label
 						+'<span class="field_req">*</span></label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
-						+field.field_type.toLowerCase()
-						+'_input_valid custom_field required form-control field_length" id="'
+						
+						+'custom_field required form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
 						+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "contacts" "enter-number"}}"></input>'
@@ -810,8 +810,8 @@ function show_custom_fields_helper(custom_fields, properties){
 					el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+' custom-number-controls"><input type="number" class="'
-							+field.field_type.toLowerCase()
-							+'_input_valid  custom_field required form-control field_length" id="'
+							
+							+' custom_field required form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
 							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "contacts" "enter-number"}}"></input>'
@@ -822,8 +822,8 @@ function show_custom_fields_helper(custom_fields, properties){
 					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 						+field.field_label
 						+'</label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
-						+field.field_type.toLowerCase()
-						+'_input_valid  custom_field form-control field_length" id="'
+						
+						+'  custom_field form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
 						+'"max_len="'+max_len+'" placeholder="{{agile_lng_translate "contacts" "enter-number"}}"></input>'
@@ -832,8 +832,8 @@ function show_custom_fields_helper(custom_fields, properties){
 					el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 							+field.field_label
 							+'</label><div class="controls col-sm-9 '+div_col9_style+' custom-number-controls"><input type="number" class="'
-							+field.field_type.toLowerCase()
-							+'_input_valid  custom_field form-control field_length" id="'
+							
+							+' custom_field form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
 							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "contacts" "enter-number"}}"></input>'
