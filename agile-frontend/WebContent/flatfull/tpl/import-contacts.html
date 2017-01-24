@@ -668,14 +668,13 @@
     <option value="properties_address-zip">{{agile_lng_translate 'contact-edit' 'zip'}}</option>
     <option value="properties_address-country">{{agile_lng_translate 'contacts-view' 'country'}}</option>
 </optgroup>
- {{#if custom_fields}}
 <optgroup label="Custom field" id="custom_fields">
    
 		{{#each custom_fields}}
 			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
 		{{/each}}
+		<option value="properties__ignore_" class="text-info add-custom-field-from-import">-{{agile_lng_translate 'admin-settings-custom-fields' 'add-custom-field'}}-</option>
 </optgroup>
-{{/if}}
 </select>
 
 
@@ -721,14 +720,13 @@
     <option value="properties_address-zip">{{agile_lng_translate 'contact-edit' 'zip'}}</option>
     <option value="properties_address-country">{{agile_lng_translate 'contacts-view' 'country'}}</option>
 </optgroup>
- {{#if custom_fields}}
 <optgroup label="Custom field" id = "custom_fields">
    
 		{{#each custom_fields}}
 			<option class="CUSTOM" value="properties_{{this.field_type}}-{{this.field_label}}">{{this.field_label}}</option>
 		{{/each}}
+		<option value="properties__ignore_" class="text-info add-custom-field-from-import">-{{agile_lng_translate 'admin-settings-custom-fields' 'add-custom-field'}}-</option>
 </optgroup>
-{{/if}}
 </select>
 
 

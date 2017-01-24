@@ -107,8 +107,20 @@ function showCustomFieldModel(data)
 		            var typ = $(element).find('input').attr('id') ;
 		            scopeExtension.push(typ);
 		            var position = 0 ;
-		            if(typ == 'contacts'){
-		                if(App_Admin_Settings.contactCustomFieldsListView && App_Admin_Settings.contactCustomFieldsListView.collection)
+		            if(Current_Route && Current_Route == "import" && App_Contacts.CUSTOM_FIELDS_FOR_IMPORT && 
+		            	(typ == "contacts" || typ == "companies"))
+	            	{
+	            		$.each(App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models, function(index, customFieldModel){
+							if(customFieldModel.get("position") > position)
+							{
+								position = customFieldModel.get("position");
+							}
+						});
+						positionList.push(typ+'-'+ position);
+	            	}
+
+		            if(typ == 'contacts' && Current_Route != "import"){
+		            	if(App_Admin_Settings.contactCustomFieldsListView && App_Admin_Settings.contactCustomFieldsListView.collection)
 		                { 
 		                   	$.each(App_Admin_Settings.contactCustomFieldsListView.collection.models , function(i,m)
 							{
@@ -118,7 +130,7 @@ function showCustomFieldModel(data)
 		                    positionList.push(typ+'-'+ position);
 		                }
 		            }
-		            else if(typ == 'companies'){
+		            else if(typ == 'companies' && Current_Route != "import"){
 		                if(App_Admin_Settings.companyCustomFieldsListView && App_Admin_Settings.companyCustomFieldsListView.collection)
 		                { 
 		                   	$.each(App_Admin_Settings.companyCustomFieldsListView.collection.models , function(i,m)
@@ -204,48 +216,60 @@ function showCustomFieldModel(data)
 			if(models.length > 1)
 			{
 				$.each(models, function(index, value) {
-								
-					var custom_field_model_json;
-
-					if(value.scope=="CONTACT")
-						custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(value.id);
-					else if(value.scope=="COMPANY")
-						custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(value.id);
-					else if(value.scope=="DEAL")
-						custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(value.id);
-					else if(value.scope=="CASE")
-						custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(value.id);
-					else if(value.scope=="LEAD")
-						custom_field_model_json = App_Admin_Settings.leadCustomFieldsListView.collection.get(value.id);
-
-					if(custom_field_model_json)
+					
+					if(Current_Route && Current_Route == "import")
 					{
-						custom_field_model_json.set(value);
+						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(value);
+						if((value.scope == "CONTACT" && $("#import-contacts").length > 0) || (value.scope == "COMPANY" && $("#import-comp").length > 0))
+						{
+							var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+							$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(value));
+							$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+value.field_label);
+						}
 					}
 					else
 					{
+						var custom_field_model_json;
+
 						if(value.scope=="CONTACT")
+							custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(value.id);
+						else if(value.scope=="COMPANY")
+							custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(value.id);
+						else if(value.scope=="DEAL")
+							custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(value.id);
+						else if(value.scope=="CASE")
+							custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(value.id);
+						else if(value.scope=="LEAD")
+							custom_field_model_json = App_Admin_Settings.leadCustomFieldsListView.collection.get(value.id);
+
+						if(custom_field_model_json)
 						{
-							App_Admin_Settings.contactCustomFieldsListView.collection.add(value);
-							App_Admin_Settings.contactCustomFieldsListView.render(true);
+							custom_field_model_json.set(value);
 						}
-						if(value.scope=="COMPANY")
+						else
 						{
-							App_Admin_Settings.companyCustomFieldsListView.collection.add(value);
-							App_Admin_Settings.companyCustomFieldsListView.render(true);	
-						}	
-						if(value.scope=="DEAL")
-						{
-							App_Admin_Settings.dealCustomFieldsListView.collection.add(value);
-							App_Admin_Settings.dealCustomFieldsListView.render(true);
-						}
-						if(value.scope=="LEAD")
-						{
-							App_Admin_Settings.leadCustomFieldsListView.collection.add(model);
-							App_Admin_Settings.leadCustomFieldsListView.render(true);
+							if(value.scope=="CONTACT")
+							{
+								App_Admin_Settings.contactCustomFieldsListView.collection.add(value);
+								App_Admin_Settings.contactCustomFieldsListView.render(true);
+							}
+							if(value.scope=="COMPANY")
+							{
+								App_Admin_Settings.companyCustomFieldsListView.collection.add(value);
+								App_Admin_Settings.companyCustomFieldsListView.render(true);	
+							}	
+							if(value.scope=="DEAL")
+							{
+								App_Admin_Settings.dealCustomFieldsListView.collection.add(value);
+								App_Admin_Settings.dealCustomFieldsListView.render(true);
+							}
+							if(value.scope=="LEAD")
+							{
+								App_Admin_Settings.leadCustomFieldsListView.collection.add(model);
+								App_Admin_Settings.leadCustomFieldsListView.render(true);
+							}
 						}
 					}
-
 				});
 			}
 			else
@@ -255,44 +279,57 @@ function showCustomFieldModel(data)
 					cuModel = models[0];
 				else
 					cuModel = models;
-				if(cuModel.scope=="CONTACT")
-					custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(models.id);
-				else if(cuModel.scope=="COMPANY")
-					custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(models.id);
-				else if(cuModel.scope=="DEAL")
-					custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(models.id);
-				else if(cuModel.scope=="CASE")
-					custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(models.id);
-				else if(cuModel.scope=="LEAD")
-					custom_field_model_json = App_Admin_Settings.leadCustomFieldsListView.collection.get(models.id);
-				if(custom_field_model_json)
+
+				if(Current_Route && Current_Route == "import" && cuModel)
 				{
-					custom_field_model_json.set(models);
+					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(cuModel);
+					if((cuModel.scope == "CONTACT" && $("#import-contacts").length > 0) || (cuModel.scope == "COMPANY" && $("#import-comp").length > 0))
+					{
+						var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+						$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(cuModel));
+						$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+cuModel.field_label);
+					}
 				}
 				else
 				{
 					if(cuModel.scope=="CONTACT")
+						custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(models.id);
+					else if(cuModel.scope=="COMPANY")
+						custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(models.id);
+					else if(cuModel.scope=="DEAL")
+						custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(models.id);
+					else if(cuModel.scope=="CASE")
+						custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(models.id);
+					else if(cuModel.scope=="LEAD")
+						custom_field_model_json = App_Admin_Settings.leadCustomFieldsListView.collection.get(models.id);
+					if(custom_field_model_json)
 					{
-						App_Admin_Settings.contactCustomFieldsListView.collection.add(models);
-						App_Admin_Settings.contactCustomFieldsListView.render(true);
+						custom_field_model_json.set(models);
 					}
-					if(cuModel.scope=="COMPANY")
+					else
 					{
-						App_Admin_Settings.companyCustomFieldsListView.collection.add(models);
-						App_Admin_Settings.companyCustomFieldsListView.render(true);	
-					}	
-					if(cuModel.scope=="DEAL")
-					{
-						App_Admin_Settings.dealCustomFieldsListView.collection.add(models);
-						App_Admin_Settings.dealCustomFieldsListView.render(true);
+						if(cuModel.scope=="CONTACT")
+						{
+							App_Admin_Settings.contactCustomFieldsListView.collection.add(models);
+							App_Admin_Settings.contactCustomFieldsListView.render(true);
+						}
+						if(cuModel.scope=="COMPANY")
+						{
+							App_Admin_Settings.companyCustomFieldsListView.collection.add(models);
+							App_Admin_Settings.companyCustomFieldsListView.render(true);	
+						}	
+						if(cuModel.scope=="DEAL")
+						{
+							App_Admin_Settings.dealCustomFieldsListView.collection.add(models);
+							App_Admin_Settings.dealCustomFieldsListView.render(true);
+						}
+						if(cuModel.scope=="LEAD")
+						{
+							App_Admin_Settings.leadCustomFieldsListView.collection.add(models);
+							App_Admin_Settings.leadCustomFieldsListView.render(true);
+						}	
 					}
-					if(cuModel.scope=="LEAD")
-					{
-						App_Admin_Settings.leadCustomFieldsListView.collection.add(models);
-						App_Admin_Settings.leadCustomFieldsListView.render(true);
-					}	
 				}
-
 			}
 			$("#custom-field-add-modal").modal('hide');
 			$("body").removeClass("modal-open").css("padding-right", "");
@@ -438,6 +475,15 @@ function bindCustomFiledChangeEvent(el){
 		else
 			$('.warning-message',el).parent().hide();
 		
+	});
+
+	$("#custom-field-add-modal", el).on("click", ".close", function(e){
+		if(Current_Route && Current_Route == "import")
+		{
+			e.preventDefault();
+			$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties__ignore_");
+		}
+		//$("#custom-field-add-modal").hide();
 	});
 	
 }
