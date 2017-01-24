@@ -3565,7 +3565,7 @@ i.mce-ico, i.mce-caret, span.mce-txt{
 {
   margin-top:-5px;
 }
-#helpcenter-content .panel .panel-heading
+#helpcenter-content .panel .panel-heading,#send-email-listener-container .send-email-edtior .panel-heading
 {
   font-size: 13px!important;
   color:#78909c!important;
@@ -3775,9 +3775,9 @@ th.category-buttons-left.header:after
 {
  display:none;
 }
-.select-landing-page-button.btn-addon i 
+.select-landing-page-button.btn-addon i ,.ticket-new-theme-article-add-btn i
 {
-  float:left;
+  float:left !important;
   margin-top:-3px !important;
 }
 .btn-sm-imp
@@ -3788,5 +3788,51 @@ th.category-buttons-left.header:after
 }
 #enable_tracking
 {
-      padding-top: 11px;
+      padding-top: 12px;
+}
+#enable_tracking input{
+  margin-top:0px;
+}
+.m-t-lg-imp
+{
+    height: 35px!important;
+    padding: 0px 3em;
+    line-height: 35px!important;
+    font-size: 13px!important;
+}
+.newthemepanel
+{
+  background-color: #F4F8F9;
+}
+.new-theme-table-heading.header:after
+{
+  display:none;
+}
+.new-theme-table-heading.header,.ticket-new-theme-article.header
+
+{
+  padding-right:0px;
+}
+.ticket-new-theme-article.header:after
+{
+  display:none;
+}
+.dropdown-menu .dropdown-submenu:hover>a:after
+{
+  border-left-color:#ccc;
+}
+.dropdown-submenu>a:after
+{
+margin-top:0px;
+}
+.ticket-new-theme-article-btn
+{
+  text-transform:none!important;
+}
+.ticket-new-theme-article , .new-theme-table-heading
+{
+  padding-right:0px!important;
+}
+.ticket-new-theme-article i:before{
+     margin-right: 0px!important;
 }

@@ -156,7 +156,7 @@
                            {{agile_lng_translate 'other' 'enable-tracking'}}
                             </label>
                         </div>
-                        <div class="pull-right col-sm-9 p-r-none">
+                        <div class="pull-left col-sm-6 p-r-none">
                             <select name="push_param" class="form-control">
                                 <option value="YES">{{agile_lng_translate 'portlets' 'yes'}}</option>
                                 <option value="YES_AND_PUSH_EMAIL_ONLY"> {{agile_lng_translate 'prefs-email' 'yes-and-push-email-only'}}</option>
@@ -177,9 +177,9 @@
 
                 <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
                 <div class="line ling-lg b-b"></div>
-                <div class="form-actions pull-right {{#isNewTheme}}col-md-offset-8 col-md-4 m-r-sm{{else}}col-md-offset-8 col-md-4 m-r-n-lg{{/isNewTheme}}">
-                    <a href="#contacts" class="btn btn-sm btn-default btn-default-imp  btn-sm-imp" id="send-email-close">{{agile_lng_translate 'other' 'cancel'}}</a>
-                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary btn-primary-imp  btn-sm-imp">{{agile_lng_translate 'tasks' 'Send'}}</a>
+                <div class="form-actions pull-right {{#isNewTheme}}col-md-offset-7 col-md-5 m-r-md{{else}}col-md-offset-8 col-md-4 m-r-n-lg{{/isNewTheme}}">
+                    <a href="#contacts" class="btn btn-sm  btn-default btn-default-imp  m-t-lg-imp {{#isNewTheme}} m-r-sm {{/isNewTheme}}" id="send-email-close">{{agile_lng_translate 'other' 'cancel'}}</a>
+                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary m-t-lg-imp  ">{{agile_lng_translate 'tasks' 'Send'}}</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
                 </div>
             </fieldset>
