@@ -130,16 +130,34 @@
                         <input type="text" class="form-control" name="attachment_key" id="eattachment_key"/>
                     </div>
                 </div>
-
+                <div class="control-group form-group">
+                    <div class="col-sm-offset-2 col-sm-8">
+                            <div class="controls">
+                            <a href="#" class="add-attachment-select text-info"><i class="fa fa-paperclip m-r-xs"></i>{{agile_lng_translate 'other' 'attach-file'}}</a>
+                            <span class="attachment-document-select" style="display:none;">
+                                <select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control pull-left w overflow-auto text-xs input-xs">
+                                </select>
+                                <a href="#" class="add-attachment-confirm pull-left text-info text-xs  m-l-xs {{#isNewTheme}} m-t-sm {{/isNewTheme}}">{{agile_lng_translate 'other' 'add'}}</a> 
+                                <a href="#" class="add-attachment-cancel text-info pull-left text-xs m-l-xs {{#isNewTheme}} m-t-sm {{/isNewTheme}} ">{{agile_lng_translate 'other' 'cancel'}}</a>
+                                <!--&nbsp;
+                                <a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>-->
+                                <span class="attachment-status"></span>
+                                <span class="save-status"></span>
+                            </span>
+                         </div>         
+                    </div>
+                </div>
+                <div class="clearfix"></div>
                 <div class="control-group form-group m-b-sm">
                     <div class="col-sm-offset-2 col-sm-8">
-                        <div class="checkbox p-t-none pull-left" id="enable_tracking">
+                        <div class="checkbox  pull-left" id="enable_tracking">
                             <label class="i-checks i-checks-sm">
                             <input type="checkbox" name="track_clicks" checked="checked"><i></i>
                            {{agile_lng_translate 'other' 'enable-tracking'}}
                             </label>
                         </div>
-                        <div class="pull-right">
+
+                        <div class="pull-left col-sm-6 p-r-none">
                             <select name="push_param" class="form-control">
                                 <option value="YES">{{agile_lng_translate 'portlets' 'yes'}}</option>
                                 <option value="YES_AND_PUSH_EMAIL_ONLY"> {{agile_lng_translate 'prefs-email' 'yes-and-push-email-only'}}</option>
@@ -148,7 +166,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="control-group form-group" id="eattachment" style="display:none">
                     <div class="controls col-sm-10 col-sm-offset-2">
                         <div id="attachment_id" name="blob_key" style="display: inline-block"">
@@ -159,31 +176,14 @@
                     </div>
                 </div>
 
-               <div class="control-group form-group">
-                    <div class="col-sm-offset-2 col-sm-8">
-                            <div class="controls">
-                            <a href="#" class="add-attachment-select text-info"><i class="fa fa-paperclip m-r-xs"></i>{{agile_lng_translate 'other' 'attach-file'}}</a>
-                            <span class="attachment-document-select" style="display:none;">
-                                <select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control pull-left w overflow-auto text-xs input-xs">
-                                </select>
-                                <a href="#" class="add-attachment-confirm pull-left text-info text-xs  m-l-xs m-t-sm">{{agile_lng_translate 'other' 'add'}}</a> 
-                                <a href="#" class="add-attachment-cancel text-info pull-left text-xs m-l-xs m-t-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
-                                <!--&nbsp;
-                                <a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>-->
-                                <span class="attachment-status"></span>
-                                <span class="save-status"></span>
-                            </span>
-                         </div>         
-                    
-                </div>
-                <div class="clearfix"></div>           
-            </div>
                 <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
                 <div class="line ling-lg b-b"></div>
-                <div class="form-actions col-sm-offset-2 col-sm-8">          
-                    <a href="#contacts" class="btn btn-sm btn-default btn-default-imp  btn-lg-imp" id="send-email-close">{{agile_lng_translate 'other' 'cancel'}}</a>
-                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary btn-primary-imp  btn-lg-imp">{{agile_lng_translate 'tasks' 'Send'}}</a>
+                <div class="form-actions  {{#isNewTheme}}col-md-offset-2 col-md-8 p-r-none{{else}}col-md-offset-8 col-md-4 m-r-n-lg pull-right{{/isNewTheme}}">
+                <div class="{{#isNewTheme}}pull-right{{/isNewTheme}}">
+                    <a href="#contacts" class="btn btn-sm  btn-default btn-default-imp  m-t-lg-imp {{#isNewTheme}} m-r-sm {{/isNewTheme}}" id="send-email-close">{{agile_lng_translate 'other' 'cancel'}}</a>
+                    <a href="#"  id="sendEmail" class="btn btn-sm btn-primary m-t-lg-imp  ">{{agile_lng_translate 'tasks' 'Send'}}</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
+                </div>
                 </div>
             </fieldset>
         </form>

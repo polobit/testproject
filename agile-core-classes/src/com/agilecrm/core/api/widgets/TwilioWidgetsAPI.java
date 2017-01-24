@@ -766,6 +766,18 @@ public class TwilioWidgetsAPI
 	}
 		return null;		
 	}
+	
+	/**
+	 * Get all active twilio Users
+	 * @return
+	 */
+	@Path("getTwilioUsers")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTwiliioUsers()throws Exception{	
+		JSONArray result = TwilioUtil.getTwillioUsersAndNumbers();
+		return result.toString();
+	}
 	/**
 	 * Set Twilio from number based on widget id 
 	 * 

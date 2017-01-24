@@ -67,5 +67,6 @@
  	"alternate-text": "{{agile_lng_translate 'builder' 'alternate-text'}}",
  	"link-to-web-link": "{{agile_lng_translate 'builder' 'link-to-web-link'}}",
  	"body": "{{agile_lng_translate 'builder' 'body'}}",
+ 	"merge-fields": "{{agile_lng_translate 'contact-view' 'merge-fields'}}",
  	"select": "{{agile_lng_translate 'deal-view' 'select'}}"
 }

@@ -221,7 +221,7 @@ public class DocumentUtil
     
     private static String remove25(String s){
     	while(s.contains("%25")){
-    		remove25(s.replace("%25", "%"));
+    		s = remove25(s.replace("%25", "%"));
     	}
     	return s;
     }

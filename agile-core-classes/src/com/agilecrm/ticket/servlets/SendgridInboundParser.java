@@ -359,7 +359,7 @@ public class SendgridInboundParser extends HttpServlet
 					null, attachmentExists, false, true);
 
 			// Sending user replied notification
-			TicketBulkActionsBackendsRest.publishNotification(ticket.requester_name + " replied to ticket #"
+			TicketBulkActionsBackendsRest.publishNotification(nameEmail[0] + " replied to ticket #"
 					+ ticket.id);
 
 			// Execute note created by customer trigger

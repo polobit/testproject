@@ -1390,7 +1390,11 @@
 											});
 									}});	
 								});
-							});	
+							});
+							$(".add-section-new-theme").on("click",function(e)
+							{
+								window.location.href = $(this).attr("href");
+							});
 							
 
 						});
@@ -1476,6 +1480,11 @@
 									}});	
 								});
 							});	
+							$(".ticket-new-theme-article-add-btn").on('click',function(e)
+							{
+								
+								window.location.href = $(this).attr("href");
+							});
 							
 
 						});	

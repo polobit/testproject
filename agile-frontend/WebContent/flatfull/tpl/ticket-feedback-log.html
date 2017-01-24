@@ -65,13 +65,13 @@
 <table class="table table-striped table-layout-mob-view {{#isNewTheme}} agile-table {{/isNewTheme}}">
       <thead>
           <tr>
-              <th width="10%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-contact'}}</th>
+              <th width="20%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-contact'}}</th>
               <th width="20%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-assignee'}}</th>
               <th width="14%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-time'}}</th>
               <th width="10%" style="text-align:center;max-width:10%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-feedback'}}</th>
               <th width="25%" style="vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-feedback-comment'}}</th>
-              <th width="10%" style="max-width:20%;vertical-align:middle"></th>
-              <th width="10%" style="max-width:20%;vertical-align:middle"></th>
+              <th width="5%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-ticket'}}</th>
+              <th width="5%" style="max-width:20%;vertical-align:middle"></th>
           </tr>             
         </thead>  
         <tbody id="ticket-feedback-log-model-list"></tbody>
@@ -82,14 +82,14 @@
 <script id="ticket-feedback-log-model-template" type="text/html">
 <td style="vertical-align:middle">
 	
-    <div class="avatar thumb-sm text-capitalize" style="width:150px;
-    overflow: hidden;
-    text-overflow: ellipsis;">
+    <div class="avatar text-capitalize agile-img m-r-sm " data-toggle="tooltip" data-container="body" data-placement="bottom" title="{{first_name}} {{last_name}}" style="width:196px;
+    overflow: hidden; border-radius: 0px;
+    text-overflow: ellipsis;word-break:break-word">
                 
         {{#if contact_id}}
-                <a href="#contact/{{contact_id}}" data="{{contact_id}}"><img class="user-img ref-roundedimg" src="{{img_url}}" target="_blank"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="#contact/{{contact_id}}"  data="{{contact_id}}" ><img class="user-img" style="height:34px;width: 34px;border-radius: 0px !important;" src="{{img_url}}" target="_blank"/>&nbsp;&nbsp;&nbsp;&nbsp;
         {{else}}
-                <a href="#contact/{{contact_id}}"  data="{{contact_id}}"><img class="user-img ref-roundedimg" target="_blank" src="{{defaultGravatarurl 40}}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="#contact/{{contact_id}}"  data="{{contact_id}}"><img class="user-img" target="_blank"  style="height:34px;width: 34px; border-radius: 0px !important;" src="{{defaultGravatarurl 20}}"/>&nbsp;&nbsp;&nbsp;&nbsp;
         {{/if}} 
     
                 {{first_name}} {{last_name}}  </a>
@@ -98,7 +98,7 @@
     </td>
 
     <td class="text-capitalize" style="vertical-align:middle;">
-    <div class="line-clamp line-clamp-3" >
+    <div class="line-clamp line-clamp-3" style="word-break:break-word;">
           {{#if assignee_name}}{{assignee_name}}{{else}}-{{/if}}                      
     </div>
     </td>
@@ -128,12 +128,11 @@
        {{/if_equals}}     </td>
 
       <td style="vertical-align:middle">
-        <a href="#ticket/{{ticket_id}}"  style="color:#23b7e5" target="_blank">{{agile_lng_translate 'tickets' 'feedback-ticket'}} #{{ticket_id}}</a>     
+        <a href="#ticket/{{ticket_id}}"  style="color:#23b7e5" target="_blank">#{{ticket_id}}</a>     
      </td>           
     
      <td  style="vertical-align:middle" id="ticket_note" data-id="{{id}}">        
-          <a href="" class="ticket-feedback-notes text-info" data-id="{{id}}">{{agile_lng_translate 'tickets' 'feedback-view-note'}}</a>      
-            
+          <a href="" class="ticket-feedback-notes text-info" data-id="{{id}}"><i class="fa fa-file-text-o"></i></a>      
       </td>  
       
 	</div>
@@ -189,7 +188,7 @@
       </div>
       <div class="modal-body">
       <div class="word-break-all bold-text" style="margin-bottom:5px;text-weight:bold">
-      <a href="#ticket/{{ticket_id}}" target="_blank">{{agile_lng_translate 'tickets' 'feedback-ticket'}} # {{ticket_id}}</a>
+      <a href="#ticket/{{ticket_id}}" target="_blank"> # {{ticket_id}}</a>
        </div>
        <div class="word-break-all" style="margin-bottom:5px;">
         <span class="bold-text">{{agile_lng_translate 'tickets' 'feedback-subject'}}:</span> {{ticket_subject}}
