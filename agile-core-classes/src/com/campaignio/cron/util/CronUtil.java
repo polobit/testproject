@@ -240,7 +240,7 @@ public class CronUtil
 		while(cronUtil.doContinue()){
 			try
 			{
-				cronUtil.fetchAndExecute(100);
+				cronUtil.fetchAndExecute(25);
 			}
 			catch (Exception e)
 			{
@@ -298,6 +298,10 @@ public class CronUtil
 				System.out.println("Data store time out exception occured while iterating the query result "+e.getMessage());
 			}
 		}
+		
+		// Clear the list object
+		if(crons != null)
+			crons.clear();
 	}
 
 	/**
