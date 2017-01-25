@@ -1344,10 +1344,20 @@ function getAvailableContacts()
 			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
-		 else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+		else if (company_util.isCompany() && App_Companies.companiesListCountView && App_Companies.companiesListCountView.collection.toJSON()[0] && App_Companies.companiesListCountView.collection.toJSON()[0].count)
+		{
+			current_view_contacts_count = App_Companies.companiesListCountView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+		else if (App_Contacts.contactsListCountView && App_Contacts.contactsListCountView.collection && App_Contacts.contactsListCountView.collection.toJSON()[0] && App_Contacts.contactsListCountView.collection.toJSON()[0].count)
+		{
+			current_view_contacts_count = App_Contacts.contactsListCountView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
 	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
