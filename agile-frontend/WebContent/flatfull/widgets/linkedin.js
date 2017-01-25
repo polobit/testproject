@@ -9,7 +9,7 @@ $(function(){
 	eventer(messageEvent,function(e) {
 	    var key = e.message ? "message" : "data";
 	    var data = e[key];
-	    console.log(data.image_src+"received==="+data.p_link+"====="+data.p_phone+"===="+data.p_email+"===="+data.p_twitter);
+	    console.log(data.city+"========="+data.state+"========="+data.country+"========="+data.image_src+"received==="+data.p_link+"====="+data.p_phone+"===="+data.p_email+"===="+data.p_twitter);
 	    if(data == "loadsearchpage"){
 	    	var source = "https://www.linkedin.com/search/results/people/?keywords="+$("#contact_name").text().trim()+"&origin=GLOBAL_SEARCH_HEADER";
 			$("#linkedin-iframe").get(0).contentWindow.location.replace(source);
@@ -55,6 +55,27 @@ $(function(){
 			if (!contact_image && data.image_src){
 				var linkedin_image = data.image_src;
 				propertiesArray.push({ "name" : "image", "value" : linkedin_image});
+			}
+			var address = {};
+			if(data.city){
+				var l_city = data.city;
+				address.city = l_city.trim();
+			}
+			if(data.state){
+				var l_state = data.state;
+				address.state = l_state.trim();
+			}
+			if(data.country){
+				var l_country = data.country
+				address.countryname = l_country.trim();
+			}
+			if(address){
+				propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+			}
+			if(data.title){
+				if(!checkPropertyValueWithOutSubType("title",data.title)){
+					propertiesArray.push({ "name" : "title", "value" : data.title,"type" : "SYSTEM"});
+				}
 			}
 			verifyUpdateImgPermission(function(can_update){
 				if(can_update){
