@@ -202,13 +202,16 @@ public class DocumentUtil
     // encoding url, encode file name with space or special character in file name.
     
     public static void urlEncode(Document d){
-    	if(d.url != null && d.network_type.equals(Document.NetworkType.S3) && !d.url.contains("%2")){
+    	if(d.url != null && d.network_type.equals(Document.NetworkType.S3)){
     	try{
-		    	String s = d.url;
-		    	String st = s.substring(0,s.lastIndexOf("/")+1) ;
-		    	String en = s.substring(s.lastIndexOf(".")) ;
-		    	String filename = s.replace(st, "").replace(en, "");
-		    	d.url = st+URLEncoder.encode(filename, "UTF-8")+en;
+    		   if(d.url.contains(d.extension)){
+    			   d.url= d.url.replace(d.extension, URLEncoder.encode(d.extension, "UTF-8"));
+    		   }
+//		    	String s = d.url;
+//		    	String st = s.substring(0,s.lastIndexOf("/")+1) ;
+//		    	String en = s.substring(s.lastIndexOf(".")) ;
+//		    	String filename = s.replace(st, "").replace(en, "");
+//		    	d.url = st+URLEncoder.encode(filename, "UTF-8")+en;
 		    	} catch(Exception e){}
     	}
 //    	else if(d.url.contains("%25"))
