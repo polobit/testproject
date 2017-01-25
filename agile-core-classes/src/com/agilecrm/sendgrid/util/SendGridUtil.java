@@ -871,8 +871,8 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		
 		String whoisData=HTTPUtil.accessURL(WHO_IS_API_URL + emailDomain);
 		
-		long thirtyDaysBackTime = System.currentTimeMillis()/1000;
-		thirtyDaysBackTime = thirtyDaysBackTime -5092000;
+		long sixtyDaysBackTime = System.currentTimeMillis()/1000;
+		sixtyDaysBackTime = sixtyDaysBackTime -5092000;
 		
 		String format = "yyyy-MM-dd";
 		
@@ -898,7 +898,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			
 			long createdTimeMillisecond = date.getTime()/1000;
 			
-			if(createdTimeMillisecond <= thirtyDaysBackTime)
+			if(createdTimeMillisecond <= sixtyDaysBackTime)
 				return true;
 		}
 		
