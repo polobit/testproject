@@ -33,13 +33,10 @@
 #img-div {
     margin-top: 70px;
 }
-.item-icon {
+.item-icon .fa{
     border-radius: 50%;
     border: 2px solid #555;
-    width: 50px;
-    height: 50px;
-    padding-top: 12px;
-    margin: 0 auto;
+    padding: 13px;
 }
 figure.items{
     text-align: center;
@@ -120,14 +117,6 @@ figure {
 }
 .single-testimonial img ,.client_image img {
     border-radius: 50%;
-}
-.single-testimonial div.blockquote:after {
-    position: absolute;
-    bottom: -18px;
-    left: 45px;
-    content: "";
-    border-top: 19px solid #fff;
-    border-right: 22px solid transparent;
 }
 .single-testimonial div.blockquote{
     background: #fff;
@@ -242,7 +231,7 @@ figure {
         margin-left:  0px;
     }
 }
-@media (max-width: 375px) and (min-width: 300px){
+@media (max-width: 500px) and (min-width: 300px){
     .play-store img{
         margin-top: 10px;
     }    
@@ -257,7 +246,21 @@ figure {
 }
 @media (max-width: 500px) and (min-width: 300px){
     .videobtn-resp {
-        margin-top: 0px;
+        margin-top: -50px;
     }
 }
-
+.faqs-div{
+    margin-bottom: 30px;
+}
+.arrow-div{
+    position: absolute;
+    bottom: 16px;
+    left: 45px;
+    content: "";
+    border-top: 19px solid #fff;
+    border-right: 22px solid transparent;
+}
+.lg-fa{
+    font-size: 1.33333333em;
+    line-height: 0.75em;
+}
