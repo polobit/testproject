@@ -299,7 +299,7 @@ if(isSafari && isWin)
 <div class="form-group">
 <label class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%></label>
 <div class="col-sm-6">
-<input class="field required form-control number" name="users_count" value="10" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" type="number" pattern="\d*" min="1" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%>' autocapitalize="off">
+<input class="field required form-control number" name="users_count" value="" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" type="number" pattern="\d*" min="1" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%>' autocapitalize="off">
 
 </div>
 </div>
