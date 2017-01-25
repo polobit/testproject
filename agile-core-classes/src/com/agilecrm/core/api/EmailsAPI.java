@@ -725,6 +725,38 @@ public String validateSendgridWhitelabelDomain(@QueryParam("emailDomain") String
 	return SendGridUtil.validateSendgridWhiteLabelDomain(emailDomain, emailGateway, domain);
 }
 
+
+/**
+ * This method will return sendgrid reputation
+ * 
+ * @return String
+ * @throws Exception
+ */
+@Path("/sendgrid/whitelabel/reputation")
+@GET
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+public boolean getSendgridReputation() throws Exception
+{
+	try
+	{
+		String domain = NamespaceManager.get();
+		
+		  JSONArray reputationOBJ=new JSONArray(SendGridSubUser.getSendGridUserReputation(domain, null));	
+		  int reputation = reputationOBJ.getJSONObject(0).getInt(SendGridSubUser.REPUTATION);
+		
+		  System.out.println("Reputation object of domain : " + domain + reputationOBJ.toString());
+		  
+		  if(reputation >80)
+			  return true;
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while checking sendgrid reputation.." + e.getMessage());
+	    e.printStackTrace();
+	    return true;
+	}
+	return false;
+}
 /**
  * This method will validate  sendgrid whitelabel host and key
  * 

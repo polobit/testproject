@@ -54,7 +54,7 @@ public class SendGridSubUser extends SendGridLib
 	final static String SOFT_BOUNCE = "deferred";
 	final static String SPAM_REPORT = "spam_reports";
 	final static String REJECTED = "invalid_emails";
-	final static String REPUTATION = "reputation";
+	public final static String REPUTATION = "reputation";
 	
 	// 01-MARCH-2016
 	final static long SEND_GRID_TIMESTAMP=1456805583000L;
@@ -546,14 +546,13 @@ public class SendGridSubUser extends SendGridLib
 	public static void main(String adf[]){
 		try
 		{
-			updateSendGridSubUserPassword("xyz");
+			System.out.println(getSendGridUserReputation("prashannjeet", null));
 		}
-		catch (SendGridException e)
+		catch (Exception e)
 		{
 			System.out.println("Exception occured in main...."  + e.getMessage());
 			e.printStackTrace();
 		}
-		catch(Exception e){e.printStackTrace();}
 	}
 	/**
 	 * Add SendGrid sub account creation task in Deferred queue

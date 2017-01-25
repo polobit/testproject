@@ -732,14 +732,20 @@ function show_bulk_owner_change_page()
 				// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
-				var MAX_LIMIT = 500;
+				var MAX_LIMIT = 500; //Without DKIM SPF
+				var BULK_MAX_LIMIT = 1000;
 
 			 if(selected_count > MAX_LIMIT && emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
 				{
+							var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+							var json = {};
+							json.contact_ids = id_array;
+
 				  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id, MAX_LIMIT))
 				  	{
 				  		return;
 				  	}
+
 					  accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
               		    function(response){ // success
 
@@ -767,15 +773,36 @@ function show_bulk_owner_change_page()
 		                      				
 		                      	return;
 	                  		}
+							//check sendgrid reputation
+						  	else if(selected_count > BULK_MAX_LIMIT )
+						  	{
+						  		 accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/reputation', 
+              		             function(response)
+              		             { // success
 
-	                  		var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+              		             	if(response){
+              		             		alert("Your email sent reputation is good ");
+	              		             	postBulkOperationData(url, json, $form, undefined, function(data)
+											{
+												enable_save_button(saveButton);
+											}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+	              		               }
+	              		             else
+	              		             	alert("Your email sent reputation is not good ");
 
-							var json = {};
-							json.contact_ids = id_array;
-							postBulkOperationData(url, json, $form, undefined, function(data)
-							{
-								enable_save_button(saveButton);
-							}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+              		             }, 
+		              			function()
+		              			{
+		              				//error
+								});
+						  	}
+						  	else
+						  	{
+								postBulkOperationData(url, json, $form, undefined, function(data)
+								{
+									enable_save_button(saveButton);
+								}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+							}
 		              	}, 
 		              	function(){
 
