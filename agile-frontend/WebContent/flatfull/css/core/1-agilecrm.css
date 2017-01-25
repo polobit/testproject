@@ -5229,3 +5229,32 @@ span.rolecontainer::first-letter {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
 }
+#event-color-checkbox li{
+  display: inline;
+}
+.color-checkbox {
+  margin-right: 0px;
+}
+#event-color-checkbox .i-checks {
+  padding-left: 14px !important;
+}
+.bcp-select {
+    height: 17px;
+    width: 17px;
+    display: inline-block;
+    
+}
+#checkboxes-div {
+    width: 99%;
+    height: 20px;
+    margin-left: 166px;
+}
+.bcp-selected {
+background: url(//calendar.google.com/googlecalendar/images/combined_v46_vr.png);
+    background-position: -95px -50px;
+    height: 10px;
+    width: 10px;
+    margin: 3px;
+    position: relative;
+    vertical-align: top;
+  }

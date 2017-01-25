@@ -420,7 +420,7 @@ public class Event extends Cursor
 	}
 	
 		String status=this.status;
-		if(status != null && status.length() > 0){
+		/*if(status != null && status.length() > 0){
 		  if(status.equals("Cancelled")){
 			this.backgroundColor="#FDAD9E";
 		  }else if(status.equals("completed")){
@@ -430,7 +430,7 @@ public class Event extends Cursor
 		  }else if(status.equals("no-show")){
 			this.backgroundColor="#DDDDDD";
 		  }	
-		}
+		}*/
     }
 
     public String toString()
