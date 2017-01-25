@@ -3598,7 +3598,7 @@ i.mce-ico, i.mce-caret, span.mce-txt{
 {
   background-color:#F4F8F9!important;
 }
-#helpcenter-content .theme-panel .panel-footer
+#helpcenter-content .theme-panel .panel-footer , #helpcenter-content .newthemepanel .panel-footer
 {
       background-color: #F4F8F9;
 }
