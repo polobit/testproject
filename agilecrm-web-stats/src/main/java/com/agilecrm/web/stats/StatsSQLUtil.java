@@ -200,6 +200,7 @@ public class StatsSQLUtil
     public static JSONArray getPageViewsOfAllEmails(String domain, String email)
     {
 	
+    /*
 	String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_visits p1";
 	
 	// Gets UNIQUE session ids based on Email from database
@@ -215,9 +216,19 @@ public class StatsSQLUtil
 	System.out.println("sids query is: " + sessions);
 	System.out.println("Select query: " + pageViews);
 	
+	*/
+    //above query commented on 25/Jan/2017 because we are getting wrong page views for a given contacts because
+    //guid duplication in the Database.
+    
+    String pageViewsQuery = "SELECT domain,lcase(hex(guid)) as guid,lcase(hex(sid)) as sid,url,inet6_ntoa(ip) as ip,is_new,ref_url,user_agent,stats_time,country,region,city,city_lat_long,email,"
+    		+ "UNIX_TIMESTAMP(stats_time) as created_time from page_visits WHERE email IN (" + email + ") AND domain = "
+    		+ StatsGoogleSQLUtil.encodeSQLColumnValue(domain);
+    
+    System.out.println("web stats query " + pageViewsQuery);
+    					  	
 	try
 	{
-	    return StatsSQL.getJSONQuery(pageViews);
+	    return StatsSQL.getJSONQuery(pageViewsQuery);
 	}
 	catch (Exception e1)
 	{
