@@ -2591,41 +2591,44 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
     	}
     	
     	ContactField addressField = contact.getContactField(Contact.ADDRESS);
+    	
+    	if(addressField == null || (addressField != null && StringUtils.isBlank(addressField.value)))
+    	{
+    		return;
+    	}
+    	
     	StringBuffer addressString = new StringBuffer();
-        if(addressField != null && StringUtils.isNotBlank(addressField.value))
-        {
-        	try 
+    	try 
+    	{
+    		org.json.JSONObject addressJSON = new org.json.JSONObject(addressField.value);
+    		if(addressJSON != null)
         	{
-        		org.json.JSONObject addressJSON = new org.json.JSONObject(addressField.value);
-        		if(addressJSON != null)
-            	{
-            		if(StringUtils.isNotBlank(addressJSON.getString("address")))
-            		{
-            			addressString.append(addressJSON.getString("address")).append(", ");
-            		}
-            		if(StringUtils.isNotBlank(addressJSON.getString("city")))
-            		{
-            			addressString.append(addressJSON.getString("city")).append(", ");
-            		}
-            		if(StringUtils.isNotBlank(addressJSON.getString("state")))
-            		{
-            			addressString.append(addressJSON.getString("state")).append(", ");
-            		}
-            		if(StringUtils.isNotBlank(addressJSON.getString("country")))
-            		{
-            			addressString.append(CountryUtil.getCountryName(addressJSON.getString("country"))).append(", ");
-            		}
-            		if(StringUtils.isNotBlank(addressJSON.getString("zip")))
-            		{
-            			addressString.append(addressJSON.getString("zip"));
-            		}
-            	}
-    		} 
-        	catch (Exception e) 
-        	{
-    			e.printStackTrace();
+        		if(StringUtils.isNotBlank(addressJSON.getString("address")))
+        		{
+        			addressString.append(addressJSON.getString("address")).append(", ");
+        		}
+        		if(StringUtils.isNotBlank(addressJSON.getString("city")))
+        		{
+        			addressString.append(addressJSON.getString("city")).append(", ");
+        		}
+        		if(StringUtils.isNotBlank(addressJSON.getString("state")))
+        		{
+        			addressString.append(addressJSON.getString("state")).append(", ");
+        		}
+        		if(StringUtils.isNotBlank(addressJSON.getString("country")))
+        		{
+        			addressString.append(CountryUtil.getCountryName(addressJSON.getString("country"))).append(", ");
+        		}
+        		if(StringUtils.isNotBlank(addressJSON.getString("zip")))
+        		{
+        			addressString.append(addressJSON.getString("zip"));
+        		}
         	}
-        }
+		} 
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+    	}
         
         if(StringUtils.isNotBlank(addressString.toString()))
         {

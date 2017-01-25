@@ -211,6 +211,10 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 			// Adds Other fields in contacts to document
 			doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
 			
+			if(contact.getGeo_point() == null)
+			{
+				ContactUtil.setGeoPoint(contact);
+			}
 			if (contact.getGeo_point() != null)
 			{
 				GeoPoint geoPoint = new GeoPoint(contact.getGeo_point().getLatitude(), contact.getGeo_point().getLongitude());
