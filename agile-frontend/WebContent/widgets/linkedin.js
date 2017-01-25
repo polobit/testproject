@@ -57,20 +57,23 @@ $(function(){
 				propertiesArray.push({ "name" : "image", "value" : linkedin_image});
 			}
 			var address = {};
-			if(data.city){
-				var l_city = data.city;
-				address.city = l_city.trim();
-			}
-			if(data.state){
-				var l_state = data.state;
-				address.state = l_state.trim();
-			}
-			if(data.country){
-				var l_country = data.country
-				address.countryname = l_country.trim();
-			}
-			if(address){
-				propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+			var contact_address = agile_crm_get_contact_property("address");
+			if(!contact_address){
+				if(data.city){
+					var l_city = data.city;
+					address.city = l_city.trim();
+				}
+				if(data.state){
+					var l_state = data.state;
+					address.state = l_state.trim();
+				}
+				/*if(data.country){
+					var l_country = data.country
+					address.countryname = l_country.trim();
+				}*/
+				if(address){
+					propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+				}
 			}
 			if(data.title){
 				if(!checkPropertyValueWithOutSubType("title",data.title)){
