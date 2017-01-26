@@ -1,24 +1,24 @@
-#newtemp1.logo {
+.newtemp1.logo {
     margin-bottom: 100px;
 }
-#newtemp1.intro {
+.newtemp1.intro {
     padding: 0px 10px 0px 0px;
 }
-#newtemp1 {
+.newtemp1 {
     background-color: #8cddcd;
 }
-#newtemp1 .intro {
+.newtemp1 .intro {
     padding: 0px 10px 0px 0px;
 }
-#newtemp1 p {
+.newtemp1 p {
     line-height: 1.72222;
     color: #444;
     font-size: 14px;
 }
-#newtemp1 h1,
-#newtemp1 h2,
-#newtemp1 h3,
-#newtemp1 h4 {
+.newtemp1 h1,
+.newtemp1 h2,
+.newtemp1 h3,
+.newtemp1 h4 {
     font-weight: 300;
     margin-top: 20px;
     line-height: 1.1;
@@ -48,45 +48,45 @@ figure {
 .iphone-1 {
     margin-top: 15px;
 }
-#newtemp3    {
+.newtemp3    {
     background-color: #8cddcd;
     color: #444;
     padding-top: 100px;
     padding-bottom: 0px;
 }
-#newtemp3 .lead {
+.newtemp3 .lead {
     line-height: 1.4;
     font-weight: 300;
     font-size: 21px;
     margin-bottom: 50px;
     margin-top: 15px;
 }
-#newtemp3 h1,
-#newtemp3 h2,
-#newtemp3 h3,
-#newtemp3 h4 {
+.newtemp3 h1,
+.newtemp3 h2,
+.newtemp3 h3,
+.newtemp3 h4 {
     font-weight: 300;
     margin-top: 10px;
     margin-bottom: 10px;
     line-height: 1.1;
 }
-#newtemp3  .btn-4{
+.newtemp3  .btn-4{
     background-color: #34495e;
     border: none;
     color: #fff;
     font-size: 16px;
     font-weight: 700;
 }
-#newtemp3 .btn-wide{
+.newtemp3 .btn-wide{
     padding: 15px 100px;
 }
 @media (max-width: 360px) and (min-width: 320px){
- #newtemp3 .btn-wide{
+ .newtemp3 .btn-wide{
     padding: 15px 50px;
     }
 }
 @media (max-width: 980px) and (min-width: 768px){
-    #newtemp3 .lead {
+    .newtemp3 .lead {
         font-size: 18px;
         margin-bottom: 25px;
     }
@@ -204,7 +204,7 @@ figure {
     background: #fff;
     text-align: center;
 }
-#newtemp1 .fa{
+.newtemp1 .fa{
     margin-right: 5px;
 }
 .padding-top-50{
