@@ -733,96 +733,96 @@ function show_bulk_owner_change_page()
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 				var MAX_LIMIT = 500; //Without DKIM SPF
-				var BULK_MAX_LIMIT = 1000;
-
-			 if(selected_count > MAX_LIMIT && emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
-				{
-							var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
-							var json = {};
-							json.contact_ids = id_array;
-
-				  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id, MAX_LIMIT))
-				  	{
-				  		return;
-				  	}
-
-					  accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
-              		    function(response){ // success
-
-	                      if(!response)
-	                      {
-	                            
-		                      showModalConfirmation(
-		                                      "Add to Campaign",
-		                                      "Please configure DKIM and SPF settings to send campaign emails to more than "+ MAX_LIMIT +" contacts.",
-		                                       function()
-		                                      {
-		                                      		  enable_save_button(saveButton);
-		                                              Backbone.history.navigate("api-analytics", { trigger : true });
-
-		                                      },  function()
-		                                      {
-		                                      		enable_save_button(saveButton);
-
-		                                            Backbone.history.navigate("contacts", { trigger : true });
-		                                           
-		                                      }, function()
-		                                      {
-		                                      	enable_save_button(saveButton);
-		                                      },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
-		                      				
-		                      	return;
-	                  		}
-							//check sendgrid reputation
-						  	else if(selected_count > BULK_MAX_LIMIT )
-						  	{
-						  		 accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/reputation', 
-              		             function(response)
-              		             { // success
-
-              		             	if(response){
-              		             		alert("Your email sent reputation is good ");
-	              		             	postBulkOperationData(url, json, $form, undefined, function(data)
-											{
-												enable_save_button(saveButton);
-											}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
-	              		               }
-	              		             else
-	              		             	alert("Your email sent reputation is not good ");
-
-              		             }, 
-		              			function()
-		              			{
-		              				//error
-								});
-						  	}
-						  	else
-						  	{
-								postBulkOperationData(url, json, $form, undefined, function(data)
+		
+			  //check sendgrid reputation and email sent
+				accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/reputation?emailSent=' + selected_count, 
+              		function(response)
+              		   { // success
+							if(response)
+							{
+              		            console.log("Your email sent reputation is good ");
+	              		  
+								if(selected_count > MAX_LIMIT && emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
 								{
-									enable_save_button(saveButton);
-								}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
-							}
-		              	}, 
-		              	function(){
+								   if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id, MAX_LIMIT))
+								  	{
+								  		return;
+								  	}
+									
+									accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
+				              		function(response){ // success
 
-		              	//error
+					                    if(!response)
+					                      {   
+						                   showModalConfirmation(
+						                        "Add to Campaign",
+						                        "Please configure DKIM and SPF settings to send campaign emails to more than "+ MAX_LIMIT +" contacts.",
+						                         function()
+						                            {
+						                                enable_save_button(saveButton);
+						                                Backbone.history.navigate("api-analytics", { trigger : true });
+						                            },  
+						                         function()
+						                            {
+						                                enable_save_button(saveButton);
+						                                Backbone.history.navigate("contacts", { trigger : true });
+						                            }, 
+						                         function()
+						                            {
+						                              	enable_save_button(saveButton);
+						                            },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+						                      return;
+					                  		}
+										  	else
+										  	{
+										  		var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+												var json = {};
+												json.contact_ids = id_array;
+												postBulkOperationData(url, json, $form, undefined, function(data)
+												{
+													enable_save_button(saveButton);
+												}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+											}
+						              	}, 
+						              	function(){
+						              	//error
+										});
+								}
+								else
+								{
+									var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+									var json = {};
+									json.contact_ids = id_array;
 
+									postBulkOperationData(url, json, $form, undefined, function(data)
+									{
+										enable_save_button(saveButton);
+									}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+								}
+	              		    }
+	              		    else
+	              		      {
+	              		        showModalConfirmation(
+		                        "Message",
+		                        "Your email sent reputation is low so you cant send 1000 email per day.",
+		                         function(){},
+		                         function()
+		                                   {
+		                                      enable_save_button(saveButton);		                                           
+		                                    },
+		                         function()
+		                                   {
+		                                      enable_save_button(saveButton);
+		                                      Backbone.history.navigate("contacts", { trigger : true });
+		                                   },"Go to Contacts", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+	              		    }
+              		    }, 
+		              function()
+		              	{
+		              	  console.log("Error occuered");
 						});
-				}
-				else
-				{
-					var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
-
-					var json = {};
-					json.contact_ids = id_array;
-					postBulkOperationData(url, json, $form, undefined, function(data)
-					{
-						enable_save_button(saveButton);
-					}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
-				}
-			});
-		});
+			     });
+		  });
 		
 	}
 

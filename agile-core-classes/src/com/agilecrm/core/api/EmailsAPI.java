@@ -39,6 +39,7 @@ import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.EmailPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
@@ -735,19 +736,30 @@ public String validateSendgridWhitelabelDomain(@QueryParam("emailDomain") String
 @Path("/sendgrid/whitelabel/reputation")
 @GET
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public boolean getSendgridReputation() throws Exception
+public boolean getSendgridReputation(@QueryParam("emailSent") int emailSent) throws Exception
 {
 	try
 	{
-		String domain = NamespaceManager.get();
+		  String domain = NamespaceManager.get();
+		  System.out.println("Email sent task added for : " + emailSent);
+		  
+		  long  domainCreatedTimestamps=DomainUserUtil.getCurrentDomainUser().getCreatedTime();
+		  
+		  //if domain is old then don't check any thing
+		  if(domainCreatedTimestamps < SendGridSubUser.DOMAIN_CREATED_TIME)
+		     return false;
 		
 		  JSONArray reputationOBJ=new JSONArray(SendGridSubUser.getSendGridUserReputation(domain, null));	
 		  int reputation = reputationOBJ.getJSONObject(0).getInt(SendGridSubUser.REPUTATION);
 		
 		  System.out.println("Reputation object of domain : " + domain + reputationOBJ.toString());
 		  
-		  if(reputation >80)
-			  return true;
+		  if(reputation < 90)
+		  {
+			  if((SendGridSubUser.PER_DAY_EMAIL_SENT_LIMIT - SendGridSubUser.getPerDayEmailSent(domain)) > emailSent)
+				  return true;
+		  }
+			  
 	}
 	catch (Exception e)
 	{

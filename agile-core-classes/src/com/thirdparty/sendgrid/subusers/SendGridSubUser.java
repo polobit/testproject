@@ -59,6 +59,12 @@ public class SendGridSubUser extends SendGridLib
 	// 01-MARCH-2016
 	final static long SEND_GRID_TIMESTAMP=1456805583000L;
 	
+	//26-JAN-2017
+	public final static long DOMAIN_CREATED_TIME = 1485498264L;
+	
+	// Perday email sent limit if reputation is low
+	public static final long PER_DAY_EMAIL_SENT_LIMIT = 1000L;
+	
 	public SendGridSubUser(String username, String password)
 	{
 		super(username, password);
@@ -546,7 +552,7 @@ public class SendGridSubUser extends SendGridLib
 	public static void main(String adf[]){
 		try
 		{
-			System.out.println(getSendGridUserReputation("prashannjeet", null));
+			System.out.println(getPerDayEmailSent("prashannjeet"));
 		}
 		catch (Exception e)
 		{
@@ -606,6 +612,34 @@ public class SendGridSubUser extends SendGridLib
 			System.out.println("After throwing exception");
 	}
 	
+	/**
+	 * This method will return per day email sent count from SendGrid
+	 * 
+	 * @param domain
+	 * @return long
+	 */
+	public static int getPerDayEmailSent(String domain)
+	{
+		int emailSent = 0;
+	  try
+		{
+		  SendGridStats stats=new SendGridStats();
+		  stats.setDuration("day");
+		  stats.setStartTime(System.currentTimeMillis()-(24*60*60*1000));
+		  
+		  JSONArray responseJSON = new JSONArray(getSubUserStatistics(domain, null, stats));
+		  emailSent = responseJSON.getJSONObject(0).getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT);
+		  
+		  System.out.println("Per Email sent Count for domain : " + domain + emailSent);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured while fetching per day email count"  + e.getMessage());
+			e.printStackTrace();
+			return emailSent;
+		}
+	  return emailSent;
+	}
 }
 	
 
