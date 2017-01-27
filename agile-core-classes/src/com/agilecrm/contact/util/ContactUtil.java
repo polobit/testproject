@@ -2603,23 +2603,23 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
     		org.json.JSONObject addressJSON = new org.json.JSONObject(addressField.value);
     		if(addressJSON != null)
         	{
-        		if(StringUtils.isNotBlank(addressJSON.getString("address")))
+        		if(addressJSON.has("address") && StringUtils.isNotBlank(addressJSON.getString("address")))
         		{
         			addressString.append(addressJSON.getString("address")).append(", ");
         		}
-        		if(StringUtils.isNotBlank(addressJSON.getString("city")))
+        		if(addressJSON.has("city") && StringUtils.isNotBlank(addressJSON.getString("city")))
         		{
         			addressString.append(addressJSON.getString("city")).append(", ");
         		}
-        		if(StringUtils.isNotBlank(addressJSON.getString("state")))
+        		if(addressJSON.has("state") && StringUtils.isNotBlank(addressJSON.getString("state")))
         		{
         			addressString.append(addressJSON.getString("state")).append(", ");
         		}
-        		if(StringUtils.isNotBlank(addressJSON.getString("country")))
+        		if(addressJSON.has("country") && StringUtils.isNotBlank(addressJSON.getString("country")))
         		{
         			addressString.append(CountryUtil.getCountryName(addressJSON.getString("country"))).append(", ");
         		}
-        		if(StringUtils.isNotBlank(addressJSON.getString("zip")))
+        		if(addressJSON.has("zip") && StringUtils.isNotBlank(addressJSON.getString("zip")))
         		{
         			addressString.append(addressJSON.getString("zip"));
         		}
