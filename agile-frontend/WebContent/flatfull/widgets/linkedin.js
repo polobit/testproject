@@ -1,93 +1,6 @@
-$(function(){
+function startLinkedinWidget(){
 	showLinkedinMatchingProfilesBasedOnName();
-	
-	var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-	var eventer = window[eventMethod];
-	var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
-
-	// Listen to message from child window
-	eventer(messageEvent,function(e) {
-	    var key = e.message ? "message" : "data";
-	    var data = e[key];
-	    console.log(data.city+"========="+data.state+"========="+data.country+"========="+data.image_src+"received==="+data.p_link+"====="+data.p_phone+"===="+data.p_email+"===="+data.p_twitter);
-	    if(data == "loadsearchpage"){
-	    	var source = "https://www.linkedin.com/search/results/people/?keywords="+$("#contact_name").text().trim()+"&origin=GLOBAL_SEARCH_HEADER";
-			$("#linkedin-iframe").get(0).contentWindow.location.replace(source);
-	    }else{
-		    var contact_image = agile_crm_get_contact_property("image");
-		    var propertiesArray = [{ "name" : "website", "value" : data.p_link, "subtype" : "LINKEDIN" ,"type" : "SYSTEM"}];
-		    var website_url = data.p_url;
-		    if(website_url){
-		    	var w_urls = website_url.split(",");
-		    	for(var i=0;i<w_urls.length;i++){
-		    		if(!checkPropertyValue("website",w_urls[i].trim(),"URL")){
-		    			propertiesArray.push({ "name" : "website", "value" : w_urls[i].trim(),"subtype" : "URL","type" : "SYSTEM"});
-		    		}
-		    	}
-		    }
-		    var twitter_profile = data.p_twitter;
-		    if(twitter_profile){
-		    	var t_profiles = twitter_profile.split(",");
-		    	for(var i=0;i<t_profiles.length;i++){
-		    		if(!checkPropertyValue("website","@"+t_profiles[i].trim(),"TWITTER")){
-		    			propertiesArray.push({ "name" : "website", "value" : "@"+t_profiles[i].trim(),"subtype" : "TWITTER","type" : "SYSTEM"});
-		    		}
-		    	}
-		    }
-		    var l_email = data.p_email;
-		    if(l_email){
-		    	var c_email = l_email.split(",");
-		    	for(var i=0;i<c_email.length;i++){
-			    	if(!checkPropertyValueWithOutSubType("email",c_email[i].split(" (")[0].trim())){
-						propertiesArray.push({ "name" : "email", "value" : c_email[i].split(" (")[0].trim(),"type" : "SYSTEM"});
-					}
-				}
-			}
-			var l_phone = data.p_phone;
-			if(l_phone){
-				var p_no = l_phone.split(",");
-				for(var i=0;i<p_no.length;i++){
-					if(!checkPropertyValueWithOutSubType("email",p_no[i].split(" (")[0].trim())){
-						propertiesArray.push({ "name" : "phone", "value" : p_no[i].split(" (")[0].trim(),"type" : "SYSTEM"});
-					}
-				}
-			}
-			if (!contact_image && data.image_src){
-				var linkedin_image = data.image_src;
-				propertiesArray.push({ "name" : "image", "value" : linkedin_image});
-			}
-			var address = {};
-			var contact_address = agile_crm_get_contact_property("address");
-			if(!contact_address){
-				if(data.city){
-					var l_city = data.city;
-					address.city = l_city.trim();
-				}
-				if(data.state){
-					var l_state = data.state;
-					address.state = l_state.trim();
-				}
-				/*if(data.country){
-					var l_country = data.country
-					address.countryname = l_country.trim();
-				}*/
-				if(address){
-					propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
-				}
-			}
-			if(data.title){
-				if(!checkPropertyValueWithOutSubType("title",data.title)){
-					propertiesArray.push({ "name" : "title", "value" : data.title,"type" : "SYSTEM"});
-				}
-			}
-			verifyUpdateImgPermission(function(can_update){
-				if(can_update){
-					agile_crm_update_contact_properties_linkedin(propertiesArray);
-				}
-			});
-		}
-	},false);
-});
+}
 /**
  * Fetches matching profiles from LinkedIn based on current contact
  * first name and last name
@@ -202,7 +115,9 @@ function agile_crm_update_contact_properties_linkedin(propertiesArray, callback)
 	}
 	// If property is new then new field is created
 	contact_model.set({ "properties" : properties });
+	var msg_count=0;
 	// Save model
+	console.log("many many times");
 	var model = new Backbone.Model();
 	model.url = "core/api/contacts";
 	model.save(contact_model.toJSON(), {
@@ -221,6 +136,12 @@ function agile_crm_update_contact_properties_linkedin(propertiesArray, callback)
 					var block_el = contactDetailsBlock.render(true).el;
 	      			$('#contact-details-block').html($(block_el)); 
 
+	      			if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+						contact_collection = App_Contacts.contactsListView.collection;
+
+	      			if (contact_collection != null)
+						contact_detail_view_navigation_linkedin(contactId, App_Contacts.contactsListView);
+
 	      			var msgType = "success";
 					var msg = _agile_get_translated_val('widgets','linkedin-data-sync-success');
 					showNotyPopUp(msgType , msg, "bottomRight");
@@ -228,6 +149,41 @@ function agile_crm_update_contact_properties_linkedin(propertiesArray, callback)
 	      	}
 		}
 	});
+}
+/**
+ * To navigate from one contact detail view to other
+ */
+function contact_detail_view_navigation_linkedin(id, contact_list_view){
+	var contact_collection = contact_list_view.collection;
+	var collection_length = contact_collection.length;
+    var current_index = contact_collection.indexOf(contact_collection.get(id));
+    var previous_contact_id;
+    var next_contact_id;
+    //fetch next set so that next link will work further.
+    if(collection_length <= current_index+5) {
+    	contact_list_view.infiniScroll.fetchNext();
+    }
+    if (collection_length > 1 && current_index < collection_length && contact_collection.at(current_index + 1) && contact_collection.at(current_index + 1).has("id")) {
+     
+    	next_contact_id = contact_collection.at(current_index + 1).id
+    }
+
+    if (collection_length > 0 && current_index != 0 && contact_collection.at(current_index - 1) && contact_collection.at(current_index - 1).has("id")) {
+
+    	previous_contact_id = contact_collection.at(current_index - 1).id
+    }
+
+    var route = "contact";
+    if(Current_Route && Current_Route == "lead/" + id)
+    {
+      route = "lead";
+    }
+
+    if(previous_contact_id != null)
+    	$('.navigation').append('<a style="float:left;" href="#'+route+'/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
+    if(next_contact_id != null)
+    	$('.navigation').append('<a style="float:right;" href="#'+route+'/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
+	
 }
 /*function loadframe(){
 	console.log("load frmae valueee");
