@@ -115,6 +115,9 @@ function showLinkedinMatchingProfilesBasedOnName(){
 			}else{
 				console.log(linkedin_profile+"linkedin profile");
 				var source = linkedin_profile;
+				if(source.startsWith("linkedin")){
+					source = "https://"+source;
+				}
 				$("#Linkedin").html("<iframe id='linkedin-iframe' src='"+source+"' height='500px' width='250px' style='overflow: hidden;' frameBorder='0'><p>Your browser does not support iframes.</p></iframe>");
 			}
 		}else{
@@ -205,11 +208,9 @@ function agile_crm_update_contact_properties_linkedin(propertiesArray, callback)
 	model.save(contact_model.toJSON(), {
 		success : function(data){
 			if(data){
-				console.log("Contact ID ****** ");				
 				var currentContactId = App_Contacts.contactDetailView.model.id;
 				console.log(currentContactId + " : "+ contactId);
 				if(currentContactId && contactId == currentContactId){
-					console.log("fullcontact Updated **** ");
 					App_Contacts.contactDetailView.model = data;
 
 					var contactDetailsBlock = new Base_Model_View({ 
@@ -219,6 +220,10 @@ function agile_crm_update_contact_properties_linkedin(propertiesArray, callback)
 
 					var block_el = contactDetailsBlock.render(true).el;
 	      			$('#contact-details-block').html($(block_el)); 
+
+	      			var msgType = "success";
+					var msg = _agile_get_translated_val('widgets','linkedin-data-sync-success');
+					showNotyPopUp(msgType , msg, "bottomRight");
 	      		}
 	      	}
 		}
