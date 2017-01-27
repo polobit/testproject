@@ -733,8 +733,9 @@ function show_bulk_owner_change_page()
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 				var MAX_LIMIT = 500; //Without DKIM SPF
-		
-			  //check sendgrid reputation and email sent
+			
+			  if(!_IS_EMAIL_GATEWAY && emails_workflows.hasOwnProperty(workflow_id))
+			  {
 				accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/reputation?emailSent=' + selected_count, 
               		function(response)
               		   { // success
@@ -803,9 +804,12 @@ function show_bulk_owner_change_page()
 	              		    else
 	              		      {
 	              		        showModalConfirmation(
-		                        "Message",
-		                        "Your email sent reputation is low so you cant send 1000 email per day.",
-		                         function(){},
+		                        "{{agile_lng_translate 'other' 'alert'}}",
+		                        "{{agile_lng_translate 'campaign' 'reputation-alert'}}",
+		                         function(){
+		                         			 enable_save_button(saveButton);
+		                         			 Backbone.history.navigate("contacts", { trigger : true });
+		                         },
 		                         function()
 		                                   {
 		                                      enable_save_button(saveButton);		                                           
@@ -813,17 +817,27 @@ function show_bulk_owner_change_page()
 		                         function()
 		                                   {
 		                                      enable_save_button(saveButton);
-		                                      Backbone.history.navigate("contacts", { trigger : true });
-		                                   },"Go to Contacts", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+		                                   },"Go To Contacts", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 	              		    }
               		    }, 
 		              function()
 		              	{
 		              	  console.log("Error occuered");
 						});
+			      }
+			   else
+					{
+						var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+						var json = {};
+						json.contact_ids = id_array;
+
+						postBulkOperationData(url, json, $form, undefined, function(data)
+							{
+								enable_save_button(saveButton);
+							}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+					}
 			     });
-		  });
-		
+		  });	
 	}
 
 	function show_add_tag_bulkaction_form()

@@ -743,11 +743,11 @@ public boolean getSendgridReputation(@QueryParam("emailSent") int emailSent) thr
 		  String domain = NamespaceManager.get();
 		  System.out.println("Email sent task added for : " + emailSent);
 		  
-		  long  domainCreatedTimestamps=DomainUserUtil.getCurrentDomainUser().getCreatedTime();
+		  long  domainCreatedTimestamps = DomainUserUtil.getCurrentDomainUser().getCreatedTime();
 		  
 		  //if domain is old then don't check any thing
 		  if(domainCreatedTimestamps < SendGridSubUser.DOMAIN_CREATED_TIME)
-		     return false;
+		     return true;
 		
 		  JSONArray reputationOBJ=new JSONArray(SendGridSubUser.getSendGridUserReputation(domain, null));	
 		  int reputation = reputationOBJ.getJSONObject(0).getInt(SendGridSubUser.REPUTATION);

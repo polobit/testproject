@@ -625,7 +625,7 @@ public class SendGridSubUser extends SendGridLib
 		{
 		  SendGridStats stats=new SendGridStats();
 		  stats.setDuration("day");
-		  stats.setStartTime(System.currentTimeMillis()-(24*60*60*1000));
+		  stats.setStartTime(System.currentTimeMillis());
 		  
 		  JSONArray responseJSON = new JSONArray(getSubUserStatistics(domain, null, stats));
 		  emailSent = responseJSON.getJSONObject(0).getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT);
