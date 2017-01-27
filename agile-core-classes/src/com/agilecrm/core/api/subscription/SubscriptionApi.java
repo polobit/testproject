@@ -121,8 +121,13 @@ public class SubscriptionApi {
 			 */
 
 			if (subscribe.card_details != null) {
-				if (subscribe.plan != null || subscribe.emailPlan != null)
+				if (subscribe.plan != null || subscribe.emailPlan != null){
+					String countryName = request.getHeader("X-AppEngine-Country");
+					System.out.println("countryName:::: "+countryName);
+					if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+						throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 					subscribe.createNewCustomer();
+				}
 				else
 					subscribe = updateCreditcard(subscribe.card_details);
 
