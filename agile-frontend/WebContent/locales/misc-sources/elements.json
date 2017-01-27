@@ -24,6 +24,9 @@
         {"url":"elements/content_section12.html","height":376, "thumbnail":"elements/images/thumbs/new/content_section12.png"},
         {"url":"elements/layout4.html","height":470, "thumbnail":"elements/images/thumbs/new/layout4.png"},
         {"url":"elements/layout5.html","height":649, "thumbnail":"elements/images/thumbs/new/layout5.png"},   
+        {"url":"elements/newtemp11.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp11.png"},      
+        {"url":"elements/content_section1.html","height":481, "thumbnail":"elements/images/thumbs/new/content_section1.png"},
+        {"url":"elements/content_section2.html","height":520, "thumbnail":"elements/images/thumbs/new/content_section2.png"},     
         {"url":"elements/newtemp7.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp7.png"},
         {"url":"elements/content_section3.html","height":774, "thumbnail":"elements/images/thumbs/content_section3.png"},
         {"url":"elements/content_section5.html","height":846, "thumbnail":"elements/images/thumbs/content_section5.png"},
@@ -33,17 +36,13 @@
     ],  
          
     "{{agile_lng_translate 'landingpage-builder' 'call-to-action'}}":[
+        {"url":"elements/header1.html","height":481, "thumbnail":"elements/images/thumbs/new/header1.png"},
+        {"url":"elements/header4.html","height":500, "thumbnail":"elements/images/thumbs/new/header4.png"},
+        {"url":"elements/header2.html","height":498, "thumbnail":"elements/images/thumbs/new/header2.png"},
+        {"url":"elements/header3.html","height":500, "thumbnail":"elements/images/thumbs/new/header3.png"},
         {"url":"elements/newtemp8.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp8.png"},
         {"url":"elements/newtemp9.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp9.png"},
-        {"url":"elements/newtemp10.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp10.png"},
-        {"url":"elements/header1.html","height":481, "thumbnail":"elements/images/thumbs/new/header1.png"},
-        {"url":"elements/header2.html","height":498, "thumbnail":"elements/images/thumbs/new/header2.png"},
-        {"url":"elements/newtemp11.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp11.png"},
-        {"url":"elements/header3.html","height":500, "thumbnail":"elements/images/thumbs/new/header3.png"},
-        {"url":"elements/header4.html","height":500, "thumbnail":"elements/images/thumbs/new/header4.png"},      
-        {"url":"elements/content_section1.html","height":481, "thumbnail":"elements/images/thumbs/new/content_section1.png"},
-        {"url":"elements/content_section2.html","height":520, "thumbnail":"elements/images/thumbs/new/content_section2.png"}      
-
+        {"url":"elements/newtemp10.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp10.png"}   
     ],
     "{{agile_lng_translate 'landingpage-builder' 'testimonial'}}":[
         {"url":"elements/newtemp5.html","height":107, "thumbnail":"elements/images/thumbs/new/newtemp5.png"},
@@ -94,7 +93,8 @@
     "{{agile_lng_translate 'landingpage-builder' 'footer'}}":[
     	{"url":"elements/footer1.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
     	{"url":"elements/footer2.html","height":107, "thumbnail":"elements/images/thumbs/footer2.png"},
-    	{"url":"elements/footer3.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"}
+    	{"url":"elements/footer3.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"},
+        {"url":"elements/newtemp15.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"}
     ]
     }
 }
