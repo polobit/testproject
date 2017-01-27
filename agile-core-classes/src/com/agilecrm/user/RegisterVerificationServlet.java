@@ -88,8 +88,8 @@ public class RegisterVerificationServlet extends HttpServlet
 	    }
 	    
 	    String countryName = request.getHeader("X-AppEngine-Country");
-	    
-	    if (StringUtils.equalsIgnoreCase(countryName, "BD") || StringUtils.equalsIgnoreCase(countryName, "NG")
+	    System.out.println("countryName:::: "+countryName);
+	    if (StringUtils.equalsIgnoreCase(countryName, "BD") || StringUtils.equalsIgnoreCase(countryName, "NG") || StringUtils.equalsIgnoreCase(countryName, "TN")
 		    || "180.211.195.60".equals(userIp))
 	    {
 		writeErrorMessage(response, "Access denied");
