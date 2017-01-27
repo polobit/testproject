@@ -313,10 +313,7 @@ public class Document extends Cursor
     private void postLoad(){
     	DocumentUtil.urlEncode(this);
     }
-    @PrePersist
-    private void prePersist(){
-    	DocumentUtil.urlEncode(this);
-    }
+    
     
 
     /**
@@ -439,6 +436,7 @@ public class Document extends Cursor
 
     // Saves domain user key
     ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
+    DocumentUtil.urlEncode(this);
 
     }
 

@@ -363,8 +363,8 @@ a{
 					</form>
 
 					 <div style="display:table;width:75%;margin:15px auto;" class="m-b-none">
-		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs" tabindex="2" type="submit">Invite Users</button> 
-		              <a href="<%=redirectHomeURL%>"  tabindex="1" style="padding: 10px 0px 10px 0px;" class="inline-block  redirect-to-panel text-info text-11 pull-right  m-r" id="skip" onclick="return false;">Skip</a>
+		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" onclick="track_event('invite user-invited');" class="btn btn-lg btn-primary pull-right text-xs" tabindex="2" type="submit">Invite Users</button> 
+		              <a href="<%=redirectHomeURL%>"  tabindex="1" style="padding: 10px 0px 10px 0px;" class="inline-block  redirect-to-panel text-info text-11 pull-right  m-r" id="skip" onclick="track_event('invite user-skip');return false;">Skip</a>
 
 
 	            	</div>
@@ -428,8 +428,10 @@ function isValidForm(form) {
 var redirectHomeURL = '<%=redirectHomeURL%>';
 var restricted = '<%=is_restricted%>';
 var emailDomain = '<%=email_domain%>';
+var email = '<%=email%>';
 
 	$(document).ready(function(e) {
+		load_analytics_code();
 		$("a.redirect-to-panel").click(function(){
 			if($(this).attr("disabled"))
 				return false;
@@ -650,6 +652,23 @@ var emailDomain = '<%=email_domain%>';
 			
 		}
 	});
+	/** Google analytics code **/
+	function load_analytics_code(){
+
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  ga('create', 'UA-44894190-1', 'auto');
+		  ga('send', 'pageview');
+		  ga('create', 'UA-75813054-1', {'name':'b'});
+		  ga('b.send', 'pageview');
+	}
+	function track_event(event){
+		if(window.location.href.indexOf("localhost") > 0)
+			return;
+		ga('b.send', 'event', 'Agile Dashboard', event, email.toLowerCase());
+	}
 
 	
 		

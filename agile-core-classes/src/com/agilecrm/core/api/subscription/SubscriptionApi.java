@@ -21,10 +21,10 @@ import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 
-import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
@@ -121,8 +121,13 @@ public class SubscriptionApi {
 			 */
 
 			if (subscribe.card_details != null) {
-				if (subscribe.plan != null || subscribe.emailPlan != null)
+				if (subscribe.plan != null || subscribe.emailPlan != null){
+					String countryName = request.getHeader("X-AppEngine-Country");
+					System.out.println("countryName:::: "+countryName);
+					if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+						throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 					subscribe.createNewCustomer();
+				}
 				else
 					subscribe = updateCreditcard(subscribe.card_details);
 
@@ -144,6 +149,10 @@ public class SubscriptionApi {
 				subscribe = changePlan(subscribe.plan, request);
 
 			else if (subscribe.emailPlan != null) {
+				String countryName = request.getHeader("X-AppEngine-Country");
+				System.out.println("countryName:::: "+countryName);
+				if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+					throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 				subscribe = addEmailPlan(subscribe.emailPlan);
 				return subscribe;
 
@@ -522,10 +531,14 @@ public class SubscriptionApi {
 	// Life time emails purchase 
 	@Path("/purchaseEmailCredits")
 	@POST
-	public void purchaseEmailCredits(@QueryParam("quantity") Integer quantity)
+	public void purchaseEmailCredits(@Context HttpServletRequest request, @QueryParam("quantity") Integer quantity)
 	{
 		Subscription subscription = SubscriptionUtil.getSubscription();
 		try {
+			String countryName = request.getHeader("X-AppEngine-Country");
+			System.out.println("countryName:::: "+countryName);
+			if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+				throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 			if(SubscriptionUtil.isEmailsPurchaseStatusBlocked(subscription))
 				throw new Exception(ExceptionUtil.EMAILS_PURCHASE_BLOCKED);
 			subscription.purchaseEmailCredits(quantity);
@@ -549,9 +562,13 @@ public class SubscriptionApi {
 	// Auto Renewal Credits 
 	@Path("/auto_recharge")
 	@POST
-	public void autoRecharge(@FormParam("isAutoRenewalEnabled") Boolean isAutoRenewalEnabled, @FormParam("nextRechargeCount") Integer nextRechargeCount, @FormParam("autoRenewalPoint") Integer autoRenewalPoint)
+	public void autoRecharge(@Context HttpServletRequest request, @FormParam("isAutoRenewalEnabled") Boolean isAutoRenewalEnabled, @FormParam("nextRechargeCount") Integer nextRechargeCount, @FormParam("autoRenewalPoint") Integer autoRenewalPoint)
 	{
 		try {
+			String countryName = request.getHeader("X-AppEngine-Country");
+			System.out.println("countryName:::: "+countryName);
+			if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+				throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 			if(!restriction.isAutoRenewalEnabled){
 				Subscription subscription = SubscriptionUtil.getSubscription();

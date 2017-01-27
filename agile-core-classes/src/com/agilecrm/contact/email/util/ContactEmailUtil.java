@@ -390,10 +390,6 @@ public class ContactEmailUtil
 		// Adding attachment name to the content of email
 		if (attachment_name !=null && !attachment_name.equals("") && attachment_url != null && !attachment_url.equals(""))
 		{
-			com.agilecrm.document.Document d = com.agilecrm.document.Document.getById(documentIds.get(0));
-			if(d.network_type.equals(com.agilecrm.document.Document.NetworkType.S3))
-				body = body + "<div><a onclick=\"fileDownloadWithCustomName('"+attachment_url+"','"+d.extension+"')\" style='color:#23b7e5;'><i class='fa fa-paperclip m-r-xs'></i>" + d.extension + "</a></div>";
-			else
 			  body = body + "<div><a href='"+attachment_url+"' style='color:#23b7e5;'><i class='fa fa-paperclip m-r-xs'></i>" + attachment_name + "</a></div>";
 		}
 		else if (attachment_name !=null && !attachment_name.equals(""))

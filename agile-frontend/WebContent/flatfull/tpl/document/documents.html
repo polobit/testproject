@@ -260,7 +260,7 @@
         {{/unless}}
 
         <div class="pull-right" style="margin-top:2px;">
-        <b class="activate-link" style="display:none;">{{#if url}}<a {{#if_equals network_type 'S3'}}onclick="fileDownloadWithCustomName('{{url}}','{{extension}}')" {{else}} href='{{url}}' {{/if_equals}} target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
+        <b class="activate-link" style="display:none;">{{#if url}}<a href='{{url}}' target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
         </div>
         </div>
         
@@ -295,7 +295,7 @@
 <td data="{{id}}" class="data">
 <div class="pull-left inline-block table-resp line-clamp line-clamp-3"  title="{{name}}"  style="max-width:90%;width:20em;"><a class="text-cap document-url" href="#documents/{{id}}" data="{{id}}">{{name}}</a></div>
 <div class="pull-left m-l-xs">
-<b class="activate-link" style="display:none;">{{#if url}}<a {{#if_equals network_type 'S3'}}onclick="fileDownloadWithCustomName('{{url}}','{{extension}}')" {{else}} href='{{url}}' {{/if_equals}} target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
+<b class="activate-link" style="display:none;">{{#if url}}<a href='{{url}}' target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
 </div>
 <div class="clearfix"></div>
 </div>
