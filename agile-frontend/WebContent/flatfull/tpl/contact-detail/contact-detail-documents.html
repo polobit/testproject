@@ -130,7 +130,7 @@
 		<div class="clearfix"></div>
     <div>
     {{#if url}}
-		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a {{#if_equals network_type 'S3'}}onclick="fileDownloadWithCustomName('{{url}}','{{extension}}')" {{else}} href='{{url}}' {{/if_equals}} target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/hasMenuScope}}
+		{{network network_type}}{{#hasMenuScope 'DOCUMENT'}}&nbsp;&nbsp;<a href='{{url}}' target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/hasMenuScope}}
 	{{/if}}			
 	</div>
 <div class="clearfix"></div>

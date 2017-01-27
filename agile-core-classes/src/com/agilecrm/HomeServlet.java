@@ -15,6 +15,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.DocumentTemplatesUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.addon.AddOn;
@@ -199,6 +200,7 @@ public class HomeServlet extends HttpServlet
 	    // time for Domain user
 	    setLastLoggedInTime(domainUser);
 	    Defaults.createTemplateForExistingUser(domainUser);
+	   // DocumentTemplatesUtil.findDuplicate("Sample Quote","Business Proposal");
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 	}
 	catch (Exception e)
