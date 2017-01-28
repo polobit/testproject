@@ -43,6 +43,9 @@
 <%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
 <%@page import="com.agilecrm.account.util.EmailGatewayUtil"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
+<%@page import="java.util.Map.Entry"%>
+
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -176,6 +179,15 @@ if(!StringUtils.equalsIgnoreCase(languageCookieValue, _LANGUAGE) && LanguageUtil
 
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application, "menu");
 String userAgent = request.getHeader("user-agent");
+
+LinkedHashMap<String, String> servicemap = new LinkedHashMap<String, String>();
+if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+   servicemap.put("#tickets","Help Desk");
+   servicemap.put("#ticket-feedback","Feedback");
+   servicemap.put("#ticket-groups","Groups");
+   servicemap.put("#ticket-labels","Labels");
+   servicemap.put("#canned-responses","Canned Responses");
+}
 %>
 
 
@@ -204,6 +216,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     CLOUDFRONT_TEMPLATE_LIB_PATH = "";  
     CSS_PATH = FLAT_FULL_PATH;
   }
+
+  
 %>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
@@ -465,8 +479,7 @@ function isIE() {
                         <span class="grid-selector" navigation="#calendar">Calendar<p class="comma-seperator">,</p></span>
                         <%}%>
                         <span class="grid-selector" navigation="#tasks">Tasks<p class="comma-seperator">,</p></span>
-                         
-                       
+                                          
                         <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar<p class="comma-seperator">,</p></span>
                       </span>
                      
@@ -526,6 +539,9 @@ function isIE() {
                   <span class="grid2-sub-nav">
                      <%
                     if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+                    for (Entry<String, String> entry : servicemap.entrySet()) {
+                          System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+                      
                     %>
                    <span class="grid-selector help-desk-shortcut" navigation="#tickets">Help Desk<p class="comma-seperator">,</p></span>
                    <%}%>
@@ -1545,14 +1561,14 @@ if(!HANDLEBARS_PRECOMPILATION){
     });
 }
 /*$('.grid-selector').click(function(e){*/
-  $('.grid-dropdown-menu').on('click','.grid-selector',function(e){
+  /*$('.grid-dropdown-menu').on('click','.grid-selector',function(e){
   e.stopImmediatePropagation();
   var route = $(this).attr("navigation");
   Backbone.history.navigate(route, {
                 trigger: true
             });
   $("#need_help_header").removeClass("open");
-  });
+  });*/
 
 // Remove the loadinng
 $('body').css('background-image', 'none');

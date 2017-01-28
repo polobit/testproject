@@ -105,6 +105,17 @@ $("#prefsDropdownModal").on('click','#showUserVoice',function(e){
 
 });
 
+$('.grid-dropdown-menu').on('click','.grid-selector',function(e){
+  e.stopImmediatePropagation();
+  var route = $(this).attr("navigation");
+  $(this).parent().closest(".grid-dropdown-menu").find('span').removeClass("grid-menu-active");
+  Backbone.history.navigate(route, {
+                trigger: true
+            });
+  $("#need_help_header").removeClass("open");
+  $(this).addClass("grid-menu-active");
+  });
+
 $("#help-options").click(function(e){
 	$("#prefsDropdownModal").html(getTemplate('prefs-dropdown-options', {})).modal('show');
 	agile_toggle_chat_option_on_status();
@@ -679,7 +690,10 @@ function initRolehandlers(){
  			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
  			// $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
  			appendAgileNewThemeSubNavMenu();
- 			// Call dashboard route
+ 			$(e.target).closest(".grid-dropdown-menu").find('span').removeClass("grid-menu-active");
+ 			if($(this).attr("data-service-name") == "SERVICE")
+ 				$(e.target).find(".help-desk-shortcut").addClass("grid-menu-active");
+ 			
  			if(!$(e.target).hasClass("grid-selector")){
 	 			Backbone.history.navigate("#navigate-dashboard", {
 	                trigger: true
