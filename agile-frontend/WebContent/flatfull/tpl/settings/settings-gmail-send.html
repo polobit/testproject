@@ -102,8 +102,7 @@
 					   
         				<div class="control-group form-group">
 			                <label class="control-label">Per day limit 
-			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"="" data-content=" Max Number of emails to be sent from Agile. This limit depends on your Gmail account." id="element" data-trigger="hover" "="" data-original-title="" title="">
-			               </span>
+			               
 			               </label>
 			                   <div class="controls">
 			                     <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" min=0 value="200"/>
@@ -112,7 +111,7 @@
 			              <div class="control-group form-group">
 			            	<div class="checkbox">
 			                <label class="i-checks i-checks-sm">
-			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Send Campaign emails from Gmail SMTP
+			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Send campaign emails from Gmail
 			                </label>
 			         	   </div>
         				</div>
@@ -129,15 +128,13 @@
 	<div class="col-md-4 col-sm-6 col-xs-12 "></div>
 	<div class="col-md-4 col-sm-6 col-xs-12 ">
          <div style="margin-top:0px; text-align : justify;">
-                <b>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</b>
-                <br>
                 <p>
-                  Send personal and campaign emails from your email provider. 
+                  Send personal and campaign emails from your Gmail account. 
                 </p>
-                 <p> <b>Per day limit:</b> Maximum number of emails to be sent from Agile to your email provider. Check with your email provider on sending limits for your account. Some email providers may only allow you to send a limited number of emails per day or per hour.
+                 <p> <b>Per day limit:</b>The value for maximum number of emails to be sent from Agile via your Gmail account. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway. Moreover the value should be less than or equal to with your Gmail sending limits. For more info on Gmail limits click <span><a href="https://support.google.com/a/answer/166852" style="color: #19a9d5;!important">here</a></span>
                  </p>
                 <p>
-                <b>Send campaign emails from Gmail SMTP:</b> The campaign emails will be sent through the connected email provider. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway.
+                <b>Send Campaign emails from Gmail:</b> The campaign and bulk emails will be sent through the connected Gmail account. 
                 </p>
                  <p>Bounces and Spam Complaints will not be shown on Agile Reports.</p>
          </div>

@@ -43,8 +43,7 @@
             </div>
              <div class="control-group form-group">
                 <label class="control-label">Per day limit 
-                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"="" data-content=" Max Number of emails to be sent from Agile. This limit depends on the SMTP mail servers." id="element" data-trigger="hover" "="" data-original-title="" title="">
-               </span>
+               
                </label>
                      <div class="controls">
                         <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" min=0 value="200"/>
@@ -104,15 +103,14 @@
 <div class="col-md-4 col-sm-6 col-xs-12 "></div>
     <div class="col-md-4 col-sm-6 col-xs-12 ">
          <div style="margin-top:0px; text-align : justify;">
-                <b>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</b>
-                <br>
+               
                 <p>
                   Send personal and campaign emails from your email provider. 
                 </p>
-                 <p> <b>Per day limit:</b> Maximum number of emails to be sent from Agile to your email provider. Check with your email provider on sending limits for your account. Some email providers may only allow you to send a limited number of emails per day or per hour.
+                 <p> <b>Per day limits:</b> Maximum number of emails to be sent from Agile via your email provider. Check with your email provider on sending limits for your account. Some email providers may only allow you to send a limited number of emails per day or per hour.
                  </p>
                 <p>
-                <b>Send campaign emails from SMTP:</b> The campaign emails will be sent through the connected email provider. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway.
+                <b>Send campaign emails from SMTP:</b> The campaign and bulk emails will be sent through the connected email provider. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway.
                 </p>
                  <p>Bounces and Spam Complaints will not be shown on Agile Reports.</p>
          </div>
