@@ -58,6 +58,8 @@ public class AgileQueues
     //Time out noraml campaign pull queue
     public static final String TIME_OUT_EMAIL_PULL_QUEUE = "time-out-email-pull-queue";
     
+    //SMTP pull queue used for send inng smpt and gmail bulk emails
+    public static final String SMTP_BULK_EMAIL_PULL_QUEUE = "smtp-bulk-email-pull-queue";
     // Campaign push queues
     public static final String NORMAL_CAMPAIGN_PUSH_QUEUE = "normal-campaign-push-queue";
     

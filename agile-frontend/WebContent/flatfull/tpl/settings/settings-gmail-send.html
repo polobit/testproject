@@ -27,10 +27,14 @@
                 			<span class="block">{{email}}</span>
                 		</div> 
 						<div class="clearfix"></div>
-					</div>
+						<br>
+						<div id="remaining_gmail_emails">Emails Remaining{{{get_remaining_email_count max_email_limit  email_sent_count}}}</div>
+					</div> 
 				</div>
+
 				<div class="text-center">
 			   		<a href="#" class="btn btn-sm btn-danger" id="gmailsend-prefs-delete" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
+			   		<a class="btn btn-sm btn-default" href="#gmail-setting/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
 				</div>
 			</div>
 		{{else}} 
@@ -65,4 +69,87 @@
 
 <script id="settings-gmail-send-collection-template" type="text/html">
 	<div id="settings-gmail-send-model-list"></div>
+</script>
+
+
+<script id="settings-outbound-gmail-send-template" type="text/html">
+{{#if id}}
+	<div class="row">
+		<div class="col-md-4 col-sm-6 col-xs-12 ">
+			<div class="panel panel-default">
+				<div class="panel-heading font-bold"><h4 class="h4">{{agile_lng_translate 'prefs-email' 'gmail'}}</h4></div>
+				    <div class="panel-body">
+				    <form id="gmail-send-setting-form">
+			        <fieldset>
+           			 <div style="min-height:50px">
+						{{#if picture}} 
+		 				 <i class="media-grid thumb thumb-wrapper pull-left"> 
+							{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
+							<img  src="{{emailGravatarurl 75 email}}"  /> 
+						 	{{else}} 
+								<img  src="{{picture}}" /> 
+						{{/if_equals}}
+						 </i>
+						{{else}} 
+							<i class="media-grid"> <img class="thumbnail m-b-none thumb" src="{{emailGravatarurl 50 email}}" /> </i>
+						{{/if}}
+						   <div class="m-l-xs pull-left" style="min-width:200px">
+			   				<span class="block m-t-sm">{{name}}</span>
+                			<span class="block">{{email}}</span>
+                			<br>
+                			</div>
+					 </div>
+					   
+        				<div class="control-group form-group">
+			                <label class="control-label">Per day limit 
+			               
+			               </label>
+			                   <div class="controls">
+			                     <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" min=0 value="200"/>
+			                   </div>
+			              </div>
+			              <div class="control-group form-group">
+			            	<div class="checkbox">
+			                <label class="i-checks i-checks-sm">
+			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Send campaign emails from Gmail
+			                </label>
+			         	   </div>
+        				</div>
+					            
+					    <div class="form-actions text-center"> 
+							<a href="#email" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+					        <a href="#" class="save btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}} </a>
+					    </div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-sm-6 col-xs-12 "></div>
+	<div class="col-md-4 col-sm-6 col-xs-12 ">
+         <div style="margin-top:0px; text-align : justify;">
+                <p>
+                  Send personal and campaign emails from your Gmail account. 
+                </p>
+                 <p> <b>Per day limit:</b>The value for maximum number of emails to be sent from Agile via your Gmail account. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway. Moreover the value should be less than or equal to with your Gmail sending limits. For more info on Gmail limits click <span><a href="https://support.google.com/a/answer/166852" style="color: #19a9d5;!important">here</a></span>
+                 </p>
+                <p>
+                <b>Send Campaign emails from Gmail:</b> The campaign and bulk emails will be sent through the connected Gmail account. 
+                </p>
+                 <p>Bounces and Spam Complaints will not be shown on Agile Reports.</p>
+         </div>
+      </div>
+      </div>
+</div>
+{{/if}}
+
+</script>
+
+
+<script id="email-remaining-progress-template" type="text/html" >
+	<span style="padding-bottom:3px !important" class="text-muted pull-right">{{emailRemain}}/{{maxEmailLimit}}</span>
+	<div class="progress" style="overflow:visible; height:7px !important;margin-bottom:15px !important" title="{{value}}%">
+        <div class="progress-bar {{badge}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{value}}%; max-width:100%">
+        </div>
+    </div>
 </script>
