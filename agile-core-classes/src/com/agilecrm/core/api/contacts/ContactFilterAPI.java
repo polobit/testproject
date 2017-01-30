@@ -260,7 +260,17 @@ public class ContactFilterAPI
     public HashMap<String, Integer> getQueryResultsCount(@PathParam("filter_id") String id)
     {
     HashMap<String, Integer> countMap = new HashMap<String, Integer>();
-    countMap.put("count", ContactFilterUtil.getContactsCount(id));
+    if (id.contains("system-"))
+    {
+	id = id.split("-")[1];
+
+	ContactFilter.DefaultFilter filter = ContactFilter.DefaultFilter.valueOf(id);
+	if (filter != null){
+		countMap.put("count", Contact.dao.getCountByProperty(ContactFilterUtil.getDefaultContactSearchMap(filter)));
+		return countMap;
+	}
+    }
+	countMap.put("count", ContactFilterUtil.getContactsCount(id));
     return countMap;
     }
 }

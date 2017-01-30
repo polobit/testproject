@@ -1559,14 +1559,14 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					// Reset collection
 					if(type == "contacts-company")
     					App_Companies.contacts_Company_List.collection.models[0].set("count", data, {silent: true});
-					else if(type == "contacts")
+					else if(type == "contacts" && Current_Route == "contacts")
 						App_Contacts.contactsListView.collection.models[0].set("count", data, {silent: true});
 					else if(type == "workflows"){
 						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)
 							App_Workflows.active_subscribers_collection.collection.models[0].set("count", data, {silent: true});
 					}else if(type == "leads" && App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 0){
 						App_Leads.leadsListView.collection.models[0].set("count", data, {silent: true});
-					} else{
+					} else if(Current_Route == "companies"){
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
 
