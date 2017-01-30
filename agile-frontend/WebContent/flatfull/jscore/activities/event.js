@@ -26,6 +26,19 @@ $(function(){
          }
 
     });
+    $("#updateActivityModal").on('click', '.bcp-select', function(){
+         if($(this).children().hasClass('bcp-selected')){
+         	$(this).children().removeClass('bcp-selected');
+         	$("#backgroundColor").val("");
+         }
+         else{
+         	var id = $(this).attr('id');
+         	$(".bcp-select").children().removeClass('bcp-selected');
+         	$(this).children().addClass('bcp-selected');
+         	$("#backgroundColor").val(id);
+         }
+
+    });
 
 	$("#updateActivityModal").on('click', '#add_event_desctiption', function(e)
 	{
