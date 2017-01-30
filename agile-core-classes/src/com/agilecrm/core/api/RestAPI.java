@@ -111,6 +111,9 @@ public class RestAPI {
 
 	    // Add properties list to contact properties
 	    contact.properties = properties;
+	    // developer rest API source identification
+	    contact.source = "zapier";
+	    
 	    if (tags.length > 0)
 		contact.addTags(PHPAPIUtil.getValidTags(tags));
 	    else
