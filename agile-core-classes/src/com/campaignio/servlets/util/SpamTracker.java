@@ -11,7 +11,7 @@ import com.agilecrm.util.EmailLinksConversion;
 public class SpamTracker 
 {
 	
-	public static final String[] blockedDomains = {"case-3022", "secure342", "billing-upgrade"};
+	public static final String[] blockedDomains = {"case-3020", "case-3022", "secure342", "billing-upgrade"};
 	
 	public static boolean isSpamDomain(String url)
 	{
