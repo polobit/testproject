@@ -1,5 +1,7 @@
 package com.agilecrm.imap;
 
+import java.io.Serializable;
+
 import com.sun.mail.imap.IMAPStore;
 
 /**
@@ -9,7 +11,7 @@ import com.sun.mail.imap.IMAPStore;
  * @author naresh
  * 
  */
-public class IMAPStoreWrapper
+public class IMAPStoreWrapper implements Serializable
 {
     private long lastUsedTime;
     private IMAPStore store;
