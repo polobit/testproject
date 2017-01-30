@@ -36,8 +36,8 @@
         ulPageList: document.getElementById('pageList'),
         responsiveToggle: document.getElementById('responsiveToggle'),
         theScreen: document.getElementById('screen'),
-        prevFocus:null,
-
+        prevFocus:null,       
+        
         init: function() {
 
             publisher.subscribe('closeStyleEditor', function () {
@@ -70,7 +70,7 @@
             $(this.buttonDetailsAppliedHide).on('click', function(){$(this).parent().fadeOut(500);});
             $(this.buttonCloseStyleEditor).on('click', this.closeStyleEditor);
             $(this.inputCustomLink).on('focus', this.inputCustomLinkFocus).on('blur', this.inputCustomLinkBlur);
-            $(document).on('modeContent modeBlocks', 'body', this.deActivateMode);
+            $(document).on('modeContent modeBlocks', 'body', this.deActivateMode);            
 
             //chosen font-awesome dropdown
             $(this.selectIcons).chosen({'search_contains': true});
@@ -996,6 +996,10 @@
 
             if($(el).prop('tagName')=== "IMG"  && $(el).attr('data-type') !== 'video')
                 $("a#img_Link").click(); 
+            if($(el).hasClass("choose-media-options"))
+                $('#image_Tab div#choose-media-div').show();    
+            else 
+                $('#image_Tab div#choose-media-div').hide();
     
             if($("#error-img-msg").css("display")!=="none"){
                 styleeditor.hideErrorMsg('imageURL');
@@ -1027,6 +1031,11 @@
 
             $('a#video_Link').parent().show();
             $('a#video_Link').click();
+            //allow user to choose a media options (agile form, video, image)
+            if($(el).hasClass("choose-media-options"))
+                $('#video_Tab div#choose-media-div').show();    
+            else 
+                $('#video_Tab div#choose-media-div').hide();
             //$('a#default-tab1').css("display","none");
 
             if($("#err-youtube-msg").css("display")!=="none"){
@@ -1417,10 +1426,15 @@
 
         },
 
-        editAgileForm: function(){
+        editAgileForm: function(el){
             $('a#agileform_link').parent().show();
             $('a#agileform_link').click();
             $('a#default-tab1').css('display','none');
+            //allow user to choose a media options (agile form, video, image)
+            if($(el).hasClass("choose-media-options"))
+                $('#agileform_Tab div#choose-media-div').show();    
+            else 
+                $('#agileform_Tab div#choose-media-div').hide();
             if($(this.activeElement.element).find('.agile_crm_form_embed').size()!==0){
                 $('#agileform_id').val($(this.activeElement.element).find('.agile_crm_form_embed').attr('id')).attr('selected','selected');
                 var form_id=$(this.activeElement.element).find(".agile_crm_form_embed").attr("id").split(window.CURRENT_AGILE_DOMAIN+"_")[1];
@@ -1479,6 +1493,7 @@
             $("."+el).next().css("margin-top","6px");
             $("."+el).show();
         }
+
 
     };
 
