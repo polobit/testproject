@@ -446,6 +446,7 @@ var Settings_Modal_Events = Base_Model_View.extend({
         		}
         	}
         }
+    },
 	/**
 	 * Select Campaign for send email through SMTP settings
 	 */
@@ -629,7 +630,6 @@ var Settings_Collection_Events = Base_Collection_View.extend({
 			});
 		});		
 	},
-
 });
 
 
