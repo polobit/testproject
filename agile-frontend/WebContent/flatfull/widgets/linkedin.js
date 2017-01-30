@@ -82,6 +82,7 @@ function checkPropertyValueWithOutSubType(propertyName,propValue){
  * @param callback
  */
 function agile_crm_update_contact_properties_linkedin(propertiesArray, callback){	
+	var contact_collection;
 	var contact_model = App_Contacts.contactDetailView.model;
 	var contactId = contact_model.id;
 	var properties = contact_model.toJSON()['properties'];

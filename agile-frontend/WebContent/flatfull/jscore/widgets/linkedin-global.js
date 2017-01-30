@@ -62,30 +62,51 @@ eventer(messageEvent,function(e) {
 			var linkedin_image = data.image_src;
 			propertiesArray.push({ "name" : "image", "value" : linkedin_image});
 		}
-		var address = {};
-		var contact_address = agile_crm_get_contact_property("address");
-		if(!contact_address){
-			if(data.city){
-				var l_city = data.city;
-				address.city = l_city.trim();
-			}
-			if(data.state){
-				var l_state = data.state;
-				address.state = l_state.trim();
-			}
-			/*if(data.country){
-				var l_country = data.country
-				address.countryname = l_country.trim();
-			}*/
-			if(address){
-				propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
-			}
-		}
 		if(data.title){
 			if(!checkPropertyValueWithOutSubType("title",data.title)){
 				propertiesArray.push({ "name" : "title", "value" : data.title,"type" : "SYSTEM"});
 			}
 		}
+		var address = {};
+		var contact_address = agile_crm_get_contact_property("address");
+		//if(!contact_address){
+		if(data.city){
+			var l_city = data.city;
+			address.city = l_city.trim();
+		}
+		if(data.state){
+			var l_state = data.state;
+			address.state = l_state.trim();
+		}
+		if(data.country_name){
+			var l_country = data.country_name;
+			var country_code;
+			address.countryname = l_country.trim();
+			$.ajax({
+				url:"https://restcountries.eu/rest/v1/name/"+address.countryname+"?fullText=true",
+				async: false,
+				success:function(data){
+					$.each(data,function(index,item){
+						country_code = item.alpha2Code;
+						if(address){
+							address.country = country_code;
+							if(agile_crm_is_model_property_changed("address",JSON.stringify(address))){
+								propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+							}
+						}
+					});
+				}
+			});
+
+		}else{
+			if(address){
+				if(agile_crm_is_model_property_changed("address",JSON.stringify(address))){
+					propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+				}
+			}
+
+		}
+		//}
 		verifyUpdateImgPermission(function(can_update){
 			if(can_update){
 				agile_crm_update_contact_properties_linkedin(propertiesArray);
