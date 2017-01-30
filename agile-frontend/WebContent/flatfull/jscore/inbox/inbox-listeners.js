@@ -107,8 +107,8 @@ function inboxFlagListners(){
 				getContent(url,dataVal);
 			}
 		}
-		var model = globalMailCollectionInstance.get(dataVal);
-		model.set({flags: 'read'});
+		/*var model = globalMailCollectionInstance.get(dataVal);
+		model.set({flags: 'read'});*/
 		$(this).css({"font-weight":"normal"});
 		$(this).removeClass("unread");
 		$(this).addClass("read");
@@ -228,28 +228,33 @@ function setSeenFlag(url,dataVal, attrid){
 }
 function getContent(url,dataVal){
 	var server = $("#inbox-email-type-select").attr("data-server");
+	var folder_type_draft = $("#inbox-email-type-select").attr("folder-type");
 	if(server != "agile"){
 		$.ajax({ 
 			url :url,
 			success : function(data){
-				dataVal = dataVal.replace(/[^\w\s]/gi, '-');
-				$("#flag"+dataVal).removeClass("pending");
-				var html = "";
-				getTemplate("mail-message", data, undefined, function(template_ui) {
-					if( !template_ui )	return;
+				if(folder_type_draft == 'draft'){
+					composeView(data);
+				}else{
+					dataVal = dataVal.replace(/[^\w\s]/gi, '-');
+					$("#flag"+dataVal).removeClass("pending");
+					var html = "";
+					getTemplate("mail-message", data, undefined, function(template_ui) {
+						if( !template_ui )	return;
 
-					html = template_ui;
-				}, '#message'+dataVal);
-				$("#message"+dataVal).html(html);
-		        $("#mails-list").hide();
-		        $("#mail-details-view").show();
-		        $(".toaddress").hide();
-		        $("#message"+dataVal).find("a").attr("target", "_blank");
-		        $("#message"+dataVal).find("div").removeClass("column");
-		        $("#message"+dataVal).find(".column").removeClass("column");
-		        $("#message"+dataVal).find("table").removeClass("container");
-		        $("#message"+dataVal).find("a").css({"color": "#15c","text-decoration":"underline"});
-		        $("#message"+dataVal).css({"background-color":"white"});
+						html = template_ui;
+					}, '#message'+dataVal);
+					$("#message"+dataVal).html(html);
+			        $("#mails-list").hide();
+			        $("#mail-details-view").show();
+			        $(".toaddress").hide();
+			        $("#message"+dataVal).find("a").attr("target", "_blank");
+			        $("#message"+dataVal).find("div").removeClass("column");
+			        $("#message"+dataVal).find(".column").removeClass("column");
+			        $("#message"+dataVal).find("table").removeClass("container");
+			        $("#message"+dataVal).find("a").css({"color": "#15c","text-decoration":"underline"});
+			        $("#message"+dataVal).css({"background-color":"white"});
+		    	}
 			} 
 		});
 	}else{
