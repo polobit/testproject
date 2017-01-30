@@ -43,6 +43,9 @@
 <%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
 <%@page import="com.agilecrm.account.util.EmailGatewayUtil"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
+<%@page import="java.util.Map.Entry"%>
+
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -176,6 +179,15 @@ if(!StringUtils.equalsIgnoreCase(languageCookieValue, _LANGUAGE) && LanguageUtil
 
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application, "menu");
 String userAgent = request.getHeader("user-agent");
+
+LinkedHashMap<String, String> servicemap = new LinkedHashMap<String, String>();
+if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+   servicemap.put("#tickets","Help Desk");
+   servicemap.put("#ticket-feedback","Feedback");
+   servicemap.put("#ticket-groups","Groups");
+   servicemap.put("#ticket-labels","Labels");
+   servicemap.put("#canned-responses","Canned Responses");
+}
 %>
 
 
@@ -204,6 +216,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     CLOUDFRONT_TEMPLATE_LIB_PATH = "";  
     CSS_PATH = FLAT_FULL_PATH;
   }
+
+  
 %>
 
 <!-- <link rel="stylesheet" type="text/css" href="<%=FLAT_FULL_PATH%>css/agile-all.css?_=<%=_AGILE_VERSION%>" />  -->
@@ -435,24 +449,126 @@ function isIE() {
                   <i class="material-icons">arrow_drop_down</i>
               </div>
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'>
-                <i class="material-icons purple-color">view_module</i>
-                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+          <ul class="dropdown-menu grid-dropdown-menu">
+              <li>
+              <a href='#' class='menu-service-select menu-select-sales' data-service-name='SALES' data-dashboard='SalesDashboard'>
+                <div class="pull-left"><i class="material-icons purple-color">view_module</i></div>
+                     <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+                     <div class="menu-shortcuts">
+                      <span class="grid2-sub-nav  block">
+                        <%
+                              if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+                        %> 
+                        <span class="grid-selector" navigation="#contacts">Contacts<p class="comma-seperator">,</p></span>
+                        <%}%>
+                        <span class="grid-selector" navigation="#companies">Companies<p class="comma-seperator">,</p></span>
+                         <%
+                          if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+                        %>
+                        <span class="grid-selector" navigation="#deals">Deals<p class="comma-seperator">,</p></span>
+                        <%
+                        }%>
+                        <%
+                          if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
+                        %>
+                        <span class="grid-selector" navigation="#documents">Documents<p class="comma-seperator">,</p></span>
+                        <%}%>
+                          <%
+                            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
+                        %>
+                        <span class="grid-selector" navigation="#calendar">Calendar<p class="comma-seperator">,</p></span>
+                        <%}%>
+                        <span class="grid-selector" navigation="#tasks">Tasks<p class="comma-seperator">,</p></span>
+
+                        <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar<p class="comma-seperator">,</p></span>
+                      </span>
+                     
+                      </div>
+                    </div>
                   </a>
               </li>
               <li>
-              <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
-                <i class="material-icons purple-color">view_module</i>
-                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+              <a href='#' class='menu-service-select menu-select-marketing' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
+                <div  class="pull-left"><i class="material-icons purple-color markeing-i">view_module</i></div>
+                  <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+                  <div class="menu-shortcuts-marketing" >
+                  <span class="grid2-sub-nav first-span block">
+                   <%
+                      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
+                  %>
+                    <span class="grid-selector" navigation="#workflows">Campaigns<p class="comma-seperator">,</p></span>
+                    
+                    <span class="grid-selector" navigation="#triggers">Triggers<p class="comma-seperator">,</p></span>
+                    <%}%>
+                    <span class="grid-selector pull-left" navigation="#email-templates">Email Templates,</span>
+                    <span class="grid-selector" navigation="#forms">Forms<p class="comma-seperator">,</p></span>
+                     <%
+                        if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
+                      %>
+                      <span class="grid-selector" navigation="#landing-pages">Landing Pages<p class="comma-seperator">,</p></span>
+                      <%}%>
+                    <%
+                      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
+                    %>
+
+                    <span class="grid-selector" navigation="#web-rules">Web Rules<p class="comma-seperator">,</p></span>
+                    <%}%>
+                   
+                     
+                      <span class="grid-selector" navigation="#push-notification">Push Notifications<p class="comma-seperator">,</p></span>
+                      <%
+                        if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+                     %>
+                      <span class="grid-selector" navigation="#social">Social<p class="comma-seperator">,</p></span>
+                      <%}%>
+                        <%
+                            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
+                        %>
+                        <span class="grid-selector" navigation="#visitors">Visitors<p class="comma-seperator">,</p></span>
+                      <%}%>
+                  </span>
+                  
+                  </div>
+                  </div>
                   </a>
               </li><li>
-              <a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'>
-                <i class="material-icons purple-color">view_module</i>
-                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
-                  </a>
+              <a href='#' class='menu-service-select menu-select-service' data-service-name='SERVICE' data-dashboard='dashboard'>
+                <div class="pull-left"><i class="material-icons purple-color" style="margin-top:-1px;">view_module</i></div>
+                      <div><span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
+                  <div class="menu-shortcuts-service">
+                  <span class="grid2-sub-nav">
+                     <%
+                    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+                    %>
+                   <span class="grid-selector help-desk-shortcut" navigation="#tickets">Help Desk<p class="comma-seperator">,</p></span>
+                   <%}%>
+                   <%
+                    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SERVICE_KNOWLEDGEBASE)){
+                    %>  
+                    <span class="grid-selector ticketknowledgebasemenushortcut" onclick="return false;" navigation="#knowledgebase">Knowledge base<p class="comma-seperator">,</p></span>
+                    <%}%> 
+                      <%
+                      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+                      %>
+                        <span class="grid-selector" navigation="#ticket-feedback" onclick="return false;">Feedback<p class="comma-seperator">,</p></span>
+                      <%}%> 
+                     <%
+                      if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+                      %> 
+                        <span class="grid-selector" navigation="#ticket-groups">Groups<p class="comma-seperator">,</p></span>
+                         <span class="grid-selector" navigation="#ticket-labels">Labels<p class="comma-seperator">,</p></span>
+                         <span class="grid-selector" navigation="#canned-responses">Canned Responses<p class="comma-seperator">,</p></span>
+                         <span class="grid-selector" navigation="#ticket-views">Views<p class="comma-seperator">,</p></span>
+                 
+                      <%}%>
+                   
+                  </span>
+                 
+                  </div>
+                  </div>
+              </a>
               </li>
+
           </ul>
                 </div>
 
@@ -1024,7 +1140,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
   <li id="ticketlabelsmenu">
-    <a  class="agile-menu-dropdown-aside1"href="#ticket-labels">
+    <a  class="agile-menu-dropdown-aside1" href="#ticket-labels">
       <i class="icon icon-flag"></i>
       <i class="material-icons hidden-icon" style="display: none">label</i>
       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Labels">label</i>
@@ -1248,6 +1364,7 @@ if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navig
 } else {
   document.write('<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>');
 }
+
 </script>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
@@ -1440,7 +1557,16 @@ if(!HANDLEBARS_PRECOMPILATION){
         downloadTemplate("contact-view.js");
     });
 }
- 
+/*$('.grid-selector').click(function(e){*/
+  /*$('.grid-dropdown-menu').on('click','.grid-selector',function(e){
+  e.stopImmediatePropagation();
+  var route = $(this).attr("navigation");
+  Backbone.history.navigate(route, {
+                trigger: true
+            });
+  $("#need_help_header").removeClass("open");
+  });*/
+
 // Remove the loadinng
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
@@ -1546,8 +1672,6 @@ function closeVideo(){
         $('#dashboard_video iframe').removeAttr("src");
     });
 }
-
-
 
 </script>
 

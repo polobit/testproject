@@ -2824,7 +2824,7 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
   float:left;    
 }
 .dashboard-select.small .dropdown-menu{
-    margin-left: -47px !important;
+    margin-left: -79px !important;
     margin-top: 0px;
 }
 .dashboard-select a i:nth-child(2){
@@ -2868,7 +2868,7 @@ div#need_help_header a:hover {
     padding: 7px 15px !important;
   }
 .dashboard-select.small .dropdown-menu{
-    margin-left: -47px !important;
+    margin-left: -79px !important;
     margin-top: 0px;
 }
 .dashboard-select a i:nth-child(2){
@@ -2882,6 +2882,8 @@ div#need_help_header a:hover {
 }
 .dashboard-select .dropdown-menu li a i{
   font-size: 22px;
+  margin-top: -2px;
+  margin-bottom: 14px;
 }
 
 .agile-theme-15 #TrackingTab.nav>li>a {
@@ -3447,8 +3449,15 @@ i.mce-ico, i.mce-caret, span.mce-txt{
     line-height: 33px;
     display: inherit !important;
 }
+.dashboard-select .dropdown-menu{width: 275px;}
 
-/*.recent-view-background-color{
+/*
+.dashboard-select .dropdown-menu .grid2-sub-nav span{font-size: 11px; padding-right: 1px; padding-top: 5px; color: #78909c;}
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover{color: #11a0f8;}
+.dashboard-select .dropdown-menu li a{display: block;}
+.dashboard-select .dropdown-menu{width: 275px;}
+
+.recent-view-background-color{
    height: 35px;
     width: 35px;
     background-color: #f0f0f0 !important;
@@ -3882,4 +3891,51 @@ margin-top:0px;
     height: 35px !important;
     line-height: 35px !important;
     font-size: 13px !important;
+
+}
+.rectview-deal-icon{
+  margin-left :7px;
+}
+.recent-view-comany-style{
+  margin-left: 5px;
+  border-radius: 0% !important;  
+}
+#recent-menu-model-list .recent-view-comany-style.img-inital{
+  height: 25px !important;
+}
+.recent-view-line-height
+{
+      margin-top: 5px;
+}
+
+.recent-view-background-color img[src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/com-default-img.png"]{
+  border-radius: 0% !important;
+}
+
+/*.dashboard-select .grid-dropdown-menu.dropdown-menu li a span.first-span{
+  display: block !important;
+}*/
+
+.dashboard-select .grid-dropdown-menu.dropdown-menu li a span.grid-span-two{
+  display: inline-block; !important;
+
+}
+.grid-menu-active{
+    color: #11a0f8 !important;
+    font-weight: 700 !important
+  }
+  .agile-theme-15 p.comma-seperator{
+     float: right !important;
+     margin : 0px !important;
+     line-height: 1 !important;
+  }
+  .dashboard-select .dropdown-menu .grid2-sub-nav span:last-child p:last-child{
+    display: none;
+  }
+  .grid-dropdown-menu>li>a{
+    white-space: normal !important;
+}
+
+.grid-dropdown-menu li a:hover{
+  border-radius: 4px !important;
 }
