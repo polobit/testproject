@@ -13,7 +13,7 @@ public class HomeUtil {
 		if (MobileUADetector.isMobile(request) || !currentUserPrefs.theme.equalsIgnoreCase("15"))
 			return "";
 
-		return "agile-theme-15 agile-theme-" + domainUser.role.toString();
+		return "agile-theme-15";
 	}
 
 	public static boolean isDisabeld(HttpServletRequest request, UserPrefs currentUserPrefs) {

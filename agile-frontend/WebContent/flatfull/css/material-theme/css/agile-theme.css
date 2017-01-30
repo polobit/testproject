@@ -2864,7 +2864,7 @@ div#need_help_header a:hover {
     background: #f4f8f9;
     border-radius: 4px;
 }
-  .nav-grid{
+ .dashboard-select .nav-grid{
     padding: 7px 15px !important;
   }
 .dashboard-select.small .dropdown-menu{
@@ -2876,7 +2876,7 @@ div#need_help_header a:hover {
     margin-left: 10px;
   }
 
-.grid-v2{
+.agile-theme-15 .dashboard-select.grid-v2{
   top: 17px !important;
   background-color: #fff !important;
 }
