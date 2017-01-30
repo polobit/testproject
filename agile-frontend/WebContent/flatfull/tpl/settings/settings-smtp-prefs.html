@@ -65,18 +65,11 @@
          <div class="control-group form-group">
             <div class="checkbox">
                 <label class="i-checks i-checks-sm">
-                    <input type="checkbox" id="smtp-bulk-email-checked" name="bulk_email" title="Send bulk email"><i></i>SMTP campaign emails 
+                    <input type="checkbox" id="smtp-bulk-email-checked" name="bulk_email" title="Send bulk email"><i></i>Send campaign emails from SMTP
                 </label>
-                 <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"" data-content=" Your campaign and bulk email also send through SMPT up to max limit if from email address is same." id="element" data-trigger="hover" "="" data-original-title="" title="">
-               </span>
             </div>
         </div>
 
-            <div class="alert danger info-block alert-warning text-black">
-                <b>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</b><br>
-                {{agile_lng_translate 'prefs-email' 'smtp-note1'}} <br>
-                {{agile_lng_translate 'prefs-email' 'smtp-note2'}} <br>
-            </div>
 <!----
             <div class="control-group form-group m-t-sm" >
                 <div class="controls">
@@ -111,10 +104,17 @@
 <div class="col-md-4 col-sm-6 col-xs-12 "></div>
     <div class="col-md-4 col-sm-6 col-xs-12 ">
          <div style="margin-top:0px; text-align : justify;">
-               <h4>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</h4>
-               <p>{{agile_lng_translate 'prefs-email' 'smtp-note1'}} <br>
-                {{agile_lng_translate 'prefs-email' 'smtp-note2'}} <br></p>
-               <p> Copy obtained records and paste it in your DNS records. On
+                <b>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</b>
+                <br>
+                <p>
+                  Send personal and campaign emails from your email provider. 
+                </p>
+                 <p> <b>Per day limit:</b> Maximum number of emails to be sent from Agile to your email provider. Check with your email provider on sending limits for your account. Some email providers may only allow you to send a limited number of emails per day or per hour.
+                 </p>
+                <p>
+                <b>Send campaign emails from SMTP:</b> The campaign emails will be sent through the connected email provider. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway.
+                </p>
+                 <p>Bounces and Spam Complaints will not be shown on Agile Reports.</p>
          </div>
       </div>
 </div>
