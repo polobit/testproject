@@ -479,7 +479,7 @@ function isIE() {
                         <span class="grid-selector" navigation="#calendar">Calendar<p class="comma-seperator">,</p></span>
                         <%}%>
                         <span class="grid-selector" navigation="#tasks">Tasks<p class="comma-seperator">,</p></span>
-                                          
+
                         <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar<p class="comma-seperator">,</p></span>
                       </span>
                      
@@ -539,9 +539,6 @@ function isIE() {
                   <span class="grid2-sub-nav">
                      <%
                     if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-                    for (Entry<String, String> entry : servicemap.entrySet()) {
-                          System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-                      
                     %>
                    <span class="grid-selector help-desk-shortcut" navigation="#tickets">Help Desk<p class="comma-seperator">,</p></span>
                    <%}%>

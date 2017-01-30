@@ -3910,6 +3910,7 @@ margin-top:0px;
 .recent-view-background-color img[src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/com-default-img.png"]{
   border-radius: 0% !important;
 }
+
 /*.dashboard-select .grid-dropdown-menu.dropdown-menu li a span.first-span{
   display: block !important;
 }*/
@@ -3918,3 +3919,15 @@ margin-top:0px;
   display: inline-block; !important;
 
 }
+.grid-menu-active{
+    color: #11a0f8 !important;
+    font-weight: 700 !important
+  }
+  .agile-theme-15 p.comma-seperator{
+     float: right !important;
+     margin : 0px !important;
+     line-height: 1 !important;
+  }
+  .dashboard-select .dropdown-menu .grid2-sub-nav span:last-child p:last-child{
+    display: none;
+  }

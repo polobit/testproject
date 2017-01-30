@@ -5773,5 +5773,13 @@ div#need_help_header a:hover {
 display: table-cell !important;
 }
 
+.comma-seperator{
+  float: right !important;
+  margin-bottom: 0px !important;
+  line-height: 1 !important;
+}
+.dashboard-select .dropdown-menu .grid2-sub-nav span:last-child p:last-child{
+    display: none;
+  }
  /** end of modal **/
 
