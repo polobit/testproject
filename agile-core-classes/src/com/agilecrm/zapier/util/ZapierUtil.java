@@ -341,6 +341,9 @@ public class ZapierUtil {
 
 	    // Add properties list to contact properties
 	    contact1.properties = properties;
+	    // Add source as zapier
+	    contact1.source = "zapier";
+	    
 	    if (tags1.length > 0)
 		contact1.addTags(PHPAPIUtil.getValidTags(tags1));
 	    else
