@@ -155,7 +155,7 @@ var SettingsRouter = Backbone.Router
 			changePassword : function()
 			{
 
-				getTemplate("documents-template-list", {}, undefined, function(template_ui){
+				getTemplate("settings", {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
