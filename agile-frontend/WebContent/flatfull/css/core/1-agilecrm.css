@@ -962,17 +962,16 @@ li.deal-color:after {
     width: 2px;
 }
 li.deal-color{position:relative;}
-/*li.deal-color.YELLOW:after { background: yellow;}
-li.deal-color.RED:after { background: red;}
-li.deal-color.VIOLET:after { background: violet;}
-li.deal-color.INDIGO:after { background: indigo;}
-li.deal-color.BLUE:after { background: blue;}
-li.deal-color.GREEN:after { background: green;}
-li.deal-color.ORANGE:after { background: orange;}
-li.deal-color.BLACK:after { background: black;}
-li.deal-color.WHITE:after { background: white;}
-li.deal-color.GREY:after { background: grey;}
-*/
+li.deal-color.YELLOW { background: #FFF9C4 !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.RED { background: #FFCDD2 !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.VIOLET { background: #E1BEE7 !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.INDIGO { background: #C5CAE9 !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.BLUE { background: #BBDEFB !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.GREEN { background: #C8E6C9 !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.ORANGE { background: #FFE0B2 !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.BLACK { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.WHITE { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.GREY { background: #E0E0E0 !important;border: 2px solid #dee5e7 !important;}
 /*Styling for deal color ends*/
 
 .milestone-main {

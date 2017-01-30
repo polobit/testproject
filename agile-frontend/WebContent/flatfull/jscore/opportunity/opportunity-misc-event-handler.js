@@ -35,8 +35,8 @@ $(function()
   {
     e.preventDefault();
 
-    var color = {"#ee82ee":"VIOLET","#4b0082":"INDIGO","#0000ff":"BLUE","#00ff00":"GREEN","#ffff00":"YELLOW"
-                   ,"#ff6600":"ORANGE","#ff0000":"RED","#000000":"BLACK","#ffffff":"WHITE","#808080":"GREY"}; 
+    var color = {"#E1BEE7":"VIOLET","#C5CAE9":"INDIGO","#BBDEFB":"BLUE","#C8E6C9":"GREEN","#FFF9C4":"YELLOW"
+		               ,"#FFE0B2":"ORANGE","#FFCDD2":"RED","#000000":"BLACK","#FFFFFF":"WHITE","#E0E0E0":"GREY"}; 
        
                     
     // To know updated or added deal form names
@@ -196,6 +196,25 @@ $(function()
     $('#opportunityUpdateModal, #newDealModal').on("click",".navigate-products",function(e)
 	{
 				Backbone.history.navigate('products', { trigger : true });
+	});
+	$('#opportunity-listners').off('click', '#opportunities-model-list > tr, .hide-popover');
+	$('#opportunity-listners').on('click', '#opportunities-model-list > tr, .hide-popover', function(e) {
+    	 $(this).closest('tr').popover('hide');
+    });
+    $('#opportunityUpdateModal, #newDealModal').off('click', '.bcp-select');
+	$('#opportunityUpdateModal, #newDealModal').on('click', '.bcp-select', function(e)
+	{
+		if($(this).children().hasClass('bcp-selected')){
+         	$(this).children().removeClass('bcp-selected');
+         	$(this).closest('form').find('#color1').val("#FFFFFF");
+		}
+		else
+		{
+			var id = $(this).attr('id');
+			$(".bcp-select").children().removeClass('bcp-selected');
+			$(this).children().addClass('bcp-selected');
+			$(this).closest('form').find('#color1').val('#'+id);
+		}	
 	});
 	
 });
