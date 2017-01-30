@@ -20,6 +20,7 @@ import com.agilecrm.widgets.util.ExceptionUtil;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.GeoPoint;
 import com.google.appengine.api.search.Index;
 
 /**
@@ -209,6 +210,17 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 
 			// Adds Other fields in contacts to document
 			doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
+			
+			if(contact.getGeo_point() == null)
+			{
+				ContactUtil.setGeoPoint(contact);
+			}
+			if (contact.getGeo_point() != null)
+			{
+				GeoPoint geoPoint = new GeoPoint(contact.getGeo_point().getLatitude(), contact.getGeo_point().getLongitude());
+				fields.put("geo_point", geoPoint.toString());
+				doc.addField(Field.newBuilder().setName("geo_point").setGeoPoint(geoPoint));
+			}
 
 			addTagFields(contact.getTagsList(), doc);
 

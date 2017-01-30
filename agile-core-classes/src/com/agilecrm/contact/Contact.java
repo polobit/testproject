@@ -48,7 +48,14 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.search.SearchException;
+import com.google.code.geocoder.Geocoder;
+import com.google.code.geocoder.GeocoderRequestBuilder;
+import com.google.code.geocoder.model.GeocodeResponse;
+import com.google.code.geocoder.model.GeocoderRequest;
+import com.google.code.geocoder.model.GeocoderResult;
+import com.google.code.geocoder.model.GeocoderStatus;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.annotation.AlsoLoad;
@@ -370,6 +377,11 @@ public class Contact extends Cursor
     @NotSaved(IfDefault.class)
     private Long lead_converted_time = 0L;
     
+    /**
+     * Geo point
+     */
+    @NotSaved(IfDefault.class)
+    private GeoPt geo_point = null;
     
 
     public Long getLead_source_id() {
@@ -418,6 +430,16 @@ public class Contact extends Cursor
 
 	public void setLeadStatus(Key<Category> leadStatus) {
 		this.leadStatus = leadStatus;
+	}
+
+	
+
+	public GeoPt getGeo_point() {
+		return geo_point;
+	}
+
+	public void setGeo_point(GeoPt geo_point) {
+		this.geo_point = geo_point;
 	}
 
 	/**
@@ -1370,6 +1392,9 @@ public class Contact extends Cursor
     {
     	e.printStackTrace();
     }
+    
+    //Setting GeoPoint to contact based on address
+    ContactUtil.setGeoPoint(this);
     
 	// Set owner, when only the owner_key is null
 	if (owner_key == null)
