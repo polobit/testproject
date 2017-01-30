@@ -2824,7 +2824,7 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
   float:left;    
 }
 .dashboard-select.small .dropdown-menu{
-    margin-left: -47px !important;
+    margin-left: -79px !important;
     margin-top: 0px;
 }
 .dashboard-select a i:nth-child(2){
@@ -2868,7 +2868,7 @@ div#need_help_header a:hover {
     padding: 7px 15px !important;
   }
 .dashboard-select.small .dropdown-menu{
-    margin-left: -47px !important;
+    margin-left: -79px !important;
     margin-top: 0px;
 }
 .dashboard-select a i:nth-child(2){

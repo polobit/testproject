@@ -680,9 +680,11 @@ function initRolehandlers(){
  			// $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
  			appendAgileNewThemeSubNavMenu();
  			// Call dashboard route
- 			Backbone.history.navigate("#navigate-dashboard", {
-                trigger: true
-            });
+ 			if(!$(e.target).hasClass("grid-selector")){
+	 			Backbone.history.navigate("#navigate-dashboard", {
+	                trigger: true
+	            });
+ 			}
 	});
 }
 /*for naigating to the particular routes from the navbar */

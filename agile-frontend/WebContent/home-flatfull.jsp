@@ -436,69 +436,126 @@ function isIE() {
               </div>
           </a>
           <ul class="dropdown-menu grid-dropdown-menu">
-            <li>
-              <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'>
-                <div><i class="material-icons purple-color">view_module</i></div>
+              <li>
+              <a href='#' class='menu-service-select menu-select-sales' data-service-name='SALES' data-dashboard='SalesDashboard'>
+                <div class="pull-left"><i class="material-icons purple-color">view_module</i></div>
                      <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
-                      <span class="grid2-sub-nav block sub-nav-ele">
-                       <%
-                            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
-                      %>  
-                        <span class="grid-selector" navigation="#contacts">Contacts,</span>
+                     <div class="menu-shortcuts">
+                      <span class="grid2-sub-nav  block">
+                        <%
+                              if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+                        %> 
+                        <span class="grid-selector" navigation="#contacts">Contacts<p class="comma-seperator">,</p></span>
                         <%}%>
-                        <span class="grid-selector" navigation="#companies">Companies,</span>
-                        <span class="grid-selector" navigation="#deals">Deals,</span>
-                        <span class="grid-selector" navigation="#tasks">Tasks</span>
+                        <span class="grid-selector" navigation="#companies">Companies<p class="comma-seperator">,</p></span>
+                         <%
+                          if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+                        %>
+                        <span class="grid-selector" navigation="#deals">Deals<p class="comma-seperator">,</p></span>
+                        <%
+                        }%>
+                        <%
+                          if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
+                        %>
+                        <span class="grid-selector" navigation="#documents">Documents<p class="comma-seperator">,</p></span>
+                        <%}%>
+                          <%
+                            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
+                        %>
+                        <span class="grid-selector" navigation="#calendar">Calendar<p class="comma-seperator">,</p></span>
+                        <%}%>
+                        <span class="grid-selector" navigation="#tasks">Tasks<p class="comma-seperator">,</p></span>
+                         
+                       
+                        <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar<p class="comma-seperator">,</p></span>
                       </span>
-                      <span class="grid2-sub-nav word-break-all white-space-normal">
-                        <span class="grid-selector" navigation="#documents">Documents,</span>
-                        <span class="grid-selector" navigation="#calendar">Calendar,</span>
-                        <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar</span>
-                      </span>
+                     
+                      </div>
                     </div>
                   </a>
               </li>
               <li>
-              <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
-                <div><i class="material-icons purple-color markeing-i">view_module</i></div>
+              <a href='#' class='menu-service-select menu-select-marketing' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
+                <div  class="pull-left"><i class="material-icons purple-color markeing-i">view_module</i></div>
                   <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
-
+                  <div class="menu-shortcuts-marketing" >
                   <span class="grid2-sub-nav first-span block">
-                    <span class="grid-selector" navigation="#workflows">Campaigns,</span>
-                    <span class="grid-selector" navigation="#triggers">Triggers,</span>
-                    <span class="grid-selector" navigation="#forms">Forms,</span>
-                    <span class="grid-selector" navigation="#web-rules">Web Rules</span>
+                   <%
+                      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
+                  %>
+                    <span class="grid-selector" navigation="#workflows">Campaigns<p class="comma-seperator">,</p></span>
+                    
+                    <span class="grid-selector" navigation="#triggers">Triggers<p class="comma-seperator">,</p></span>
+                    <%}%>
+                    <span class="grid-selector pull-left" navigation="#email-templates">Email Templates,</span>
+                    <span class="grid-selector" navigation="#forms">Forms<p class="comma-seperator">,</p></span>
+                     <%
+                        if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
+                      %>
+                      <span class="grid-selector" navigation="#landing-pages">Landing Pages<p class="comma-seperator">,</p></span>
+                      <%}%>
+                    <%
+                      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
+                    %>
+
+                    <span class="grid-selector" navigation="#web-rules">Web Rules<p class="comma-seperator">,</p></span>
+                    <%}%>
+                   
+                     
+                      <span class="grid-selector" navigation="#push-notification">Push Notifications<p class="comma-seperator">,</p></span>
+                      <%
+                        if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
+                     %>
+                      <span class="grid-selector" navigation="#social">Social<p class="comma-seperator">,</p></span>
+                      <%}%>
+                        <%
+                            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
+                        %>
+                        <span class="grid-selector" navigation="#visitors">Visitors<p class="comma-seperator">,</p></span>
+                      <%}%>
                   </span>
-                  <span class="grid2-sub-nav  word-break-all grid-span-two white-space-normal inline-block">
-                        <span class="grid-selector pull-left" navigation="#email-templates">Email Templates,</span>
-                        <span class="grid-selector" navigation="#landing-pages">Landing Pages,</span>
-                        <span class="grid-selector pull-left" navigation="#push-notification">Push Notifications,</span>
-                        <span class="grid-selector pull-left" navigation="#social">Social,</span>
-                        <span class="grid-selector pull-left" navigation="#visitors">Visitors</span>
-                  </span>
+                  
+                  </div>
                   </div>
                   </a>
               </li><li>
-              <a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'>
-                <div><i class="material-icons purple-color">view_module</i></div>
+              <a href='#' class='menu-service-select menu-select-service' data-service-name='SERVICE' data-dashboard='dashboard'>
+                <div class="pull-left"><i class="material-icons purple-color" style="margin-top:-1px;">view_module</i></div>
                       <div><span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
-
+                  <div class="menu-shortcuts-service">
                   <span class="grid2-sub-nav">
-                   <span class="grid-selector" navigation="#tickets">Help Desk,</span>
-                    <span class="grid-selector" navigation="#knowledgebase">Knowledge base,</span>
-                    <span class="grid-selector" navigation="#ticket-feedback">Feedback,</span>
+                     <%
+                    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+                    %>
+                   <span class="grid-selector help-desk-shortcut" navigation="#tickets">Help Desk<p class="comma-seperator">,</p></span>
+                   <%}%>
+                   <%
+                    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SERVICE_KNOWLEDGEBASE)){
+                    %>  
+                    <span class="grid-selector ticketknowledgebasemenushortcut" onclick="return false;" navigation="#knowledgebase">Knowledge base<p class="comma-seperator">,</p></span>
+                    <%}%> 
+                      <%
+                      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+                      %>
+                        <span class="grid-selector" navigation="#ticket-feedback" onclick="return false;">Feedback<p class="comma-seperator">,</p></span>
+                      <%}%> 
+                     <%
+                      if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+                      %> 
+                        <span class="grid-selector" navigation="#ticket-groups">Groups<p class="comma-seperator">,</p></span>
+                         <span class="grid-selector" navigation="#ticket-labels">Labels<p class="comma-seperator">,</p></span>
+                         <span class="grid-selector" navigation="#canned-responses">Canned Responses<p class="comma-seperator">,</p></span>
+                         <span class="grid-selector" navigation="#ticket-views">Views<p class="comma-seperator">,</p></span>
+                 
+                      <%}%>
                    
-                    
                   </span>
-                  <span class="grid2-sub-nav">
-                         <span class="grid-selector" navigation="#ticket-views">Views,</span>
-                        <span class="grid-selector" navigation="#ticket-labels">Labels,</span>
-                        <span class="grid-selector" navigation="#ticket-groups">Groups,</span>
-                        <span class="grid-selector" navigation="#canned-responses">Canned Responses</span>
-                  </span>
+                 
                   </div>
-                  </a>
+                  </div>
+              </a>
               </li>
+
           </ul>
                 </div>
 
