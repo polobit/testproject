@@ -5738,9 +5738,7 @@ div#need_help_header a:hover {
   display: none !important;
 }*/
 
-.free_plan_message{
-  display: table;
-}
+
 .app-aside-fixed .free-msg-subscribe-btn{
   margin-left: 19px;
 }
@@ -5793,3 +5791,10 @@ display: table-cell !important;
 }
 /** end of modal **/
 
+
+.grid-dropdown-menu>li>a{
+    white-space: normal !important;
+}
+.grid-dropdown-menu li a:hover{
+  border-radius: 4px !important;
+}

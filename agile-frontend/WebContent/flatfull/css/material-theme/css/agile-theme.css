@@ -3449,6 +3449,7 @@ i.mce-ico, i.mce-caret, span.mce-txt{
     line-height: 33px;
     display: inherit !important;
 }
+.dashboard-select .dropdown-menu{width: 275px;}
 
 /*
 .dashboard-select .dropdown-menu .grid2-sub-nav span{font-size: 11px; padding-right: 1px; padding-top: 5px; color: #78909c;}
@@ -3933,4 +3934,8 @@ margin-top:0px;
   }
   .grid-dropdown-menu>li>a{
     white-space: normal !important;
+}
+
+.grid-dropdown-menu li a:hover{
+  border-radius: 4px !important;
 }
