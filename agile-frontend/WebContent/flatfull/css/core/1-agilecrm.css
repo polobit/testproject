@@ -972,6 +972,7 @@ li.deal-color.ORANGE { background: #FFE0B2 !important;border: 2px solid #dee5e7 
 li.deal-color.BLACK { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
 li.deal-color.WHITE { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
 li.deal-color.GREY { background: #E0E0E0 !important;border: 2px solid #dee5e7 !important;}
+li.deal-color.BROWN { background: #D7CCC8 !important;border: 2px solid #dee5e7 !important;}
 /*Styling for deal color ends*/
 
 .milestone-main {

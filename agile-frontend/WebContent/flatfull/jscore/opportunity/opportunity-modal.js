@@ -451,7 +451,7 @@ function updateDeal(ele, editFromMilestoneView)
 
 
  var color = {"VIOLET":"#E1BEE7","INDIGO":"#C5CAE9","BLUE":"#BBDEFB","GREEN":"#C8E6C9","YELLOW":"#FFF9C4"
-		               ,"ORANGE":"#FFE0B2","RED":"#FFCDD2","BLACK":"#000000","WHITE":"#FFFFFF","GREY":"#E0E0E0"};
+		               ,"ORANGE":"#FFE0B2","RED":"#FFCDD2","BLACK":"#000000","WHITE":"#FFFFFF","GREY":"#E0E0E0","BROWN":"#D7CCC8"};
 
     var colorcode = color[value.colorName];
     if(!colorcode)

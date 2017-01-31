@@ -36,7 +36,7 @@ $(function()
     e.preventDefault();
 
     var color = {"#E1BEE7":"VIOLET","#C5CAE9":"INDIGO","#BBDEFB":"BLUE","#C8E6C9":"GREEN","#FFF9C4":"YELLOW"
-		               ,"#FFE0B2":"ORANGE","#FFCDD2":"RED","#000000":"BLACK","#FFFFFF":"WHITE","#E0E0E0":"GREY"}; 
+		               ,"#FFE0B2":"ORANGE","#FFCDD2":"RED","#000000":"BLACK","#FFFFFF":"WHITE","#E0E0E0":"GREY" ,"#D7CCC8":"BROWN"}; 
        
                     
     // To know updated or added deal form names
