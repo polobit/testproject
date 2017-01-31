@@ -13,7 +13,7 @@ $(function(){
 /**
 	 * shows description field in new event model
 	 */
-    $("#activityModal", "#updateActivityModal").on('click', '.bcp-select', function(){
+    $("#activityModal , #updateActivityModal").on('click', '.bcp-select', function(){
          if($(this).children().hasClass('bcp-selected')){
          	$(this).children().removeClass('bcp-selected');
          	$("#backgroundColor").val("");
