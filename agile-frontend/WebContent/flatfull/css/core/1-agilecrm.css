@@ -5806,3 +5806,11 @@ display: table-cell !important;
     color: #337ab7;
     /*font-weight: 600;*/
 }
+#deal-checkboxes-div > .bcp-select{
+  height:25px !important;
+  width:25px !important;
+  margin:3px !important;
+}
+#deal-checkboxes-div > .bcp-select > .bcp-selected {
+  margin:6px !important;
+}
