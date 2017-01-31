@@ -12,9 +12,25 @@ var DocumentsRouter = Backbone.Router.extend({
 	"documents/:idtype" : "editdocument",
 	"documents/:idtype/:templateid" : "editdocument",
 	"documents/:contactcompanydealtype/:contactcompanydealtid/:edocattachtype" : "addcontactcompanydealtypedocument",
-	"documents/:contactcompanydealtype/:contactcompanydealtid/:edocattachtype/:templateid" : "adddocument"	
+	"documents/:contactcompanydealtype/:contactcompanydealtid/:edocattachtype/:templateid" : "adddocument"	,
+	"document-builtin-templates" : "getListOfTemplates",
+	"document-template-add/:id" : "documentTemplateAdd"
 },
-addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompanydealid,edocattachtype)
+	
+
+	 getListOfTemplates : function() {
+        $('#content').html("<link rel='stylesheet' type='text/css' href='flatfull/css/jquery.fancybox.css'><div id='documentbuilder-listeners'></div>");
+        //initializeDocumentBuilderListeners();
+        $.getJSON("misc/document/templates/templates.json", function(data) {
+
+            getTemplate("documentbuilder", data.templates[0], undefined, function(ui){
+                $("#documentbuilder-listeners").html($(ui));
+            }, "#documentbuilder-listeners");
+            
+            hideTransitionBar();
+        });
+    },
+	addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompanydealid,edocattachtype)
 	{
 		if(edocattachtype=="edoc")
 			this.procdoctemplate(edocattachtype,contactcompanydealtype,contactcompanydealid);		
@@ -123,28 +139,7 @@ addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompany
 	
 	},
 	
-	procdoctemplate:function(edocattachtype,contactcompanydealtype,contactcompanydealid)
-	{
-		$("#content").html('<div contactcompanydealid='+ contactcompanydealid+' contactcompanydealtype='+ contactcompanydealtype +' id="edocument-type-select-container"></div>');
-		var that = this;
-		eDocTemplate_Select_View = new Base_Collection_View(
-		{
-			url : '/core/api/document/templates',
-			templateKey : "document-etype-select",
-			sort_collection : false,
-			individual_tag_name : 'div',
-			postRenderCallback : function(el) {
-
-			}
-		});
-		eDocTemplate_Select_View.appendItem = process_edoctemplates_model;
-		eDocTemplate_Select_View.collection.fetch();
-
-		var el=eDocTemplate_Select_View.render().el;
-		$('#edocument-type-select-container').html(el);
-		initialize_add_document_template_listeners(el);
-
-	},
+	
 	editdocument:function(id,templateid)
 	{
 	
@@ -243,11 +238,8 @@ addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompany
 	 */
 	documents : function()
 	{
-		if(tight_acl.isRestrictedScope('DOCUMENT'))
-			return;
-
 		getTemplate('documents-static-container', {}, undefined, function(template_ui) {
-					$("#content").html(template_ui);
+					$("#content").html(getTemplate("documents-static-container"));
 
 					// Add top view
 					var sortKey = _agile_get_prefs("Documentssort_Key");
@@ -315,7 +307,204 @@ addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompany
 					$("#content").find("#documents_collection_container").html(App_Documents.DocumentCollectionView.el);
 
 	
-	}
+	},
+	procdoctemplate:function(edocattachtype,contactcompanydealtype,contactcompanydealid)
+	{
+		$("#content").html('<div contactcompanydealid='+ contactcompanydealid+' contactcompanydealtype='+ contactcompanydealtype +' id="edocument-type-select-container"></div>');
+		var that = this;
+		eDocTemplate_Select_View = new Base_Collection_View(
+		{
+			url : '/core/api/document/templates',
+			templateKey : "document-etype-select",
+			sort_collection : false,
+			individual_tag_name : 'div',
+			postRenderCallback : function(el) {
+
+			}
+		});
+		eDocTemplate_Select_View.appendItem = process_edoctemplates_model;
+		eDocTemplate_Select_View.collection.fetch();
+
+		var el=eDocTemplate_Select_View.render().el;
+		$('#edocument-type-select-container').html(el);
+		initialize_add_document_template_listeners(el);
+
+	},
+	documentTemplates : function()
+	{
+				
+		$("#content").html('<div  id="document-documenttemplates-container"></div>');
+		var that = this;
+		
+
+			that.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', 
+			templateKey : "settings-document-templates",
+		      sort_collection : false,
+			individual_tag_name : 'tr', postRenderCallback : function(el)
+			{
+				console.log("loaded document template : ", el);
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							
+							$(".created_time", el).timeago();
+						});
+				
+			} });
+			that.documentTemplatesListView.collection.fetch();
+			$('#document-documenttemplates-container').html(that.documentTemplatesListView.render().el);
+			
+	},
+
+			/**
+			 * Loads a form to add new document-template. Sets HTMLEditor for the
+			 * form. Navigates to list of document templates on save success.
+			 */
+			documentTemplateAdd : function(defaultTemplateId)
+			{
+
+				  var data = {
+		            "templateId" : defaultTemplateId,
+		          
+		        };
+				$("#content").html('<div template="' + defaultTemplateId + '" id="document-documenttemplates-add-container"></div>');
+				var that = this;
+				
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",change:false,
+					saveAuth:function (el)
+					{
+						trigger_tinymce_save('document-template-html')
+						var sVal1=$("#document-template-html").val()
+						if(sVal1.length<=61)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return false;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						if($("#id","#userForm").length==0){
+							$("#userForm").append('<input id="id" name="id" type="hidden" value="' + data.id + '" />')	
+						}
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', '');	
+
+									if(defaultTemplateId)
+									{
+										$.ajax({
+								            url: "misc/document/templates/"+defaultTemplateId+"/body_index.html",
+								            async: false,
+								            data: {},
+								            success: function(data) {
+								            	set_tinymce_content('document-template-html', data);
+								            		try{
+													if(typeof (tinymce) == "undefined" || tinymce.get('document-template-html')==null)
+													{
+														reset_document_template_content('document-template-html',data);	
+													}
+												}catch(err){}
+								                //$("#tosave").html(data);
+								                register_focus_on_tinymce('document-template-html');
+								            }
+								        });
+							        }
+							        else
+							        {
+										// Register focus
+										register_focus_on_tinymce('document-template-html');
+										//$("#document-template-html_ifr").height("90vh");
+									}
+								});
+						
+					} });
+					$('#document-documenttemplates-add-container').html(that.view.render().el);
+
+				
+					
+				
+			},
+
+			/**
+			 * Updates existing document-template. On updation navigates the page
+			 * to document-templates list
+			 * 
+			 * @param id
+			 *            DocumentTemplate Id
+			 */
+			documentTemplateEdit : function(id)
+			{
+
+
+				if (!this.documentTemplatesListView || this.documentTemplatesListView.collection.length == 0)
+				{
+					this.navigate("document-templates", { trigger : true });
+					return;
+				}
+				$("#content").html('<div  id="document-documenttemplates-edit-container"></div>');
+				var that = this;
+				that.currentTemplate = that.documentTemplatesListView.collection.get(id);
+				
+				
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",reload : false,change:false,
+					saveAuth:function (el)
+					{
+						
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+						}
+						catch(err){}
+
+						if(plain_content.trim().length==0)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return true;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', that.currentTemplate.toJSON().text);
+
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									//$("#document-template-html_ifr").height("90vh");
+								});
+
+								$('.save-doc-template').on('click', function(e) {
+									e.preventDefault();
+									
+								
+								});
+						
+					} });
+					$('#document-documenttemplates-edit-container').html(that.view.render().el);
+
+					
+					
+				
+
+				
+			}
+
 
 });
 
@@ -374,6 +563,7 @@ function renderDocumentsActivityView(id)
 			}
 
 		}
+					
 
 	});
 	activitiesview.appendItem = append_document_notes;
@@ -557,6 +747,18 @@ function initializeDocumentsListeners()
 			{
 				
 				var tempate_model=null;
+
+				eDocTemplate_Select_View = new Base_Collection_View(
+		{
+			url : '/core/api/document/templates',
+			templateKey : "document-etype-select",
+			sort_collection : false,
+			individual_tag_name : 'div',
+			postRenderCallback : function(el) {
+
+			}
+		});
+
 				if(eDocTemplate_Select_View && eDocTemplate_Select_View.collection)
 					tempate_model=eDocTemplate_Select_View.collection.get(templateid)	
 				if(!tempate_model)
@@ -606,8 +808,10 @@ function initializeDocumentsListeners()
 	});
 	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.cancel-document', function(e)
 	{
- 		e.preventDefault();
- 		cancel_document();
+ 		//e.preventDefault();
+ 		//cancel_document();
+ 		parent.history.back(); 
+		return false;
  		
 	});
 	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.email-send-doc', function(e)
@@ -693,12 +897,15 @@ function initializeDocumentsListeners()
 		if(fileName.lastIndexOf("\\") > 0)
 	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
 
-	    if(fileName)
-	    {
-	    	fileName = fileName.replace(/ +/g, '+');
-	    }
+	    //if(fileName)
+	   // {
+	  //  	fileName = fileName.replace(/ +/g, '+');
+	   // }
 
-		var key = "panel/uploaded-logo/"+CURRENT_DOMAIN_USER.domain+"/"+fileName;
+	    var d = new Date();
+        var n = d.getTime();
+
+		var key = "panel/uploaded-logo/"+CURRENT_DOMAIN_USER.domain+"/"+n+"/"+fileName;
 		var fileSizeKB = Math.round(file.size / 1024);
 
 		fd.append("key", key);
@@ -732,7 +939,7 @@ function initializeDocumentsListeners()
 				var url = "https://s3.amazonaws.com/agilecrm/"+key+"?id="+form_id;
 				var network = "S3";
 				CUSTOM_DOCUMENT_SIZE = file.size;
-		 		saveDocumentURL(url, network, "upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain);
+		 		saveDocumentURL(url, network, "upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain,fileName);
 			},
 			error : function(response){
 				$("#uploaded-doc", $form).html("");
@@ -869,12 +1076,15 @@ function proc_add_document(model_json)
 						// Deals type-ahead
 						agile_type_ahead("document_relates_to_deals", el_form, deals_typeahead, fxn_process_added_deal, null, null, "core/api/search/deals", false, true);	
 
-
+                         $("#nowdoc").text('{{agile_lng_translate "documents" "newedocument"}}');
+                     //    $("#whattitle").text('What are eDocuments?');
 						$("#network_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val("NONE");
 						$("#doc_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val("SENDDOC");
+
+						//$("#pag1").text('{{agile_lng_translate "documents" "newdocuments-helptext-paragraph1"}}');
+					//	$("#pag2").text('{{agile_lng_translate "documents" "new-documents-helptext-paragraph2"}}');
+					//	$("#pag3").text('');
 					
-						
-						
 					
 					$(".generate-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 					$("#document_validate",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
@@ -884,6 +1094,52 @@ function proc_add_document(model_json)
 
 					
 					$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide");
+
+
+        $(".generate-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide");			
+		$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");
+		$("#document_validate",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");			
+		
+		setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
+		{
+
+			// Register focus
+			register_focus_on_tinymce('signdoc-template-html');
+			var sTemplateText="";
+			var templateid =$("#documents-listener-container").attr("templateid");	
+			if(templateid)
+			{
+				
+				var tempate_model=null;
+				if(eDocTemplate_Select_View && eDocTemplate_Select_View.collection)
+					tempate_model=eDocTemplate_Select_View.collection.get(templateid)	
+				if(!tempate_model)
+				{
+					//$("#documents-listener-container").data({"pricing_table":sPricingTable})
+					//$("#documents-listener-container").attr("pricingtable",sPricingTable)
+					var url = '/core/api/document/templates/'+ templateid;
+					$.ajax({
+						url : url,
+						type: 'GET',
+						dataType: 'json',
+						success: function(data){
+							process_add_document_templatemodel(data)
+							//console.log(sPricingTable)
+							
+						}
+					});										
+				}
+				else
+				{
+					process_add_document_templatemodel(tempate_model.toJSON());
+				}
+			
+			}
+			// Reset tinymce
+			
+		});
+                 
+
 				}	
 				else
 				{
@@ -1166,6 +1422,7 @@ function cancel_document()
 			});
 		}
 }
+
 function load_document_from_edit_model(model)
 {
 		$("#content").html('<div id="documents-listener-container"></div>');
@@ -1179,6 +1436,7 @@ function load_document_from_edit_model(model)
 				var documentUpdateForm = $("#uploadDocumentUpdateForm");
 				deserializeForm(model, $("#uploadDocumentUpdateForm"));
 				var 	template_type=model.template_type;
+				$("#send_mail_button").hide();
 				if($("#doc_type",'#uploadDocumentForm,#uploadDocumentUpdateForm').val()=="SENDDOC")
 				{
 
@@ -1188,7 +1446,12 @@ function load_document_from_edit_model(model)
 						$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide ");
 						$(".attachment",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
-						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
+						$("#template-content").append(model.text);
+						$("#hide-content").hide();
+						$("#document_update_validate").hide();
+						$("#send_mail_button").show();
+						
+						/*	setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
 						{
 							set_tinymce_content('signdoc-template-html', model.text);
 							// Register focus
@@ -1208,9 +1471,9 @@ function load_document_from_edit_model(model)
 								contact_json["pricing_table"]= getTemplate("documents-pricingtable", $("#documents-listener-container").data("deal_model_json")); //get_pricingtable_from_deal($("#documents-listener-container").data("deal_model_json"));
 							}										
 							return contact_json;
-						});
+						});*/
 
-						if(model.contact_ids && model.contact_ids.length >0)
+						 if(model.contact_ids && model.contact_ids.length >0)
 						{
 							var url = '/core/api/contacts/'+ model.contact_ids[0];
 							$.ajax({
@@ -1318,4 +1581,73 @@ function load_document_from_edit_model(model)
 		}, "#documents-listener-container");		
 
 
+}
+function reset_document_template_content(sId,sContent)
+{
+	try{
+		if(typeof (tinymce) == "undefined" || tinymce.get(sId)==null)
+		{
+				setTimeout(function(){
+					reset_document_template_content(sId,sContent);
+			},500);	
+		}
+		else
+			set_tinymce_content(sId, sContent);	
+	}catch(err){}
+}
+// jquery binary transpoart script
+
+$.ajaxTransport("+binary", function(options, originalOptions, jqXHR){
+    // check for conditions and support for blob / arraybuffer response type
+    if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob)))))
+    {
+        return {
+            // create new XMLHttpRequest
+            send: function(_, callback){
+		// setup all variables
+                var xhr = new XMLHttpRequest(),
+                    url = options.url,
+                    type = options.type,
+		// blob or arraybuffer. Default is blob
+                    dataType = options.responseType || "blob",
+                    data = options.data || null;
+				
+                xhr.addEventListener('load', function(){
+                    var data = {};
+                    data[options.dataType] = xhr.response;
+		// make callback and send data
+                    callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
+                });
+
+                xhr.open(type, url, true);
+                xhr.responseType = dataType;
+                xhr.send(data);
+            },
+            abort: function(){
+                jqXHR.abort();
+            }
+        };
+    }
+});
+
+// using binary transpoart script, downloaing file and after download renaming file.
+
+function fileDownloadWithCustomName(link,fileName)
+{
+   $.ajax({
+      url: link,
+      type: "GET",
+      dataType: 'binary',
+      success: function(result) {
+        var url = URL.createObjectURL(result);
+        var $a = $('<a />', {
+          'href': url,
+          'download': fileName,
+          'text': "click"
+        }).hide().appendTo("body")[0].click();
+        setTimeout(function() {
+          URL.revokeObjectURL(url);
+        }, 10000);
+      }
+    });
 }

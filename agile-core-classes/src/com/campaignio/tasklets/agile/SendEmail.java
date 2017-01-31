@@ -22,6 +22,7 @@ import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.campaignio.cron.Cron;
@@ -234,8 +235,8 @@ public class SendEmail extends TaskletAdapter
     //private static final String UNSUBSCRIBE_LINK = "http://ag-email.unscr.me/";
     //private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
     
-    private static final String UNSUBSCRIBE_LINK = "https://list-manage.agle2.me/unsubscribe";
-    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://list-manage-beta.agle2.me/unsubscribe";
+    private static final String UNSUBSCRIBE_LINK = "https://list-manage.agle1.cc/unsubscribe";
+    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://list-manage-beta.agle1.cc/unsubscribe";
     
 
     /*
@@ -748,30 +749,35 @@ public class SendEmail extends TaskletAdapter
 	// Update campaign emailed time
 	ContactUtil.updateCampaignEmailedTime(Long.parseLong(subscriberId), System.currentTimeMillis()/1000, to);
 	
-	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	String queueName = AgileQueues.NORMAL_EMAIL_PULL_QUEUE;
 	
 	try{
 	
-	if(emailGateway!=null && emailGateway.email_api!=null && emailGateway.email_api.name()!=null && emailGateway.email_api.name().equalsIgnoreCase("SES")){
- 		System.out.println("Sending mails through amazon pull queue");
- 		EmailGatewayUtil.sendBulkEmail(
- 		                 AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
- 		        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
-  	}else{
+	if(SMTPBulkEmailUtil.canSMTPSendEmail(fromEmail))
+		queueName = AgileQueues.SMTP_BULK_EMAIL_PULL_QUEUE;
 	
-	// Send Email using email gateway
-	   String queueName = AgileQueues.NORMAL_EMAIL_PULL_QUEUE;
-	   
-	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName())
-			   || Globals.BULK_ACTION_BACKENDS_URL.equals(ModuleUtil.getCurrentModuleName()))
-		   queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE;
-	   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut != null && isTimeOut)
-		   queueName = AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE;
-	  		
+	else{
+		  EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+		
+			if(emailGateway!=null && emailGateway.email_api!=null && emailGateway.email_api.name()!=null && emailGateway.email_api.name().equalsIgnoreCase("SES")){
+		 		System.out.println("Sending mails through amazon pull queue");
+		 		EmailGatewayUtil.sendBulkEmail(
+		 		                 AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
+			 		        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+		  	}
+			else{
+			  // Send Email using email gateway
+			   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName())
+					   || Globals.BULK_ACTION_BACKENDS_URL.equals(ModuleUtil.getCurrentModuleName()))
+				   queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE;
+			   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut != null && isTimeOut)
+				   queueName = AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE;
+			} 	
+	     }
 		EmailGatewayUtil.sendBulkEmail(queueName, domain, fromEmail, fromName, to, cc, bcc, subject,
-	        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
-  	}
-	}catch(Exception e){
+		        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+  	   }
+	 catch(Exception e){
 		System.err.println("Error occured in sending email:"+e.getMessage());
 	}
 
@@ -794,10 +800,10 @@ public class SendEmail extends TaskletAdapter
 	{
 	    String domain = NamespaceManager.get();
 	    
-	    String onlineLink = "https://list-manage.agle2.me/onlinelink";
+	    String onlineLink = "https://list-manage.agle1.cc/onlinelink";
 	    
 	    if(!VersioningUtil.isProductionAPP())
-	    	onlineLink = "http://list-manage-beta.agle2.me/onlinelink";
+	    	onlineLink = "http://list-manage-beta.agle1.cc/onlinelink";
 	    
 	    StringBuffer buffer = new StringBuffer();
 	    buffer.append(onlineLink);

@@ -4,10 +4,15 @@
     	<div class="col-md-9">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-        			<div>
-                    {{agile_lng_translate 'tickets' 'select-landing-page'}}
-                     <a  href='/help' target="_blank" class="pull-right text-lg  text-info" style="margin-left: 5px; margin-top:-4px;font-size:16px">{{agile_lng_translate 'widgets' 'access'}}</a>                                   
-    			     </div>
+                <div>
+                        {{agile_lng_translate 'tickets' 'select-landing-page'}}
+                        {{#isNewTheme}}
+                        {{else}}
+                         <a  href='/help' target="_blank" class="pull-right text-lg  text-info" style="margin-left: 5px; margin-top:-4px;font-size:16px">{{agile_lng_translate 'widgets' 'access'}}</a>
+                         {{/isNewTheme}}                                   
+        		</div>
+                
+
                 </div>   
 
                 <div class="panel-body p-b-xs">
@@ -25,16 +30,19 @@
                                 <select id="template_id" name="kb_landing_page_id" class="form-control text-xs" style="height: 30px;padding: 3px 6px; margin-left: 5px;">
                  
                                 </select>
-
-                            </div>    
+                            </div> 
                         </div>
+                        {{#isNewTheme}}
+                                <a  href='/help' target="_blank" class="pull-left text-lg btn btn-default text-info" style="font-size:16px">{{agile_lng_translate 'widgets' 'access'}}
+                                </a>
+                        {{else}}
+                        {{/isNewTheme}}
                     </div>    
-                    
-                      <div class="row">
-                            <div class="col-md-12"><hr class="m-t-sm"></div>
-                        </div>  
+                    <div class="row">
+                        <div class="col-md-12"><hr class="m-t-sm"></div>
+                    </div>  
                     <div class="form-group">
-                            <div class="form-actions col-sm-offset-3 col-md-9">
+                            <div class="form-actions {{#isNewTheme}}col-sm-offset-4 col-md-8{{else}}col-sm-offset-3 col-md-9{{/isNewTheme}}">
                                 <div class="form-actions">
                                     <a type="reset" href='javascript:history.back()' class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
                                 <a  href="javascript:void(0);" class="btn btn-primary btn-sm save" style="

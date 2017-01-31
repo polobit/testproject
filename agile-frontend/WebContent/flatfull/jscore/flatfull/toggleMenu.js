@@ -75,6 +75,10 @@ $('body').on('click','#speechDectation',function(e){
 	}, 6000);
 
 });
+$(".aside-wrap").on('click','li',function(e){
+   console.log("sffas");
+   $(".grid-dropdown-menu").find(".grid-selector").removeClass("grid-menu-active");
+});
 $("#searchForm").on("submit",function(){
 
 	return false;
@@ -104,6 +108,17 @@ $("#prefsDropdownModal").on('click','#showUserVoice',function(e){
 		},100);*/
 
 });
+
+$('.grid-dropdown-menu').on('click','.grid-selector',function(e){
+  e.stopImmediatePropagation();
+  var route = $(this).attr("navigation");
+  $(this).parent().closest(".grid-dropdown-menu").find('span').removeClass("grid-menu-active");
+  Backbone.history.navigate(route, {
+                trigger: true
+            });
+  $("#need_help_header").removeClass("open");
+  $(this).addClass("grid-menu-active");
+  });
 
 $("#help-options").click(function(e){
 	$("#prefsDropdownModal").html(getTemplate('prefs-dropdown-options', {})).modal('show');
@@ -679,10 +694,15 @@ function initRolehandlers(){
  			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
  			// $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
  			appendAgileNewThemeSubNavMenu();
- 			// Call dashboard route
- 			Backbone.history.navigate("#navigate-dashboard", {
-                trigger: true
-            });
+ 			$(e.target).closest(".grid-dropdown-menu").find('span').removeClass("grid-menu-active");
+ 			if($(this).attr("data-service-name") == "SERVICE")
+ 				$(e.target).find(".help-desk-shortcut").addClass("grid-menu-active");
+ 			
+ 			if(!$(e.target).hasClass("grid-selector")){
+	 			Backbone.history.navigate("#navigate-dashboard", {
+	                trigger: true
+	            });
+ 			}
 	});
 }
 /*for naigating to the particular routes from the navbar */

@@ -66,9 +66,13 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,me
 				// Show textarea and remove loading img
 				$(selector).css('display', '');
 				$('#loading-editor').html("");
-				
+				var mceClassName = "";
+				if($("html").hasClass("agile-theme-15"))
+					mceClassName = "agile-theme-15";
+
 				tinymce.init({ mode : "exact", selector : selector, plugins : plugins,
 				    menubar : false,
+				    body_class: mceClassName,
 					toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 					toolbar2 : toolbar_2, valid_elements : "*[*]",
 					toolbar_items_size: 'small',
@@ -650,9 +654,9 @@ function register_focus_on_tinymce(selector)
 }
 
 function get_tinymce_supported_language(){
-	var supported_language = "en_US";
-	if(_LANGUAGE == "es")
-		supported_language = "es";
+	var supported_language = _LANGUAGE;
+	if(_LANGUAGE == "en" || !_LANGUAGE)
+		supported_language = "en_US";
 
 	return supported_language;
 }

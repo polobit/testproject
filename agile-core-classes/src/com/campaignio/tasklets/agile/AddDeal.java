@@ -1,7 +1,9 @@
 package com.campaignio.tasklets.agile;
 
+import java.io.IOException;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
@@ -166,10 +168,13 @@ public class AddDeal extends TaskletAdapter
 	 *            - Subscriber contact id.
 	 * @param ownerId
 	 *            - Selected owner id
+	 * @throws JSONException 
+	 * @throws IOException 
+	 * @throws NumberFormatException 
 	 */
 
 	private void addDeal(String name, String value, String probability, String description, String milestone,
-			Long pipelineID, Long closedEpochTime, String contactId, Long ownerId, Long source_id)
+			Long pipelineID, Long closedEpochTime, String contactId, Long ownerId, Long source_id) throws NumberFormatException, IOException, JSONException
 	{
 		Opportunity opportunity = new Opportunity(name, description, Double.parseDouble(value), milestone,
 				Integer.parseInt(probability), null, ownerId == null ? null : ownerId.toString());

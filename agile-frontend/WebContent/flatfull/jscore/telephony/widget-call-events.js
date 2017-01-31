@@ -9,6 +9,96 @@
 $(function()
 {
 	
+
+
+	$('#content').on('click', '.Asterisk_call', function(e)
+	{
+	  	e.preventDefault();
+	  	e.stopPropagation(); 
+
+		if(checkForActiveCall()){
+			$('#callInfoModal').html(getTemplate("callStatusModal"));
+			$('#callInfoModal').modal('show');
+			$('#callStatusModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+			
+			return;
+		}
+
+		var contactDetailsObj = agile_crm_get_contact();
+		var cnt = get_contact_json_for_merge_fields(contactDetailsObj);
+		var num = $(this).closest(".contact-make-call").attr("phone");
+		cnt['phone'] = num;
+		
+		
+/*		$.each(contactDetailsObj.properties,function(ind,obj){
+			if(obj.name == "phone"){
+				obj.value = num;
+				return false;	
+			}
+		});*/
+		
+
+		try{
+				var prefs = {};
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+				if (!asterisk_widget){
+					console.log("widget is not ready");
+					return;
+				}
+
+				if(typeof(asterisk_widget.prefs) == "string"){
+
+					//prefs = replaceMergeFields(asterisk_widget.prefs);
+					//prefs = JSON.parse(prefs);		
+					var template = Handlebars.compile(asterisk_widget.prefs);
+					prefs = template(cnt);
+					prefs = eval("(" + prefs + ")");
+					//asterisk_widget.prefs = eval("(" + asterisk_widget.prefs + ")");
+				}	
+		
+				
+				var manager_details = {};
+				manager_details["id"] = prefs.manager_id;
+				manager_details["password"] = prefs.manager_password;
+				manager_details["hostname"] = prefs.asterisk_hostname;
+				var asterisk_details = {};
+				asterisk_details["channel"] = prefs.asterisk_call_channel;
+				asterisk_details["context"] = prefs.asterisk_call_context;
+				asterisk_details["extension"] = prefs.asterisk_call_extension;
+				asterisk_details["callerId"] = prefs.asterisk_call_callerId
+				//asterisk_details["variables"] = asterisk_widget.prefs.asterisk_call_variables;
+				asterisk_details["timeout"] = prefs.asterisk_call_timeout;
+				asterisk_details["priority"] = prefs.asterisk_call_priority;
+				var asterisk_details_long = {};
+				asterisk_details_long["variables"] = prefs.asterisk_call_variables;
+
+
+			  	var action ={};
+			  	action['command'] = "startCall";
+			  	action['number'] = asterisk_details["extension"];	
+			  	action['callId'] = "";
+
+				}catch(e){
+					console.log("exception occured while calling -->" + e)
+					return;
+				}
+
+		globalCall.callStatus = "dialing";
+		globalCall.calledFrom = "Asterisk";
+		
+		try{
+			
+			globalCall.contactedId = contactDetailsObj.id;
+			globalCall.contactedContact = contactDetailsObj;
+		}catch (e) {
+		}
+		setTimerToCheckDialing("Asterisk");
+		globalCall.callDirection = "Outgoing";
+		sendActionToClient(action,manager_details,asterisk_details,asterisk_details_long);
+
+	});
+
 	$('body').on('click', '.contact-make-bria-call, .Bria_call', function(e)
 	{
 	  	e.preventDefault();
@@ -20,9 +110,7 @@ $(function()
 		}
 		var action ={};
 	  	action['command'] = "startCall";
-	  	var callNumber = $(this).closest(".contact-make-call").attr("phone");
-	  	generateNumberAndExtension(callNumber, action);
-	  	//action['number'] = $(this).closest(".contact-make-call").attr("phone");
+	  	action['number'] = $(this).closest(".contact-make-call").attr("phone");
 	  	action['callId'] = "";
 
 	  	
@@ -49,9 +137,7 @@ $(function()
 			  	e.stopPropagation();
 				var action ={};
 			  	action['command'] = "startCall";
-			  	var callNumber = $(this).closest(".contact-make-call-div").children().first().attr("phone");
-			  	generateNumberAndExtension(callNumber, action);
-			  	//action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
+			  	action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
 			  	action['callId'] = "";
 			  	
 				if(checkForActiveCall()){
@@ -79,6 +165,9 @@ $(function()
 				}
 			});
 	
+
+
+
 	
 // }
 
@@ -98,7 +187,7 @@ $(function()
 	
 	
 //answer the callT
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_answer, .noty_skype_answer', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_answer, .noty_skype_answer, .noty_asterisk_answer', function(e)
 		{
 			e.preventDefault();
 			var json = {"command" : "answerCall"};
@@ -122,7 +211,7 @@ $(function()
 
 
 //hang up the call	
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_hangup, .noty_skype_hangup', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_hangup, .noty_skype_hangup, .noty_asterisk_hangup', function(e)
 		{
 		
 		e.preventDefault();
@@ -142,7 +231,7 @@ $(function()
 
 
 //cancel the outgoing call	
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_cancel, .noty_skype_cancel', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_cancel, .noty_skype_cancel, .noty_asterisk_cancel', function(e)
 	{
 		
 		e.preventDefault();
@@ -162,7 +251,7 @@ $(function()
 
 	
 //show dialpad	 ---note implemented
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_dialpad, .noty_skype_dialpad', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_dialpad, .noty_skype_dialpad, .noty_asterisk_dialpad', function(e)
 	{
 	e.preventDefault();
 	e.stopPropagation();
@@ -317,7 +406,7 @@ function sendDTMF(digit)
 // This function sends the command to local jar running in client side to make the call
 //{paramerters} -- command to execute, number to call and call id of the ingoing call if any
 
-function sendActionToClient(action){
+function sendActionToClient(action, manager, asterisk, long_details){
 	
 	var domain = CURRENT_DOMAIN_USER['domain'];
 	var id = CURRENT_DOMAIN_USER['id'];
@@ -325,11 +414,6 @@ function sendActionToClient(action){
 	var number = action.number;
 	var callid = action.callId;
 	var client = globalCall.calledFrom;
-	var extension = "";
-	
-	if(action['extension']){
-		extension = action['extension'];
-	}
 	
 	if(command == "startCall"){
 		var btns = [];
@@ -345,6 +429,7 @@ function sendActionToClient(action){
 		window.focus();
 	};
 	image.onerror= function(png) {
+		return;
 		console.log("client failure");
 		window.focus();
 		if(command != "getLogs"){
@@ -373,24 +458,224 @@ function sendActionToClient(action){
 			$('#skypeInfoModal').modal('show');
 			closeCallNoty(true);
 			return;
+		}else if(client == "Asterisk"){
+			closeCallNoty(true);
+		//	$('#callInfoModal').html(getTemplate("callInfoModal"));
+		//	$('#callInfoModal').modal('show');
+		//	$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+		//	$('#downloadCallJar_widget').attr("widget-name","Asterisk");
+			return;
 		}
 	};
-	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+";extension="+extension+"?";
+	if(client == "Asterisk"){
+		if(command == "startCall"){
+			image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk;mName="+manager.id+";mPass="+manager.password+";ip=" +manager.hostname+";channel="+asterisk.channel+";context="+asterisk.context+";exten="+asterisk.extension+";callerId="+asterisk.callerId+";timeout="+asterisk.timeout+";priority="+asterisk.priority+";variables="+long_details.variables+"?";	
+		}else{
+			image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk?";	
+		}
+	return;	
+	}
+
+	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+"?";
 }
 
 
-function generateNumberAndExtension(number, json){
-	var num = "";
-	var ext = "";
-	
-	if(number && number.indexOf(";") != -1){
-		ext = number.split(";")[1];
-		num = number.split(";")[0];
-	}else{
-		num = number;
-	}
 
-	json['number'] = num;
-	json['extension'] = ext;
-	return;
+
+/*
+ * This will save the note for the call
+ */
+function autosaveNoteTelephony(note,call){
+	$.post( "/core/api/widgets/twilio/autosavenote", {
+		subject: note.subject,
+		message: note.message,
+		contactid: note.contactid,
+		phone: note.phone,
+		callType: note.callType,
+		status: note.status,
+		duration: note.duration},
+		function(data){
+
+			var callerObjectId = call.contactId;
+
+		$.post("/core/api/call/widgets/savecallactivity?note_id="+data.id,{
+			id:callerObjectId,
+			direction: call.direction, 
+			phone: call.phone, 
+			status : call.status,
+			duration : call.duration,
+			callWidget : call.client 
+			});
+		});
+}
+
+
+
+/*
+ * This will show the note to the user after the call is completed sucessfully
+ */
+function saveCallNoteTelephony(call){
+	
+	if(!globalCallForActivity.callDirection || !globalCallForActivity.callStatus  || !globalCallForActivity.callNumber){
+		return;
+	}
+	
+	var callStatus = globalCallForActivity.callStatus;
+	var direction = globalCallForActivity.callDirection;
+	var number = globalCallForActivity.callNumber;
+	var callId = globalCallForActivity.callId;
+	var duration = globalCallForActivity.duration;
+	var cntId = globalCallForActivity.contactedId;
+	var client = globalCall.calledFrom;
+	var contact;
+	var id;
+	var desc;
+
+	resetglobalCallForActivityVariables();
+	
+	var noteSub = direction + " Call - " + callStatus;
+
+	if(direction == "Incoming"){
+	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
+	    	if(!responseJson){
+	    			resetCallLogVariables();
+	    		
+	    		if(callStatus == "Answered") {
+	    			var data = {};
+	    			data.url = "/core/api/call/widgets/";
+	    			data.subject = noteSub;
+	    			data.number = number;
+	    			data.callType = "inbound";
+	    			data.status = "answered";
+	    			data.duration = duration;
+	    			data.contId = null;
+	    			data.contact_name = "";
+	    			data.widget = client;
+	    			CallLogVariables.dynamicData = data;
+	    		}
+	    			CallLogVariables.subject = noteSub;
+		    		CallLogVariables.callWidget = client;
+		    		CallLogVariables.callType = "inbound";
+		    		CallLogVariables.phone = number;
+		    		CallLogVariables.duration = duration;
+		    		CallLogVariables.status = callStatus;
+		    		var jsonObj = {};
+					jsonObj['phoneNumber'] = number;
+					return showContactMergeOption(jsonObj);
+	    		
+	    	}
+	    	contact = responseJson;
+	    	contact_name = getContactName(contact);
+	    	if(callStatus == "Answered"){
+	    		
+				var data = {};
+				data.url = "/core/api/call/widgets/";
+				data.subject = noteSub;
+				data.number = number;
+				data.callType = "inbound";
+				data.status = "answered";
+				data.duration = duration;
+				data.contId = contact.id;
+				data.contact_name = contact_name;
+				data.widget = client;
+				showDynamicCallLogs(data);
+/*				
+				var el = $('#noteForm');
+
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+			 	// Adds contact name to tags ul as li element
+				$('.tags',el).html(template({name : contact_name, id : contact.id}));
+
+			 	$("#noteForm #subject").val(noteSub);
+					$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
+					$("#noteForm").find("#description").focus();
+				$('#noteModal').modal('show');
+				agile_type_ahead("note_related_to", el, contacts_typeahead);*/
+				
+	    	}else{
+	    		var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
+				call.client = client;
+				autosaveNoteTelephony(note,call);
+	    	}
+	    });
+	}else{
+		
+		if(cntId){
+				if( callStatus == "Answered"){
+					twilioIOSaveContactedTime();
+					accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
+					var json = resp;
+					if(json == null) {
+						return;
+					}
+
+					contact_name = getContactName(json);
+					var data = {};
+					data.url = "/core/api/call/widgets/";
+					data.subject = noteSub;
+					data.number = number;
+					data.callType = "outbound-dial";
+					data.status = "answered";
+					data.duration = duration;
+					data.contId = cntId;
+					data.contact_name = contact_name;
+					data.widget = client;
+					showDynamicCallLogs(data);
+					
+/*					var el = $('#noteForm');
+				 	$('.tags',el).html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ cntId +'">'+contact_name+'</li>');
+				 	$("#noteForm #subject").val(noteSub);
+				 	$("#noteForm #description").val("Call duration - "+ twilioSecondsToFriendly(duration));
+						$("#noteForm").find("#description").focus();
+					$('#noteModal').modal('show');
+					agile_type_ahead("note_related_to", el, contacts_typeahead);*/
+					
+					});
+				}else{
+					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": number,"callType": "outbound-dial", "status": callStatus, "duration" : 0 };
+					call.client = client;
+					autosaveNoteTelephony(note,call);
+				}
+		}else{
+				resetCallLogVariables();
+				if(callStatus == "Answered") {
+    			var data = {};
+    			data.url = "/core/api/call/widgets/";
+    			data.subject = noteSub;
+    			data.number = number;
+    			data.callType = "outbound-dial";
+    			data.status = "answered";
+    			data.duration = duration;
+    			data.contId = null;
+    			data.contact_name = "";
+    			data.widget = client;
+    			CallLogVariables.dynamicData = data;
+    		}
+    			CallLogVariables.subject = noteSub;
+	    		CallLogVariables.callWidget = client;
+	    		CallLogVariables.callType = "outbound-dial";
+	    		CallLogVariables.phone = number;
+	    		CallLogVariables.duration = duration;
+	    		CallLogVariables.status = callStatus;
+    			var jsonObj = {};
+				jsonObj['phoneNumber'] = number;
+				return showContactMergeOption(jsonObj);
+	}
+	}
+}
+
+function generateNumberAndExtension(number, json){
+	 var num = "";
+	 var ext = "";
+	 
+	 if(number && number.indexOf(";") != -1){
+	  ext = number.split(";")[1];
+	  num = number.split(";")[0];
+	 }else{
+	  num = number;
+	 }
+
+	 json['number'] = num;
+	 json['extension'] = ext;
+	 return;
 }

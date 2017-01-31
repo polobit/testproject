@@ -11,7 +11,7 @@
 	<!--instance and scaling settings-->
   <instance-class>B4</instance-class>
   <basic-scaling>
-    <max-instances>10</max-instances>
+    <max-instances>15</max-instances>
   </basic-scaling>
   <use-google-connector-j>true</use-google-connector-j>
 </appengine-web-app>

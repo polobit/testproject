@@ -45,6 +45,7 @@
                             {{/if}}
                         </div>
                     </div>
+
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'contacts-view' 'company-name'}} <span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
@@ -52,7 +53,7 @@
                         </div>
 
                     </div>
-
+                   
                     <div class="control-group form-group">
                         <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'currency'}}</label> 
                         <div class="controls col-sm-8 col-xs-8">
@@ -130,7 +131,6 @@
                         <option value="SCR-&#8360;">{{agile_lng_translate 'currency' 'Seychellois Rupee'}}</option>
                         <option value="SLL-Le">{{agile_lng_translate 'currency' 'Sierra Leonean Leone'}}</option>
                         <option value="SGD-$">{{agile_lng_translate 'currency' 'Singapore Dollar'}}</option>
-                        <option value="SKK-Sk">{{agile_lng_translate 'currency' 'Slovak Koruna'}}</option>
                         <option value="ZAR-R">{{agile_lng_translate 'currency' 'South African Rand'}}</option>
                         <option value="KRW-&#8361;">{{agile_lng_translate 'currency' 'South Korean Won'}}</option>
                         <option value="LKR-&#8360;">{{agile_lng_translate 'currency' 'Sri Lankan Rupee'}}</option>
@@ -153,7 +153,17 @@
                     </select>
                         </div>
                     </div>
-
+                    
+                    <div class="control-group form-group hidden" id="multi-currency-deals">
+                        <label class="control-label col-sm-4 col-xs-4">Deal Multi Currency</label> 
+                        <div class="controls col-sm-8 col-xs-8">
+                            <div class="checkbox">
+                                <label class="i-checks i-checks-sm">
+                                    <input type="checkbox" id="multi_currency" name="multi_currency"><i></i><small>Enables to create deals with values in multiple currencies</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="control-group form-group">
                     <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'Contacts-view' 'company-logo'}}</label> 

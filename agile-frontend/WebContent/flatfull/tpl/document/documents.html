@@ -1,3 +1,53 @@
+<script type="text/html" id="documentbuilder-template">
+<div class="custom-animated custom-fadeInUp">
+
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+       <h3 class="pull-left font-thin h3">{{agile_lng_translate 'web-rules' 'templates'}} </h3>
+       <div class="pull-right">
+            <a href="#document-template-add" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'campaigns' 'start-with-an-empty-email'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+       </div>
+       <div class="clearfix"></div>
+     </div>
+</div>
+</div>
+
+
+<div class="wrapper-md  p-t-none">
+<div class="row">    
+    <div class="col-md-12">
+        <!-- <h4>General</h4> --><br>
+    </div>
+</div>
+
+<div id="general" class="row">
+
+{{#each list}}
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="panel wrapper text-center">
+        <!-- Thumbnail and Title -->
+        <div>
+           <div class="p-b-sm p-l-none p-r-none">
+            <a href="#document-template-add/{{id}}"><img style="width:98%;" src="misc/document/templates/{{id}}/thumbnail.png"/></a>
+           </div>
+        </div>
+        <!-- Add button -->
+        <div>
+            <a class="btn btn-sm btn-default" href="#document-template-add/{{id}}">{{agile_lng_translate 'campaigns' 'go'}}</a>
+        </div>
+    </div>
+</div>
+{{/each}}
+
+    
+</div>
+
+</div>
+
+
+</div>
+</script>
 <script id="documents-pricingtable-template" type="text/html">
     {{#if this.products}}
         <table widht='100%' border='0' style='width:100%;border-collapse: collapse;border: none;table-layout:fixed;'>
@@ -39,7 +89,7 @@
 <script id="documents-static-container-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div id="documents-top-view"></div>
-<div class="wrapper-md agile-p-t-xs">
+<div class="wrapper-md" style="padding: 17px !important;">
 <div class="row">
 <div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
 <div id="historydocument" class="col-md-3">
@@ -53,7 +103,7 @@
     </div>
 </script>
 <script id="documents-top-header-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b agile-page-header">
+<div class="wrapper-md lter bg-light b-b">
 <div class="btn-toolbar m-l-none">
 <div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
 <div>
@@ -98,13 +148,13 @@
                                     </div>
                                     </div>
                                     <div class="btn-group  pull-right add-doc-btn-center">
-                                        <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs btn-primary-imp btn-lg-imp" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
-                                        <a class="btn btn-default btn-sm dropdown-toggle btn-primary-imp btn-lg-imp m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+                                        <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+                                        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
                                         <ul class="dropdown-menu pull-right" style="margin-top:3px;">
                                             <li style="padding:0px 0px;border:0px;"><a href="#documents/edoc" class="edocuments-add">{{agile_lng_translate 'deal-view' 'add-edocument'}}</a></li>
                                             <li class="divider"></li>
-                                            <li style="padding:0px 0px;border:0px;"><a href="#document-templates" class="edocuments-add">{{agile_lng_translate 'document' 'document-add-templates'}}</a></li>
+                                            <li style="padding:0px 0px;border:0px;"><a href="#document-templates" class="edocuments-add">{{agile_lng_translate 'document' 'document-list-templates'}}</a></li>
                                         </ul>
                                         <div class="clearfix"></div>
                                     </div>
@@ -137,7 +187,8 @@
                     <div class="text">
                         {{agile_lng_translate 'documents' 'you-can-add-document-by-clicking'}}
                     </div>
-                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-default-imp btn-lg-imp btn-addon btn-sm m-t-xs "><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-edocument'}}</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon btn-default-imp btn-lg-imp  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+                   <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-edocument'}}</a> 
                 </div>
                 <div class="clearfix">
                 </div>
@@ -160,7 +211,7 @@
 
             {{else}}
 
-            <div class="panel panel-default  documents-collection no-panel-border">
+            <div class="panel panel-default  documents-collection">
                 <div class="panel-heading"> {{agile_lng_translate 'documents' 'documents-list'}}</div>
                 <div class="table-responsive" >
                 <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list"  >
@@ -168,7 +219,7 @@
                         <tr>
                             <th style="width:35%">{{agile_lng_translate 'report-add' 'title'}}</th>
                             <th style="width:20%">{{agile_lng_translate 'documents' 'related-contacts'}}</th>
-                            <th style="width:20%">{{agile_lng_translate 'documents' 'uploaded-date'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'document' 'created'}}</th>
                             <th style="width:10%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
                             <th style="width:10%"></th>
                         </tr>
@@ -209,7 +260,7 @@
         {{/unless}}
 
         <div class="pull-right" style="margin-top:2px;">
-        <b class="activate-link">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
+        <b class="activate-link" style="display:none;">{{#if url}}<a href='{{url}}' target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
         </div>
         </div>
         
@@ -233,7 +284,7 @@
 
         <div class="text-ellipsis w-full pull-left text-muted l-h-xs">
         <i class="fa fa-clock-o"></i>
-        <time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}"> {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+        <time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}"> {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" uploaded_time}}</time>
         </div>
 
 </div> 
@@ -244,7 +295,7 @@
 <td data="{{id}}" class="data">
 <div class="pull-left inline-block table-resp line-clamp line-clamp-3"  title="{{name}}"  style="max-width:90%;width:20em;"><a class="text-cap document-url" href="#documents/{{id}}" data="{{id}}">{{name}}</a></div>
 <div class="pull-left m-l-xs">
-<b class="activate-link" style="display:none;">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
+<b class="activate-link" style="display:none;">{{#if url}}<a href='{{url}}' target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
 </div>
 <div class="clearfix"></div>
 </div>
@@ -257,7 +308,7 @@
 <div  style="width:128px">
         {{#each contacts}}
             {{#if_contact_type "PERSON"}}
-                <a href="#contact/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{contact_name_necessary this}}" /></a>
+                <a href="#contact/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
             {{/if_contact_type}}
             {{#if_contact_type "COMPANY"}}
                 <a href="#company/{{id}}" class="activate-link thumb-sm popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
@@ -270,7 +321,7 @@
 <td class="text-muted">
     <div class="table-resp">
         <i class="fa fa-clock-o m-r-xs"></i>
-        <time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+        <time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" uploaded_time}}</time>
     </div>
 </td><td>
     <div class="thumb-sm avatar">
@@ -291,46 +342,50 @@
 {{/is_mobile}}
 </script>
 <script id="document-etype-select-collection-template" type="text/html">
-        {{#unless this.length}}
-        <div class="bg-light lter b-b wrapper-md agile-page-header">
-            <h1 class="m-n font-thin h3"><i class="icon-plus-sign notaddon-imp">
-            </i> {{agile_lng_translate 'documents' 'document-select-doc-template'}} </h1>
-            <a href="#document-template-add" class="btn btn-default btn-addon btn-primary-imp btn-lg-imp pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add eDocument Template</a>
-                        <div class="clearfix"></div>
-        </div>
-        <div class="alert bg-white">
-            <div class="slate-content  p-md">
-                <div class="box-left pull-left m-r-md">
-                    <img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}" />
-                </div>
-                <div class="box-right pull-left">
-                    <h4 class="m-t-none">{{agile_lng_translate 'documents' 'document-add-no-doc-template'}} </h3>
-                    <div class="text">
-                        {{agile_lng_translate 'documents' 'document-add-template-throug-pref'}}
-                    </div>
-                </div>
-                <div class="clearfix">
-                </div>
-            </div>
-        </div>
-        {{/unless}}
-        {{#if this.length}}
-                <div class="bg-light lter b-b wrapper-md agile-page-header">
-                    <h1 class="m-n font-thin h3 pull-left"><i class="icon-plus-sign notaddon-imp">
-                    </i> {{agile_lng_translate 'documents' 'document-select-doc-template'}} </h1>
-                    <a href="#document-template-add" class="documents-add btn btn-primary-imp btn-lg-imp btn-default btn-addon pull-right btn-sm m-l-xs add-doc-btn-center"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'documents' 'document-add-doc-template'}}</a>
-                    <div class="clearfix"></div>
-                </div>
+               
+<div class="wrapper-md lter bg-light b-b agile-page-header">
+       <div class="btn-group dropdown m-l-none documentsheading" style="float: none">
+         <h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'documents' 'document-select-doc-template'}}<small></small></h3>
+       <div>
+     </div>
+   </div>
+   <div class="pull-right add-btn-mobile add-doc-template-btns">
+        <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp" id="addDocumentTemplate"><span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
+    </div>
+</div>
+
                 <div class="wrapper-md">
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="document-etype-select-list"></div>          
-                            
+<div id="document-etype-select-list">
+    <div class="col-md-3 col-sm-6 col-xs document-template-etype">
+    <div pos="0" pos1="0" class="panel panel-default document-template-go pos-rlt" data="default" style="height: 220px;">
+      <div pos="0" class="panel-heading text-flow-ellipsis line-clamp"  data="default">
+        <center>
+            <div class=" line-clamp" title="blankTemplate">
+                Blank Template
+            </div>
+        </center>
+      </div>
+      <div class="panel-body">
+         <div class="text-flow-ellipsis line-clamp  document-template-text" style="height:95px;-webkit-line-clamp:4;" rel="tooltip" title="blankTemplate">
+            <center>Blank Template</center>
+         </div>
+         <div class="text-center m-t">
+          <a class="btn btn-sm btn-default add-widget" href="#documents/edoc/default">Go</a> 
+            <div class="clearfix"></div>
+         </div>
+      </div>
+
+   </div>
+   </div>
+
+            </div>          
                         </div>
                     </div>
                 </div>
 
-        {{/if}}
+
 
 </script>
 <script id="document-etype-select-model-template" type="text/html">
@@ -348,9 +403,9 @@
          </div>
          <div class="text-center m-t">
          {{#if contactcompanydealtype}}
-            <a class="btn btn-sm btn-default add-widget btn-default-imp " href="#documents/{{contactcompanydealtype}}/{{contactcompanydealid}}/edoc/{{id}}">Go</a>
+            <a class="btn btn-sm btn-default add-widget" href="#documents/{{contactcompanydealtype}}/{{contactcompanydealid}}/edoc/{{id}}">Go</a>
           {{else}}  
-          <a class="btn btn-sm btn-default add-widget btn-default-imp" href="#documents/edoc/{{id}}">Go</a>
+          <a class="btn btn-sm btn-default add-widget" href="#documents/edoc/{{id}}">Go</a>
           {{/if}}  
             <div class="clearfix"></div>
          </div>

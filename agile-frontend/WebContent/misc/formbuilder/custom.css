@@ -279,8 +279,11 @@ input[type="text"]:focus, input[type="email"]:focus, textarea:focus, input[type=
 }
 
 legend {
-	border-bottom: 1px solid rgb(238, 238, 238);
-	margin-bottom: 18px;
+	
+	/*border-bottom: 1px solid rgb(238, 238, 238);*/
+	border-bottom: none;
+	/*margin-bottom: 18px;*/
+	margin-bottom: 12px;
 	padding-bottom: 6px;
 	width: 100%;
 	font-weight: bold;
@@ -308,10 +311,10 @@ fieldset {
 	display: none;
 }
 
-#target .agile-stylebutton:hover{
-	  background-color: #19a9d5!important;
-	  border-color: #189ec8!important;
-	}
+.agile-stylebutton:hover{
+	  background-color: #19a9d5;
+	  border-color: #189ec8;
+}
 #target .popover form{
 	font-family:sans-serif!important;
 }
@@ -368,5 +371,8 @@ form .popover form .btn {
 form .popover form input[type="text"]:focus {
     border: 1px solid #ccc!important;
     border-radius: 4px!important;
+}
+form .agile-form-description{
+	border-bottom: 1px solid rgb(238, 238, 238);
 }
 

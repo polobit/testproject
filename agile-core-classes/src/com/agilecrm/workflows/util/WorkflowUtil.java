@@ -334,26 +334,29 @@ public class WorkflowUtil
 	}
 	
 	/**
-	 * Fetch all workflows and check the max number of nodes among them.
+	 * Fetch all workflows and check if any workflow is having more than limit then return count
+	 * otherwise return 0
+	 * While counting nodes ignore default node(decrement nodes count by 1)
 	 * @return int
 	 */
-	public static int getMaxWorkflowNodes(){
-			int maxNodes = 0;
+	public static int checkNodesLimit(int limit){
 	    	List<Workflow> workflows = getAllWorkflows();
 	    	for(Workflow workflow : workflows){
 	    		if(workflow.rules != null){
 	    			try{
 	    			JSONObject json = new JSONObject(workflow.rules);
 	    			JSONArray nodes = json.getJSONArray("nodes");
-	    			if(nodes.length() > maxNodes)
-	    				maxNodes = nodes.length();
+	    			//check if nodes length is more than limit
+	    			//to ignore default node limit decrease count by 1
+	    			if((nodes.length()-1) > limit)
+	    				return nodes.length()-1;
 	    			}catch(JSONException e){
 	    				e.printStackTrace();
 	    			}
 	    			
 	    		}
 	    	}
-	    	return maxNodes;
+	    	return 0;
 	}
 	
 	/**

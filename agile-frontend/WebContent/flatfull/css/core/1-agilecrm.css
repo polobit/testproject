@@ -3018,9 +3018,65 @@ width: 915px;
  word-wrap:break- all;
  white-space:normal!important;
  } 
-
+ //for new deal model and deal update model 
+#milestone_val{width: 50%;float: left;}
+#milestone_val input{border-radius:0px 2px 2px 0px;width: 58%;float:right;}
+#currencies-list{width: 50%; float: left;border-radius: 2px 0px 0px 2px;border-right: 0px;font-weight: bold;}
+.ccw_unit_selector, .ccw_selector_bg {
+    background-color: whiteSmoke;
+    background-image: -webkit-linear-gradient(top,whiteSmoke,#f1f1f1);
+    height: 30px;
+}
+.input-group-addon:last-child {
+    border-left: 0;
+    padding-left: 2px;
+    width: 24px;
+}
+.ccw_selector_bg {
+    bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 1px;
+    width: 14px;
+    height: 32px;
+}
+.ccw_selector_arrows {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAAOklEQVQYV2P4//8/AwxHRkb+B2I4H13iP7ICbBJwBbgkwBhuLDaMXxLZddgk8duJTQKnP7E6CFkChAFpxL/ydoaj+QAAAABJRU5ErkJggg==) no-repeat center center;
+    bottom: -2px;
+    height: 33px;
+    pointer-events: none;
+    position: absolute;
+    right: 1px;
+    width: 14px;
+}
+.ccw_unit_selector_cnt{
+	border-bottom: 1px solid gainsboro;
+    -webkit-border-radius: 2px 0px 0px 2px;
+    overflow: inherit;
+    position: relative;
+  width: 113px;
+    height: 34px;
+}
+.ccw_unit_selector {
+    -webkit-appearance: button;
+    border: none;
+    font-size: 13px;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    overflow: hidden;
+    padding-left: 5px;
+    text-align: left;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 100%;
+  height:100%;
+}
+input.deal-pro{
+border-radius: 2px 0px 0px 2px;
+}
  .thumb-m {
-   display: inline-block;
+  display: inline-block;
   width: 80px;
 }
 
@@ -3121,8 +3177,6 @@ table.hide-head-checkbox th label.i-checks {
 
 .display-none{
   display: none;
-}
-
 }
 .fullscreen{
   width: 100%;
@@ -3596,7 +3650,7 @@ text-align:left;
   margin-bottom: 6px;
 }
 #send-cancellation #cancel_subscription_modal{
-  width: 70%;
+  width: 80%;
   margin: 0px auto;
 
 }
@@ -3626,6 +3680,11 @@ text-align:left;
 #account_pause a:hover{
   background-color: #f76c51;
   border-color: #f76c51;
+  color: white !important;
+}
+#downgrade_to_free_plan a:hover{
+  background-color: #f05050;
+  border-color: #f05050;
   color: white !important;
 }
 
@@ -5157,9 +5216,7 @@ span.rolecontainer::first-letter {
  display:block!important;
  }
 
-.grid-v2 {
-  display: none;
-}
+
 .grid-v1 {
   display: block;
 }
@@ -5275,7 +5332,6 @@ span.rolecontainer::first-letter {
     color: #f4f3f9 !important;
     background-color: #7266ba !important;
 }
-
 .navbar-brand i.fa-cloud{
   display: none;
 }
@@ -5328,4 +5384,425 @@ span.rolecontainer::first-letter {
 .contact-desc-dynamic pre 
 {
   word-break: keep-all;
+}
+
+#free-downgrade-restrictions{
+  z-index: 1;
+  background-color: #fff;
+  padding: 7px 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 150px;
+}
+
+#new-ticket i.icon-plus-sign{
+  margin-top: 7px;
+}
+
+.dashboard-select.small {
+    display: inline-block;
+    font-size: 100%;
+}
+.dashboard-select.grid-v2 {
+    position: fixed !important;
+    left: 50%;
+     z-index: 1029;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 8px !important;
+    background-color: #fff !important;
+    color: #5840eb !important;
+    border-radius:4px;
+}
+
+.grid-v2 .dropdown-toggle {
+    color: #5840eb !important;
+    background: #f4f8f9;
+    border-radius: 4px;
+}
+.dashboard-select.small .dropdown-toggle {
+       display: inline-block;
+    padding: 0;
+    margin-bottom: -5px;
+}
+.dashboard-select .dropdown-toggle {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 10px 0;
+    overflow: hidden;
+}
+.dashboard-select .nav-grid {
+    padding: 6px 15px!important;
+    padding-bottom: 0px!important;
+}
+#rolecontainer {
+    font-size: 16px;
+    margin-left: 8px;
+    text-transform: lowercase;
+    display: inline-block;
+    padding-top: -19px!important;
+    vertical-align: top;
+}
+.dashboard-select.small .dropdown-toggle .dash-name {
+    display: none;
+}
+.material-icons
+{
+  float:none;
+}
+div#need_help_header a:hover {
+    background: #f4f8f9;
+    border-radius: 4px;
+}
+.dashboard-select.small .dropdown-menu {
+    margin-left: -79px !important;
+    margin-top: 1px;
+}
+.dashboard-select.small .dropdown-menu {
+    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07);
+    margin-left: -104px;
+    left: auto;
+}
+.dashboard-select .dropdown-menu {
+    box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.07);
+    width: 241px;
+    left: -1px;
+    padding: 0;
+}
+.open>.dropdown-menu {
+    display: block;
+}
+.dashboard-select .dropdown-menu li a {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 16px 0;
+    color: inherit;
+}
+.dropdown-menu > li > a {
+    padding: 8px 20px;
+    line-height: 1;
+    text-transform: none;
+}
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.menu-service-select[data-service-name='SALES'] .material-icons {
+    color: #5840eb !important;
+}
+.dashboard-select .dropdown-menu li a i {
+    font-size: 22px;
+    margin-top:-2px;
+}
+.dashboard-select .dropdown-menu li a i {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 56px;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0;
+}
+.dropdown-menu > li > a i {
+    /* display: inline-block; */
+    vertical-align: middle;
+    padding-right: 10px;
+    /* min-width: 26px; */
+    color: #90a4ae;
+    font-style: normal;
+    margin-top: 1px;
+}
+.dashboard-select .dropdown-menu li a span {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 16px;
+    color: #263238;
+}
+.menu-service-select[data-service-name='MARKETING'] .material-icons {
+    color: #11a0f8 !important;
+}
+.menu-service-select[data-service-name='SERVICE'] .material-icons {
+    color: #66cd2e !important;
+}
+.agile-theme-SERVICE .grid-v2 .dropdown-toggle {
+    color: #66cd2e !important;
+}
+.agile-theme-MARKETING .grid-v2 .dropdown-toggle {
+    color: #11a0f8 !important;
+}
+
+#api_track_webrules_code .linenums ,#api_track_code .linenums
+{
+  margin: 0 0 0 0px;
+  
+}
+#api_track_webrules_code.prettyprint.linenums,#api_track_code.prettyprint.linenums
+{
+  font-size: 14px!important;
+}
+.grp-clipboard-track-code,.grp-clipboard-webrule-code
+{
+  margin-bottom: 10px;
+  float: right;
+}  
+#api_track_code , #api_track_webrules_code
+{
+  width: 100%;
+}
+
+.support-help-icon i.fa-question-circle{
+  font-size:17px !important;
+  opacity: 0.78;
+}
+
+.dashboard-select .dropdown-menu .grid2-sub-nav span{
+  font-size: 11px;
+    padding-right: 1px;
+    padding-top: 5px;
+    color: #78909c;
+}
+.dropdown-menu>li>a{
+  line-height: 1 !important;
+}
+.dashboard-select .dropdown-menu li a i {
+    font-size: 22px;
+    /*margin-top: -12px;*/
+   /* margin-bottom: 25px;*/
+}
+.dashboard-select .dropdown-menu li a i.markeing-i{
+  margin-top: -2px;
+}
+.dashboard-select .dropdown-menu li a i{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 56px;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 0;
+}
+.dashboard-select .grid-dropdown-menu.dropdown-menu li a span.grid-span-two {
+    display: inline-block !important;
+}
+.grid-service-span{
+  display: block !important;
+}
+.dashboard-select .dropdown-menu {
+    width: 275px;
+}
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
+    color: #337ab7;
+    font-weight: 600;
+}
+
+.new-theme-add-modals .modal-cotent.ticket-modal-content,.new-theme-add-modals .modal-content{
+  border-radius: 5px;
+}
+
+ #new-ticket .chosen-container-multi .chosen-choices .search-choice{
+  padding: 3px 25px 3px 5px !important;
+ }
+ #new-ticket .chosen-choices  .search-choice span{
+  padding-left: 4px !important;
+ }
+ #new-ticket .chosen-container-multi .chosen-choices .search-choice .search-choice-close{
+  right: 8px !important;
+ }
+
+ .btn-mlg-imp{
+  height: 35px !important;
+  line-height: 35px !important;
+  font-size: 13px !important;
+  padding: 0 3em !important;
+ }
+
+ .new-theme-add-modals .form-horizontal .form-group{
+  margin-left: 0px !important;
+  margin-right: 0px !important
+ }
+
+.new-theme-add-modals  .event-modal-send-invitation{
+  width: 100% !important;
+  margin-left: 0% !important;
+  padding-left: 0px !important;
+}
+.new-theme-add-modals .modal-description{
+ padding-bottom: 0px !important;
+ margin-bottom: 0px !important;
+}
+.new-theme-add-modals .modal-calendar-icon{
+    float: right;
+    margin-right: 6px;
+    margin-top: -27px;
+    position: relative;
+    z-index: 2;
+}
+.new-theme-add-modals .modal-search-icon{
+  float: left;
+  margin-left: 10px;
+  position: relative; 
+  margin-top: -27px;
+}
+.new-theme-add-modals #event_related_to.form-control,.new-theme-add-modals #event_relates_to_deals,.new-theme-add-modals #task_relates_to_deals,.new-theme-add-modals #task_relates_to_deals, .new-theme-add-modals #task_related_to{
+  padding: 6px 28px !important;
+}
+.new-theme-add-modals .modal-header i.icon-plus-sign{
+  margin-top:1px !important;
+  margin-left: 6px;
+}
+.new-theme-add-modals .contact-modal-envelope{
+   margin-right: 10px;
+  position: relative; 
+  margin-top: -25px;
+}
+.new-theme-add-modals  .import-icon{
+  margin-right: 10px
+}
+.new-theme-add-modals .fa-pencil{
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 7px !important;
+    font-size: 12px;
+}
+.new-theme-add-modals #showtoggle_show{
+  padding-top: 35px;
+}
+.new-theme-add-modals .modal-cbx-m-t{
+  padding-left: 0px !important;
+}
+
+.new-theme-add-modals  .icon-plus-sign:before{
+ content: "+" !important;
+}
+.new-theme-add-modals .import-icon{
+  color: #11a0f8 !important;
+  margin-left: 1px;
+}
+.new-theme-add-modals :not(.notaddon-imp).icon-plus-sign:before{
+  margin-right: 0px !important;
+}
+#tags_source_deal_modal .control-label{
+  padding-top: 0px;
+}
+#custom-field-deals .control-group.form-group{
+  margin-bottom: 10px;
+}
+.new-theme-add-modals .modal-cbx-m-t{
+  margin-top: 0px !important;
+}
+.ticket-modal-cancel{
+  vertical-align: middle;
+}
+.app-aside-folded .free-msg-subscribe-btn{
+  display: none !important;
+}
+/*.app-aside-fixed .free-msg-subscribe-btn{
+  display: block !important;
+}*/
+.app-aside-folded .free-plan-upgrade-msg-btn{
+  display: block !important;
+}
+.app-aside-folded .free_msg{
+  display: none !important;
+}
+.app-aside-dock .menu-subscribe{
+  display: none !important;
+}
+.menu-subscribe {
+  margin-top: 120px;
+}
+/*.app-aside-fixed .free-plan-upgrade-msg-btn{
+  display: none !important;
+}*/
+
+
+.app-aside-fixed .free-msg-subscribe-btn{
+  margin-left: 19px;
+}
+
+.free-msg-subscribe-btn{
+  line-height: 1.5;
+  padding:1px 45px;
+  font-size: 12px;
+}
+@media (min-width: 768px){
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a span. {  
+     width:auto;    
+}
+}
+.menu-subscribe.marketing-subscribe{
+  margin-top: 15px !important
+}
+.grid-menu-active{
+    color: #337ab7 !important;
+    font-weight: 600 !important;
+}
+.grid-dropdown-menu {
+  border-radius: 4px !important;
+}
+ 
+ .dashboard-select .grid-dropdown-menu .grid2-sub-nav span{
+  display: table-cell !important;
+  float: left;
+}
+.dashboard-select .grid-dropdown-menu li a span{
+display: table-cell !important;
+}
+
+.comma-seperator{
+  float: right !important;
+  margin-bottom: 0px !important;
+  line-height: 1 !important;
+  color:#78909c!important;
+  font-weight:normal!important;
+}
+.dashboard-select .dropdown-menu .grid2-sub-nav span:last-child p:last-child{
+    display: none;
+  }
+
+.grid-dropdown-menu>li>a{
+    white-space: normal !important;
+}
+
+.dashboard-select .dropdown-menu li a{
+
+ display: block !important; 
+}
+/** end of modal **/
+
+
+.grid-dropdown-menu>li>a{
+    white-space: normal !important;
+}
+.grid-dropdown-menu li a:hover{
+  border-radius: 4px !important;
+}
+
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
+    color: #337ab7;
+    font-weight: 600;
 }

@@ -411,6 +411,9 @@ public class SendGridUtil
 		
 		if(StringUtils.equals(queueName, AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE) && emailsCount > MAX_LIMIT)
 			return AgileGlobalProperties.SendGridIpPools.BULK;
+		
+		if(StringUtils.equals(queueName, AgileQueues.SMTP_BULK_EMAIL_PULL_QUEUE) && emailsCount > MAX_LIMIT)
+			return AgileGlobalProperties.SendGridIpPools.BULK;
 			
 		return AgileGlobalProperties.SendGridIpPools.TRANSACTIONAL;
 	}
@@ -695,7 +698,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 
 	
 	public static void main(String asd[]) throws ParseException{
-		System.out.println(isEmailDomainValid("mailme.net.in"));
+		System.out.println(isEmailDomainValid("agle2.me"));
 		
 		//System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
@@ -871,10 +874,12 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		
 		String whoisData=HTTPUtil.accessURL(WHO_IS_API_URL + emailDomain);
 		
-		long thirtyDaysBackTime = System.currentTimeMillis()/1000;
-		thirtyDaysBackTime = thirtyDaysBackTime -2592000;
+		long sixtyDaysBackTime = System.currentTimeMillis()/1000;
+		sixtyDaysBackTime = sixtyDaysBackTime -5092000;
 		
 		String format = "yyyy-MM-dd";
+		
+		System.out.println(whoisData);
 		
 		String creationDate = StringUtils.substringBetween(whoisData, "Creation Date:", "T");
 		
@@ -884,26 +889,29 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			format = "dd/MM/yyyy";
 		}
 		
+		if(StringUtils.isBlank(creationDate))
+		{
+			creationDate = StringUtils.substringBetween(whoisData, "Registered on:", "Expiry date");
+			format = "dd-MMM-yyyy";
+		}
+		
 		if(StringUtils.isNotBlank(creationDate)){
 			DateFormat dateFormat = new SimpleDateFormat(format);
 			Date date = dateFormat.parse(creationDate.trim());
 			
 			long createdTimeMillisecond = date.getTime()/1000;
 			
-			if(createdTimeMillisecond >=thirtyDaysBackTime)
-				return false;
+			if(createdTimeMillisecond <= sixtyDaysBackTime)
+				return true;
 		}
 		
 		System.out.println("Email Domain name and created date" + creationDate + "   "+emailDomain);
 	}
 	catch(Exception e){
 		System.out.println("Exception occured while validatin email domain on whois server : " +e.getMessage());
-		return true;
+		return false;
 	    }
-	return true;
+	return false;
 	}
-	
-	
-	
 	
 }

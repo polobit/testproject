@@ -1,6 +1,7 @@
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 String templateId = request.getParameter("tmpid");
@@ -9,7 +10,7 @@ String action = request.getParameter("action");
 //Locales JSON
 String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "email-builder");
-
+System.out.println("language = " + localeJSON);
 %>
 <!DOCTYPE html>
 <html lang="<%=_LANGUAGE%>">
@@ -22,11 +23,13 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "emai
 
         <!-- styles -->
 
-        <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
+        <!--  <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
         <link href="css/responsive-table.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
+        <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>  -->
+
+        <link href="build/emailbuilder.min.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
 
 <script>
 var AGILE_EB_ROOT = window.location.origin + "/";
@@ -53,8 +56,10 @@ var localeJSON = <%=localeJSON%>;
 
         <!--<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>-->
         <script src="/js/designer/tinymce/tinymce.min.js"></script>
-        <script type="text/javascript" src="js/colpick.js"></script>
-        <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>
+        <!--<script type="text/javascript" src="js/colpick.js"></script>
+        <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>-->
+
+        <script type="text/javascript" src="build/emailbuilder.min.js?v=<%=_AGILE_VERSION%>"></script>
 
 <style>
 .mce-btn button {
@@ -169,6 +174,8 @@ var localeJSON = <%=localeJSON%>;
                                 <!-- SOCIAL LINKS -->
                                 <%@ include file="blocks/social-links.html" %>
 
+                                <%@ include file="blocks/image-caption.html" %>
+
                             </li>
                         </ul>
                     </div>
@@ -192,23 +199,23 @@ var localeJSON = <%=localeJSON%>;
     <div class="col-sm-8">
         <select class="form-control font-family-picker">
 
-        <option value= 'Arial, "Helvetica Neue", Helvetica, sans-serif' style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif" >Arial</option>
-        <option value='"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace' style="font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace">Courier</option>
-        <option value='Georgia, Times, "Times New Roman", serif' style="font-family: Georgia, Times, 'Times New Roman', serif">Georgia</option>
-        <option value='"Helvetica Neue", Helvetica, Arial, sans-serif' style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica</option>
-        <option value='"Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Geneva, Verdana, sans-serif' style="font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Geneva, Verdana, sans-serif">Lucida Sans</option>
-        <option value='Tahoma, Verdana, Segoe, sans-serif' style="font-family: Tahoma, Verdana, Segoe, sans-serif">Tahoma</option>
-        <option value='TimesNewRoman, "Times New Roman", Times, Beskerville, Georgia, serif' style="font-family: TimesNewRoman, 'Times New Roman', Times, Beskerville, Georgia, serif">Times New Roman</option>
-        <option value='"Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif' style="font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Trebuchet MS</option>
-        <option value='Verdana, Geneva, sans-serif' style="font-family: Verdana, Geneva, sans-serif">Verdana</option>
-        <option value='Bitter, Georgia, Times, "Times New Roman", serif' style="font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif">Bitter</option>
-        <option value='"Droid Serif", Georgia, Times, "Times New Roman", serif' style="font-family: 'Droid Serif', Georgia, Times, 'Times New Roman', serif">Droid Serif</option>
-        <option value='Lato, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif">Lato</option>
-        <option value='"Open Sans, "Helvetica Neue", Helvetica, Arial, sans-serif' style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Open Sans</option>
-        <option value='Roboto, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Roboto', Tahoma, Verdana, Segoe, sans-serif">Roboto</option>
-        <option value='"Source Sans Pro", Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif"> Source Sans Pro</option>
-        <option value='Montserrat, "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif' style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Montserrat</option>
-        <option value='Ubuntu, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Ubuntu', Tahoma, Verdana, Segoe, sans-serif">Ubuntu</option>
+        <option value= 'Arial,"Helvetica Neue",Helvetica,sans-serif' style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif" >Arial</option>
+        <option value='"Courier New",Courier,"Lucida Sans Typewriter","Lucida Typewriter",monospace' style="font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace">Courier</option>
+        <option value='Georgia,Times,"Times New Roman",serif' style="font-family: Georgia, Times, 'Times New Roman', serif">Georgia</option>
+        <option value='"Helvetica Neue",Helvetica,Arial,sans-serif' style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica</option>
+        <option value='"Lucida Sans Unicode","Lucida Grande","Lucida Sans",Geneva,Verdana,sans-serif' style="font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Geneva, Verdana, sans-serif">Lucida Sans</option>
+        <option value='Tahoma,Verdana,Segoe,sans-serif' style="font-family: Tahoma, Verdana, Segoe, sans-serif">Tahoma</option>
+        <option value='TimesNewRoman,"Times New Roman",Times,Beskerville,Georgia,serif' style="font-family: TimesNewRoman, 'Times New Roman', Times, Beskerville, Georgia, serif">Times New Roman</option>
+        <option value='"Trebuchet MS","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Tahoma,sans-serif' style="font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Trebuchet MS</option>
+        <option value='Verdana,Geneva,sans-serif' style="font-family: Verdana, Geneva, sans-serif">Verdana</option>
+        <option value='Bitter,Georgia,Times,"Times New Roman",serif' style="font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif">Bitter</option>
+        <option value='"Droid Serif",Georgia,Times,"Times New Roman",serif' style="font-family: 'Droid Serif', Georgia, Times, 'Times New Roman', serif">Droid Serif</option>
+        <option value='Lato,Tahoma,Verdana,Segoe,sans-serif' style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif">Lato</option>
+        <option value='"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif' style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Open Sans</option>
+        <option value='Roboto,Tahoma,Verdana,Segoe,sans-serif' style="font-family: 'Roboto', Tahoma, Verdana, Segoe, sans-serif">Roboto</option>
+        <option value='"Source Sans Pro",Tahoma,Verdana,Segoe,sans-serif' style="font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif"> Source Sans Pro</option>
+        <option value='Montserrat,"Trebuchet MS","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Tahoma,sans-serif' style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Montserrat</option>
+        <option value='Ubuntu,Tahoma,Verdana,Segoe,sans-serif' style="font-family: 'Ubuntu', Tahoma, Verdana, Segoe, sans-serif">Ubuntu</option>
 
     </select>
             </div>
@@ -467,7 +474,7 @@ var localeJSON = <%=localeJSON%>;
                                     <div class="input-group">
                                       <input type="text" id="image-url" class="form-control" data-id="none"/>
                                       <span class="input-group-btn">
-                                        <a id="browseBtn" class="btn btn-default" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                        <a id="browseBtn" class="btn btn-default browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
                                          <input type="file" id="uploadImageToS3Btn" class="hidden">
                                       </span>
                                     </div><!-- /input-group -->
@@ -475,6 +482,7 @@ var localeJSON = <%=localeJSON%>;
 
                         </div>
 
+                        <!-- start of image link -->
                         <div class="form-group" id="image-link-holder">
                             
                             <div >
@@ -490,20 +498,19 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
 
                             </div>
-                        </div>
+                        </div> <!-- end of image link -->
                          
+                        
+                        <!-- start of alt text -->
                         <div class="form-group"> 
-
                             <div class="col-sm-3 control-label">Alt Text</div>
                                 
                                 <div class="col-sm-9">
                                     
                                     <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
                                                                      
-                                </div>
-
-                           
-                        </div>
+                                </div>    
+                        </div> <!-- end of alt text -->
 
 
 
@@ -541,6 +548,23 @@ var localeJSON = <%=localeJSON%>;
     </div> <!-- end of image height -->
 
 </div>
+
+        <!-- start of image alignment -->        
+                    <div class="form-group" id="select_alignment">
+                            
+                            <div >
+                             <div class="col-sm-3 control-label">Alignment</div>
+                                
+                                <div class="col-sm-9">
+                                    <select class="form-control image-align-picker">
+                                        <option value="left">Left</option>
+                                        <option value="center">Center</option>
+                                        <option value="right">Right</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div> <!-- end of image alignment -->
 
                         
                     </div> <!-- end of image properties -->
@@ -934,6 +958,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 <div id="common-settings">
 
 <div class="form-horizontal">
+
 <!-- start of padding top -->
     <div class="form-group">
             <div class="col-sm-5 control-label">Padding Top</div>
@@ -1000,6 +1025,40 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
         </script>
         
     </div> <!-- end of block background color -->
+
+
+    <!-- start of background image -->
+    <!-- <div class="form-group">
+        <div class="col-sm-5 control-label">Background Image</div>
+        <div class="col-sm-7">
+            <div class="input-group">
+            <input type="text" id="bg-image-url" class="form-control" data-id="none">
+                <span class="input-group-btn">
+                <a id="bg-image-browseBtn" class="btn btn-default browseBtn" onclick="$('#uploadBgImageToS3ThroughBtn').click()">Browse</a>
+                <input type="file" id="uploadBgImageToS3ThroughBtn" class="hidden">
+                </span>
+            </div>
+        </div>
+    </div> --> <!-- end of background image -->
+
+
+    <!-- start of image caption settings -->
+    <div id="image-caption-settings">
+    <hr>
+        <div class="form-group">
+            <div class="col-sm-5 control-label">Caption Position</div>
+                <div class="col-sm-7" >
+                    <select class="form-control" id="image-caption-position">
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    </select>
+                </div>
+        </div>
+    </div> <!-- end of image caption settings -->
+
+
 
     <div class="form-group" style="padding-top:6px;">
         <div class="col-xs-4 pull-right" style="margin-right: 8px;">

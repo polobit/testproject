@@ -7,6 +7,7 @@
  *            Function to be called after loading highcharts.js and
  *            exporting.js, it gives functionalities to
  */
+ var buttons;
 function setupCharts(callback)
 {
 
@@ -14,6 +15,20 @@ function setupCharts(callback)
 	LIB_PATH + 'lib/flot/no-data-to-display.js', LIB_PATH + 'lib/flot/export-csv.js', function()
 	{
 		_agile_library_loader.localize_highcharts();
+		if(!buttons)
+		{
+			buttons = Highcharts.getOptions().exporting.buttons.contextButton.menuItems;
+			buttons.push({
+			    text: "{{agile_lng_translate 'highcharts' 'view-data'}}",
+			    onclick: triggerReportDetails
+			});
+		}
+		else if(!(buttons[buttons.length-1].text=="View Data")){
+			buttons.push({
+			    text: "{{agile_lng_translate 'highcharts' 'view-data'}}",
+			    onclick: triggerReportDetails
+			});
+		}
 		// Checks if callback is available, if available calls the callback
 		if (callback && typeof (callback) === "function")
 		{
@@ -108,7 +123,13 @@ function pie(url, selector, name)
 												return { x : 15, y : 23 };
 											}, },
 										legend : { itemWidth : 75, },
-
+						                 exporting : {
+												buttons: {
+									   			 contextButton: {
+						       					    menuItems: buttons.slice(0,8)
+						       					  },
+						       					}
+									       	},												
 										plotOptions : {
 											pie : {
 												 animation: animation,
@@ -380,6 +401,13 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 										color : '#98A6AD'
 											 },
 						},
+                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},					
 			});
 			});
 	});
@@ -665,6 +693,13 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			    //and pipeline
 			    
 			    series: series,
+                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},	
 			});
 			
 		});
@@ -768,6 +803,13 @@ function showFunnel(url, selector, name, show_loading)
 										color : '#98A6AD'
 											 },
 						},
+                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},	
 		    });
 			
 		});
@@ -1131,7 +1173,13 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
-			  
+                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},			  
 			});
 		});
 	});
@@ -1172,7 +1220,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 	// callback
 	setupCharts(function()
 	{
-
+         
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
 		fetchReportData(url, function(data)
@@ -1499,7 +1547,14 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
                									 x : 60,
                									 y: 5
            									 },
-       								 }
+       								 },
+                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons
+       					  },
+       					}
+			       	},	
 			});
 		});
 	});
@@ -1757,6 +1812,13 @@ chart = new Highcharts.Chart({
                         useHTML: true
                 },
 			    series: series,
+                exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons
+       					  },
+       					}
+			       	},			    
 			});
 }
 
@@ -1882,20 +1944,13 @@ function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_int
                 //Sets the series of data to be shown in the graph,shows total 
                 //and pipeline
                 series: series,
-          /*      exporting : {
-						    	buttons: {
-			   						  exportButton: {
-       					 menuItems: null,
-       					 onclick: function () { this.downloadCSV(); }
-       					 
-       					},
-       					printButton: {
-       						enabled : false
+                exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons
+       					  },
        					}
-	       		
-			       		
-			       				}
-						    },*/
+			       	},
             });
 }
 function pieforReports(url, selector, name,show_loading, is_lost_analysis)
@@ -1913,7 +1968,8 @@ function pieforReports(url, selector, name,show_loading, is_lost_analysis)
 	var frequency = $( "#frequency:visible").val();
 	setupCharts(function()
 	{
-
+		if(selector == "lossreasonpie-chart-users")
+			buttons.pop();
 		fetchReportData(
 						url,
 						function(data)
@@ -2064,7 +2120,14 @@ if(selector == 'lossreasonpie-chart-users'){
 											 position :{
                									 y: 5
            									 },
-								 }
+								 },
+                exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons
+       					  },
+       					}
+			       	},	
 				 } );
 
 
@@ -2285,7 +2348,14 @@ function showGuage(selector, data,goal_data,name,show_loading)
        
 
 
-        }]
+        }],
+                  exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},	       
     });
 		    });
 }
@@ -2296,7 +2366,8 @@ function showFunnelForConversion(selector, name, show_loading,v)
 	setupCharts(function()
 	{
 
-			
+		if(selector == "Default")
+		buttons.pop();	
 			var funnel_data = [];
 			
 
@@ -2373,6 +2444,13 @@ function showFunnelForConversion(selector, name, show_loading,v)
 										color : '#98A6AD'
 											 },
 						},
+	                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},						
 		    });
 			
 		});
@@ -2615,7 +2693,20 @@ function BubbleChart(url, selector, name,show_loading)
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
 			    series: series,
+                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},	
 			});
 		});
 	});
 	}
+
+
+function triggerReportDetails()
+{
+	$('.filter-reports').trigger('click');
+}

@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.campaignio.servlets.util.SpamTracker;
 import com.campaignio.tasklets.agile.SendEmail;
 import com.google.appengine.api.NamespaceManager;
 
@@ -24,8 +25,8 @@ public class EmailLinksConversion
     public static final String[] trackURLDomains = {"agle.me", "agle1.me", "agle2.me", "agle1.cc"};
     
     // Domains having these words won't get tracked
-    public static final String[] blockedURLDomains = {"paypal", "apple"};
-    
+    public static final String[] skippedURLDomains = {"paypal", "apple"};
+
     /**
      * Extensions to avoid url shortening
      * 
@@ -47,8 +48,11 @@ public class EmailLinksConversion
 //  private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.me";
 //  private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.me";
     
-    private static final String LINK_TRACK_URL = "https://list-manage.agle2.me/click";
-    private static final String BETA_LINK_TRACK_URL = "http://list-manage-beta.agle2.me/click";
+//    private static final String LINK_TRACK_URL = "https://list-manage.agle2.me/click";
+//    private static final String BETA_LINK_TRACK_URL = "http://list-manage-beta.agle2.me/click";
+    
+    private static final String LINK_TRACK_URL = "https://list-manage.agle1.cc/click";
+    private static final String BETA_LINK_TRACK_URL = "http://list-manage-beta.agle1.cc/click";
     
     private static String trackingURL = LINK_TRACK_URL;
     
@@ -94,7 +98,7 @@ public class EmailLinksConversion
 
 	return false;
     }
-    
+
     public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String pushParam)
     {
     	return convertLinksUsingJSOUP(input, subscriberId, campaignId, null, pushParam);
@@ -315,7 +319,13 @@ public class EmailLinksConversion
     	if(StringUtils.isBlank(url) || !StringUtils.startsWithIgnoreCase(url, "http"))
     		return true;
     	
-    	for(String domain: blockedURLDomains)
+    	for(String domain: skippedURLDomains)
+    	{
+    		if(StringUtils.containsIgnoreCase(url, domain))
+    			return true;
+    	}
+    	
+    	for(String domain: SpamTracker.blockedDomains)
     	{
     		if(StringUtils.containsIgnoreCase(url, domain))
     			return true;

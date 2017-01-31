@@ -39,6 +39,8 @@ import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil.PrefsType;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
@@ -487,22 +489,34 @@ public class EmailGatewayUtil
 				
 				//Fetch the email options from user's Gmail oauth preferences 
 				GmailSendPrefs gmailPrefs = GmailSendPrefsUtil.getPrefs(agileUser, fromEmail);
+				int emailCount = StringUtils.countMatches(to + cc + bcc , "@");
+				
 				if(gmailPrefs != null) {
-					System.out.println("+++gmailSendPrefs.email:" + gmailPrefs.email);
-					
-					GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
+					long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, PrefsType.GMAIL);
+					if(emailMaxLimitCount > emailCount)
+					{
+						SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, emailCount, PrefsType.GMAIL);
+						
+						System.out.println("GmailPrefs email address : "  + gmailPrefs.email + "   Email Limit : " + emailMaxLimitCount);
+						GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
 							html, text, documentIds, mailAttach, attachments);
-					return true;
+					  return true;
+					}
 				}
 
 				//Fetch the email options from user's SMTP preferences 
 				SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
 				if(smtpPrefs != null) {
-					System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
-					
-					GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
+					long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, PrefsType.SMTP);
+					if(emailMaxLimitCount > emailCount)
+					{
+						SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, emailCount, PrefsType.SMTP);
+						
+						System.out.println("SMTPPrefs email address : "  + smtpPrefs.user_name + "   Email Limit : " + emailMaxLimitCount);
+						GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
 							html, text, documentIds, mailAttach, attachments);
-					return true;
+					 return true;
+					}
 				}
 			}
 		} 
@@ -682,7 +696,6 @@ public class EmailGatewayUtil
 
 	try
 	{
-
 	    // Set namespace
 	    NamespaceManager.set(domain);
 
@@ -698,21 +711,29 @@ public class EmailGatewayUtil
 	    	EMAIL_API preferredGateway = (emailGateway != null) ? 
 	    			emailGateway.email_api : EMAIL_API.SEND_GRID;
 	    	
-	    	if(preferredGateway == SEND_GRID)
-			    SendGridUtil.sendSendGridMails(tasks, emailSender);
-
-	    	else if(preferredGateway == MANDRILL)
-	    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
-		
-	    	else if(preferredGateway == SES)
-				AmazonSESUtil.sendSESMails(tasks, emailSender);
+	    	if(StringUtils.equalsIgnoreCase(queueName, AgileQueues.SMTP_BULK_EMAIL_PULL_QUEUE))
+	    	{
+	    		tasks = SMTPBulkEmailUtil.sendSMTPBulkEmails(tasks, emailSender);
+	    	}
 	    	
-			else if(preferredGateway == MAILGUN)
-				 MailgunUtil.sendMailgunMails(tasks, emailSender);
+	    	if(tasks.size() > 0)
+	    	{
+		    	if(preferredGateway == SEND_GRID)
+				    SendGridUtil.sendSendGridMails(tasks, emailSender);
 	
-			addEmailLogs(tasks);
+		    	else if(preferredGateway == MANDRILL)
+		    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
+			
+		    	else if(preferredGateway == SES)
+					AmazonSESUtil.sendSESMails(tasks, emailSender);
+		    	
+				else if(preferredGateway == MAILGUN)
+					 MailgunUtil.sendMailgunMails(tasks, emailSender);
+		
+				addEmailLogs(tasks);
+	    	}
 	
-			emailSender.setCount(tasks.size());
+			emailSender.setCount(emailSender.getEmailsToSend());
 			emailSender.updateStats();
 
 

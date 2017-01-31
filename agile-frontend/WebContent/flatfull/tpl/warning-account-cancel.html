@@ -162,25 +162,35 @@
 
                     <div class="text-center row">
                      <div class="display-center p-b">
-                      <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}}{{else}}col-md-offset-2{{/check_plan_interval}}">
+                      <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}} col-md-3  {{else}}{{/check_plan_interval}}">
                       <div id="account_cancel_chat" class="wrapper">
                               <div class="bg-box m-r m-l" style="background-color: #50c7a7;">
                                 <i class="fa fa-comment-o pos-rlt pos-t-xs"></i>
                               </div>
                               <h4>{{agile_lng_translate 'reasons' 'instant-help'}}</h4>
                               <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">{{agile_lng_translate 'reasons' 'we-can-help-you-to-get-more-out-of-chat'}}!</div>
-                              <a id="account_cancel_chat_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Chat</a>
+                              <a id="account_cancel_chat_btn" class="btn btn-md btn-default p-t-sm p-b-sm w-xx-half">Chat</a>
                             </div></div>
-                    <div class="col-md-4">
+                      <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}} col-md-3 {{else}}{{/check_plan_interval}}">
+                      <div id="downgrade_to_free_plan" class="wrapper pos-rlt">
+                        <div id="free-downgrade-restrictions" class="pos-abs hide"></div>
+                              <div class="bg-box m-r m-l" style="background-color: #f05050;">
+                                <i class="icon-arrow-down pos-rlt pos-t"></i>
+                              </div>
+                              <h4>{{agile_lng_translate 'help' 'free-plan'}}</h4>
+                              <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">{{agile_lng_translate 'help' 'free-plan-desc'}}</div>
+                              <a id="downgrade_to_free_plan_btn" class="btn btn-md btn-default p-t-sm p-b-sm w-xx-half" data-toogle="popover" data-placement="top">{{agile_lng_translate 'help' 'downgrade'}}</a>
+                            </div></div>
+                    <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}} col-md-3 {{else}}{{/check_plan_interval}}">
                       <div id="account_cancel_support" class="wrapper">
                               <div class="bg-box m-r m-l" style="background-color: #5fa2dd;">
                                 <i class="icon-support pos-rlt pos-t"></i>
                               </div>
                               <h4>{{agile_lng_translate 'help' 'schedule-a-call'}}</h4>
                               <div class="text-xs p-b-xs p-l-sm p-r-sm text-muted">{{agile_lng_translate 'help' 'shedule-a-slot-our-product-support-will-call-you'}}</div>
-                              <a href="http://supportcal.agilecrm.com" target="_blank" id="account_cancel_support_btn" class="btn btn-md btn-default p-t-sm w-xx-half">{{agile_lng_translate 'other' 'schedule'}}</a>
+                              <a href="http://supportcal.agilecrm.com" target="_blank" id="account_cancel_support_btn" class="btn btn-md btn-default p-t-sm p-b-sm w-xx-half">{{agile_lng_translate 'other' 'schedule'}}</a>
                             </div></div>
-                    <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}}{{else}}hide{{/check_plan_interval}}">
+                    <div class="col-md-4 {{#check_plan_interval 'MONTHLY'}}col-md-3 {{else}}hide{{/check_plan_interval}}">
                       <div id="account_pause" class="wrapper">
                               <div class="bg-box m-r m-l" style="background-color: #f76c51;">
                                 <i class="icon-rocket pos-rlt pos-t"></i>
@@ -199,7 +209,7 @@
                                   </span>
                                   <span id="month_id" class="m-l-xs">month</span>, {{agile_lng_translate 'help' 'sothat-you-cant-lose-your-data'}}
                              </div>
-                              <a id="account_pause_btn" class="btn btn-md btn-default p-t-sm w-xx-half">Pause</a>
+                              <a id="account_pause_btn" class="btn btn-md btn-default p-t-sm p-b-sm w-xx-half">Pause</a>
                             </div></div>
                             
                             </div>
@@ -236,3 +246,49 @@
     {{agile_lng_translate 'cancellation' 'advices'}} : {{advices}}
   {{/if}}
 </script>
+
+<script id="free-downgrade-restrictions-template" type="text/html">
+<div class="text-bold"><span class="p-r-xs">We see that you are using {{plan}} plan features, which we do not support in free plan</span><span class="free-downgrade-tooltip text-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="
+  {{#if users}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Users'}} - {{users.count}}; 
+  {{/if}}
+  {{#if contacts}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'contacts-or-companies'}} - {{contacts.count}}; 
+  {{/if}}
+  {{#if workflows}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Campaigns'}} - {{workflows.count}}; 
+  {{/if}}
+  {{#if webrules}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Webrules'}} - {{webrules.count}}; 
+  {{/if}}
+  {{#if triggers}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Triggers'}} - {{triggers.count}}; 
+  {{/if}}
+  {{#if widgets}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Widgets'}} - {{widgets.count}}; 
+  {{/if}}
+  {{#if nodes}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Nodes'}} - {{nodes.count}}; 
+  {{/if}}
+  {{#if emailAccounts}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'EmailAccounts'}} - {{emailAccounts.count}}; 
+  {{/if}}
+  {{#if reports}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Reports'}} - {{reports.count}}; 
+  {{/if}}
+  {{#if tracks}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'Tracks'}} - {{tracks.count}}; 
+  {{/if}}
+  {{#if smsGateway}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'SmsGateway'}}; 
+  {{/if}}
+  {{#if ecommerceSync}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'EcommerceSync'}}; 
+  {{/if}}
+  {{#if accountingSync}}
+    {{agile_lng_translate 'Plan-and-upgrade' 'AccountingSync'}}; 
+  {{/if}}
+"><i class="icon icon-question"></i></span></div>
+<div class="text-danger">Please adjust your current plan accordingly and proceed to downgrade.</div>
+</script>
+

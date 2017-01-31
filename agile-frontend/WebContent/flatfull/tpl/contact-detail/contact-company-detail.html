@@ -29,8 +29,8 @@
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
 								</button>
 								<ul class="dropdown-menu pull-right text-sm">
-<!--<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
-<li class="divider"></li>-->
+									<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
+									<li class="divider"></li>
 									<li><a href='#' class="contact-add-note"><i
 											class="fa fa-file-text"></i> {{agile_lng_translate 'deal-view' 'add-note'}}</a></li>
 									<li><a href='#' class="contact-add-task"><i
@@ -449,7 +449,7 @@
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a>*/ -->
 								<a href="#" class="tooltip_info" style='text-decoration: none; margin-right: 25px'>
-										<img class='b-2x r-2x upload_pic imgholder submit' type="submit"
+										<img class='b-2x r-2x upload_pic imgholder submit' type="submit" style="width:46px;height:46px;margin-left: 24px;"
 										{{getCompanyImage "80" "display:inline;width:46px;height:46px;margin-left: 24px;"}} /></a>
 										<div style="width: 32px; top: 30px; left: 69px; position:absolute;font-size: 11px;" class="toggle-contact-image">
 											<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
@@ -468,8 +468,8 @@
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
 								</button>
 								<ul class="dropdown-menu pull-right text-sm"  role="menu">
-<!--<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
-<li class="divider"></li>-->
+									<li> <a href="#company-edit"><i class="fa fa-edit" style="margin-right:2px"></i> Edit</a></li>
+									<li class="divider"></li>
 
 
 									{{#isRestrictedMenuScope "CASES"}} {{else}}

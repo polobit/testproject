@@ -1,0 +1,102 @@
+<script id="asterisk-login-template" type="text/html">
+<div>
+  <form  id="asterisk_login_form" name="asterisk_login_form" method="post">
+      <fieldset>
+          <p class="m-t-sm">
+                  {{agile_lng_translate 'widgets' 'Asterisk-content'}}
+              </p>
+        
+        <label><b>{{agile_lng_translate 'widgets' 'asterisk-manager-details'}}</b> </label>                
+                <div class="control-group form-group">
+                     <div class="controls">
+                          <input type="text" id="manager_id" name="manager_id" class="input-medium required widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-username'}}" placeholder="{{agile_lng_translate 'widgets' 'asterisk-manager-id-placeholder'}}" required></input>
+                     </div>
+                </div>
+
+                <div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="manager_password" name="manager_password" class="input-medium required widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-secret'}}"  placeholder="{{agile_lng_translate 'widgets' 'asterisk-manager-password-placeholder'}}" required></input>
+                     </div>
+                </div>
+
+                <div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="asterisk_hostname" name="asterisk_hostname" class="input-medium required widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-ip'}}" placeholder="{{agile_lng_translate 'widgets' 'asterisk-machine-ip-placeholder'}}" required></input>
+                     </div>
+                </div>
+
+                <label><b>{{agile_lng_translate 'widgets' 'asterisk-my-credentials'}}</b> </label> 
+
+                <div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="asterisk_call_channel" name="asterisk_call_channel" class="input-medium required widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-channel'}}" placeholder="{{agile_lng_translate 'widgets' 'asterisk-user-channel-placeholder'}}" required></input>
+                     </div>
+                </div>  
+
+                
+               <label><b>{{agile_lng_translate 'widgets' 'asterisk-calling-details'}} </b> </label> 
+              
+               
+               
+                <div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="asterisk_call_context" name="asterisk_call_context" class="input-medium required widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-context'}}" placeholder="{{agile_lng_translate 'widgets' 'asterisk-context-placeholder'}}" required></input>
+                     </div>
+                </div> 
+
+                <div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="asterisk_call_extension" name="asterisk_call_extension" title="{{agile_lng_translate 'widgets' 'asterisk-title-extension'}}" class="input-medium required widget_input_box form-control" 
+                         value="\{{phone}}"  placeholder="{{agile_lng_translate 'widgets' 'asterisk-user-extension-placeholder'}}" required></input>
+                     </div>
+                </div> 
+
+                <div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="asterisk_call_callerId" name="asterisk_call_callerId" class="input-medium required widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-callerID'}}" placeholder="{{agile_lng_translate 'widgets' 'asterisk-caller-id-placeholder'}}" required></input>
+                     </div>
+                </div>
+              
+                <a href="#" class="asterisk-advance-settings"><i class="icon-minus-sign asterisk-advance-settings-hide" style="display:none;"></i><i class="icon-plus-sign asterisk-advance-settings-show"></i> {{agile_lng_translate 'widgets' 'advanced-settings'}}
+                </a>
+                <div id="asterisk-div-setting" style="display:none;">  
+
+                   <div class="control-group form-group">
+                       <div class="controls">
+            
+                           <input type="text" id="asterisk_call_variables" name="asterisk_call_variables" class="input-medium variableFormat widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-variables'}}" placeholder="{{agile_lng_translate 'widgets' 'variables'}}"></input>
+                       </div>
+                  </div>
+
+                 <div class="control-group form-group">
+                       <div class="controls">
+                          <input type="text" id="asterisk_call_priority" name="asterisk_call_priority" class="input-medium  widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-priority'}}" placeholder="{{agile_lng_translate 'widgets' 'priority'}}"></input>
+                       </div>
+                  </div>
+
+                 <div class="control-group form-group">
+                       <div class="controls">
+                           <input type="text" id="asterisk_call_timeout" name="asterisk_call_timeout" class="input-medium  widget_input_box form-control" value="" title="{{agile_lng_translate 'widgets' 'asterisk-title-timeout'}}" placeholder="{{agile_lng_translate 'widgets' 'timeout'}}"></input>
+                       </div>
+                  </div>
+
+                 </div> 
+<div class="m-t text-center">
+             
+        <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_lng_translate 'modals' 'save'}}</a>
+        <a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
+</div>             
+
+<div class="m-t" style="font-size: 11px;">
+             
+        <a href="https://github.com/agilecrm/campaigns-merge-fields" target="_blank">
+          <span style="color:blue;">Merge Fields</span>
+        </a>. Only contact and custom field for contact.   
+</div>
+     </fieldset>
+
+    </form>
+</div>
+</script>
+
+

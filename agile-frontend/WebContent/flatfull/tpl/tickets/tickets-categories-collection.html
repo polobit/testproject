@@ -46,19 +46,22 @@
     </div> 
 
     {{else}}
-    <div class="col-md-9 row {{#isNewTheme}} col-sm-9 {{/isNewTheme}}">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{agile_lng_translate 'tickets' 'knowledgebase_categorylist'}}
-                <div class="pull-right" style="margin-left:10px;margin-top:-4px;">
-                    <a href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon">
-                        <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
-                    </a>
-                </div>
-                <div class="pull-right" style="margin-top: -4px;">
-                    <a href="#selectlandingpage"  class="btn btn-sm btn-default btn-addon access_kb">
-                        {{agile_lng_translate 'preferences' 'settings'}}
-                    </a>
-                </div>    
+    <div class="col-md-9 row {{#isNewTheme}} col-sm-9  {{/isNewTheme}}">
+        <div class="panel panel-default {{#isNewTheme}}theme-panel {{else}}{{/isNewTheme}}">
+            <div class="panel-heading {{#isNewTheme}} hide  {{/isNewTheme}}">{{agile_lng_translate 'tickets' 'knowledgebase_categorylist'}}
+                {{#isNewTheme}}
+                {{else}}
+                  <div class="pull-right" style="margin-left:10px;margin-top:-4px;">
+                      <a href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon">
+                          <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
+                      </a>
+                  </div>
+                  <div class="pull-right {{#isNewTheme}}panelbuttons {{/isNewTheme}}" style="margin-top: -4px;">
+                      <a href="#selectlandingpage"  class="btn btn-sm btn-default btn-addon access_kb">
+                          {{agile_lng_translate 'preferences' 'settings'}}
+                      </a>
+                  </div> 
+                {{/isNewTheme}}   
             </div>    
             <div class="table-responsive b-n inline-block m-b-none">
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/categorie/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
@@ -66,8 +69,25 @@
                         <thead>
                             <tr>
                                 <th class="hide">Id</th>
-                                <th style="width:40%">{{agile_lng_translate 'category' 'name'}}</th>
-                                <th style="width:40%">&nbsp;</th>
+                                <th {{#isNewTheme}} style="width:30%"{{else}} style="width:40%"
+                                {{/isNewTheme}}>{{agile_lng_translate 'category' 'name'}}</th>
+                                <th {{#isNewTheme}} style="width:30%" {{else}} style="width:40%" 
+                                {{/isNewTheme}}>&nbsp;</th>
+                                {{#isNewTheme}}
+                                <th style="width:28%" class="category-buttons-left">
+                                <div class="inline-block m-r-sm">
+                                    <button href="#selectlandingpage"  class="btn select-landing-page-button btn-sm btn-default btn-mlg-sm-imp btn-addon access_kb">
+                                        {{agile_lng_translate 'preferences' 'settings'}}
+                                    </button>
+                                </div> 
+                                <div class="inline-block" style="">
+                                    <button href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon btn-mlg-sm-imp btn-mlg-imp select-landing-page-button">
+                                        <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}}
+                                    </button>
+                                </div>
+                                </th>
+                                {{else}}
+                                {{/isNewTheme}}
                             </tr>
                         </thead>
                         <tbody id="ticket-helpcenter-categories-model-list" class="c-p ui-sortable deal-tracks-tbody"> </tbody>

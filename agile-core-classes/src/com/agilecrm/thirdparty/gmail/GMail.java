@@ -21,9 +21,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.activation.DataHandler;
+import javax.mail.Address;
+import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -40,6 +43,7 @@ import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.HttpTransport;
@@ -48,6 +52,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.Base64;
 import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.Gmail.Users;
 import com.google.api.services.gmail.Gmail.Users.Messages;
 import com.google.api.services.gmail.Gmail.Users.Messages.Send;
 import com.google.api.services.gmail.model.Message;
@@ -67,14 +72,13 @@ public class GMail {
 
 	//private static final String SMTP_URL ="http://104.155.153.221:8080/agile-smtp/smtpMailSender";		//GCloud
 	//private static final String SMTP_URL ="http://localhost:8081/agile-smtp/smtpMailSender";
+
 	//private static final String SMTP_URL ="http://54.234.153.217:80/agile-smtp-beta/smtpMailSender";
 	private static final String SMTP_URL ="http://54.234.153.217:80/agile-smtp/smtpMailSender";
 
-    private static String applicationName = "gmail_oauth2";
-	
-	private static JsonFactory JSON_FACTORY = new JacksonFactory();
-    private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-
+    public static String applicationName = "gmail_oauth2";
+	public static JsonFactory JSON_FACTORY = new JacksonFactory();
+    public static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     
 	/**
 	 * Core method to be called from EmailGatewayUtil to invoke agile-smtp SMTPMailSender
@@ -282,25 +286,6 @@ public class GMail {
 		System.out.println((message.getId() != null) ? "+++success+++" : "+++failed+++");
 	}
 
-	/**
-	 * Builds Message object with Mime content to be delivered.
-	 * 
-	 * @param emailContent
-	 * @return
-	 * @throws MessagingException
-	 * @throws IOException
-	 */
-	private static Message createMessageWithEmail(MimeMessage emailContent) 
-			throws MessagingException, IOException {
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		emailContent.writeTo(buffer);
-		byte[] bytes = buffer.toByteArray();
-		
-		Message message = new Message();
-		message.setRaw(Base64.encodeBase64URLSafeString(bytes));
-		return message;
-	}
-	
     /**
      * create a mimemessage with plain text, if no attachment.
      *
@@ -376,6 +361,60 @@ public class GMail {
 		return null;
 	}
     
+	/**
+	 * Builds Message object with Mime content to be delivered.
+	 * @param emailContent
+	 * @return
+	 * @throws MessagingException
+	 * @throws IOException
+	 */
+	public static Message createMessageWithEmail(MimeMessage emailContent) 
+			throws MessagingException, IOException {
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		emailContent.writeTo(buffer);
+		byte[] bytes = buffer.toByteArray();
+		
+		Message message = new Message();
+		message.setRaw(Base64.encodeBase64URLSafeString(bytes));
+		return message;
+	}
+	
+	/**
+	 * create a mimemessage with text body and attachment.
+	 *
+	 */
+	private static Message createEmailWithDocument(String to, String cc, String bcc, 
+			String from, String subject, String fromName, String name, String bodyText, 
+			String[] attachFile) throws MessagingException, IOException, Exception {
+		
+		String fileName = attachFile[1];
+		
+		MimeMessage emailMsg = new MimeMessage(Session.getDefaultInstance(new Properties(), null));
+
+		emailMsg.setSender(new InternetAddress(from));
+		emailMsg.addRecipients(TO, InternetAddress.parse(to, false));
+		emailMsg.addRecipients(CC, InternetAddress.parse(cc, false));
+		emailMsg.addRecipients(BCC, InternetAddress.parse(bcc, false));
+		emailMsg.setSubject(subject);
+
+		Multipart multipart = new MimeMultipart();
+		
+		MimeBodyPart bodyPart = new MimeBodyPart();
+		bodyPart.setContent(bodyText, "text/html; charset=UTF-8");
+		multipart.addBodyPart(bodyPart);
+
+		MimeBodyPart attachPart = new MimeBodyPart();
+		attachPart.setFileName(fileName);
+		attachPart.setContent(fileName, "application/octet-stream");
+		attachPart.setDataHandler(new DataHandler(new URL(attachFile[2])));
+		multipart.addBodyPart(attachPart);
+		
+		emailMsg.setContent(multipart);
+
+		return createMessageWithEmail(emailMsg);
+	}
+    
+
 	/**
      * This method builds the attachment part to be available for sending to SMTP servlet.
      * 
@@ -477,6 +516,163 @@ public class GMail {
 
 		return url.toString();
 	}
+	
+	/**
+	 * This method will send campaign or bulk email through Gmail Auth.
+	 * 
+	 * @param domain
+     *            - Domain name
+     * @param campaignId
+     *            - Campaign Id
+     * @param fromEmail
+     *            - from email
+     * @param fromName
+     *            - from name
+     * @param to
+     *            - to email
+     * @param cc
+     *            - cc
+     * @param bcc
+     *            - bcc
+     * @param subject
+     *            - subject
+     * @param replyTo
+     *            - reply to
+     * @param html
+     *            - html body
+     * @param text
+     *            - text body
+	 * @param gcredential
+	 * 
+	 * @throws MessagingException
+	 * 
+	 * @throws IOException
+	 * 
+	 * @throws Exception
+	 */
+	public static boolean sendEmailByGmailAPI(String domain, String campaignId, String fromEmail, String fromName, String to, String cc, String bcc, String subject,	String replyTo, String html, String text,	Credential gcredential)	{
+	
+	 try{
+			Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, gcredential)
+					.setApplicationName(applicationName)
+					.build();
+			
+			MimeMessage mimeMessage = createMimeMessageForBulk(domain, campaignId, to, cc, bcc, fromEmail, fromName, subject, text, html, replyTo);	
+			
+			Message message = createMessageWithEmail(mimeMessage);
+			
+			if(message == null)
+				return false;
+			
+			Users users = service.users();
+			Messages msgs = users.messages();
+			Send send = msgs.send("me", message);
+			message = send.execute();
+			
+			System.out.println("GMail Bulk Email Response : " + ((message.getId() != null) ? "Success" : "Failed"));
+			
+			return (message.getId() != null) ? true : false;
+	  }
+	 catch(Exception e){
+		 System.out.println("Exception occured while sending bulk email via Gmail auth : " + e.getMessage());
+		 return false;
+	 }
+	}
+
+	/**
+	 * This message is used for creating MimeMessage object for sending email through Gmail Auth key
+	 * 
+	 * @param domain
+	 * @param campaignId
+	 * @param to
+	 * @param cc
+	 * @param bcc
+	 * @param from
+	 * @param fromName
+	 * @param subject
+	 * @param text
+	 * @param html
+	 * @param replyTo
+	 * 
+	 * @return MimeMessage
+	 */
+	public static MimeMessage createMimeMessageForBulk(String domain,	String campaignId, String to, String cc, String bcc, String fromEmail, String fromName, String subject, String text, String html, String replyTo) throws UnsupportedEncodingException {
+		try {
+			Properties props = new Properties();
+			Session session = Session.getDefaultInstance(props, null);
+			
+			MimeMessage message = new MimeMessage(session);
+			message.setHeader("Content-Type", "text/plain; charset=UTF-8");
+			
+			fromName = StringUtils.isBlank(fromName) ? "" : fromName;
+			
+		    //Add from address of email
+			 message.addFrom(new Address[]
+				{
+		    		   new InternetAddress(fromEmail, fromName, "UTF-8")
+		    	});
+
+			// To
+			if (StringUtils.isNotBlank(to))
+				SMTPBulkEmailUtil.getEmailAddress(message, to, RecipientType.TO);
+
+			// CC
+			if (StringUtils.isNotBlank(cc))
+				SMTPBulkEmailUtil.getEmailAddress(message, cc, RecipientType.CC);
+
+			// BCC
+			if (StringUtils.isNotBlank(bcc))
+				SMTPBulkEmailUtil.getEmailAddress(message, bcc, RecipientType.BCC);
+			
+			message.setSubject(subject, "UTF-8");
+			
+			MimeMultipart mimeBodyPart = new MimeMultipart("alternative");
+			
+			// add text part Text
+		 	if (StringUtils.isNotBlank(text)) 
+		 	{
+		        BodyPart textPart = new MimeBodyPart();
+		        
+		        textPart.setContent(text, "text/plain; charset=utf-8");
+		        
+		        mimeBodyPart.addBodyPart(textPart);
+		 	}
+	   
+		 	if (StringUtils.isNotBlank(html))
+		 	{
+	            BodyPart htmlPart = new MimeBodyPart();
+		     
+		        htmlPart.setContent(html,"text/html; charset=utf-8");
+		        
+		        mimeBodyPart.addBodyPart(htmlPart);
+		 	}
+	        
+		 	// Reply To
+			if (StringUtils.isNotBlank(replyTo))
+			{
+			  message.setReplyTo(new Address[]
+			    	{
+		    		    new InternetAddress(replyTo)
+		    		});
+			}
+			
+	        //adding HTML or Text body part 
+	        message.setContent(mimeBodyPart);
+	        
+	        //Add metadata
+	        if(StringUtils.isNotBlank(campaignId) && StringUtils.isNotBlank(domain))
+	        {
+		        message.addHeader(SMTPBulkEmailUtil.SMTP_DOMAIN_NAME_HEADER, domain);
+		        message.addHeader(SMTPBulkEmailUtil.SMTP_CAMPAIGN_ID_HEADER, campaignId);
+	        }
+			return message;
+		} 
+		catch(MessagingException ex) {
+			Logger.getLogger(GMail.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
+		return null;
+	}
 
 	/**
 	 * for local unit testing
@@ -485,14 +681,13 @@ public class GMail {
 	 */
 	public static void main(String[] args) {
 		try {
-			//System.out.println(HTTPUtil.accessURLUsingPost("http://localhost:8080/agile-smtp/smtpMailSender", "data"));
 			//System.out.println("qwert");
 			//System.out.println(HTTPUtil.accessURLUsingPost("http://requestb.in/127v7v11?user_name=agileravi.crm%40gmail.com&password=thejabman&host=smtp.gmail.com&ssl=true&subject=fill&html=%3C%21DOCTYPE+html%3E%0A%3Chtml%3E%0A+%3Chead%3E+%0A+%3C%2Fhead%3E+%0A+%3Cbody%3E++%0A++%3Cdiv+class%3D%22ag-img%22%3E%0A+++%3Cimg+src%3D%22https%3A%2F%2Fnull-dot-sandbox-dot-agilecrmbeta.appspot.com%2Fopen%3Fs%3D1475130268590%22+nosend%3D%221%22+style%3D%22display%3Anone%21important%3B%22+width%3D%221%22+height%3D%221%22+%2F%3E%0A++%3C%2Fdiv%3E%0A+%3Cdiv%3E%3Cbr%2F%3ESent+using+%3Ca+href%3D%22https%3A%2F%2Fwww.agilecrm.com%3Futm_source%3Dpowered-by%26utm_medium%3Demail-signature%26utm_campaign%3Dnull%22+target%3D%22_blank%22+style%3D%22text-decoration%3Anone%3B%22+rel%3D%22nofollow%22%3E+Agile%3C%2Fa%3E%3C%2Fdiv%3E%3C%2Fbody%3E%0A%3C%2Fhtml%3E&to=Ravi+theja++++%3Cravithejab%40gmail.com%3E&cc=&bcc=","DATAAAA"));
 			
 			String html = "Привет! \n Тестирую русский язык.";
 			System.out.println(html);
 			
-		} catch(Exception e) {
+		} catch(Exception e) { 
 			e.printStackTrace();
 		}
 	}

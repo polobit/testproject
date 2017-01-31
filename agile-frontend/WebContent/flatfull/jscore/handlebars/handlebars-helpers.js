@@ -1073,8 +1073,27 @@ $(function()
 	{
 		if (type == 'GOOGLE')
 			return '{{agile_lng_translate "documents" "google-drive"}}';
-		if (type == 'S3')
-			return '{{agile_lng_translate "documents" "uploaded-doc"}}';
+		else if (type == 'S3')
+			return '{{agile_lng_translate "document" "local-drive"}}';
+		else
+			return '{{agile_lng_translate "document" "edocument"}}';
+	});
+
+	Handlebars.registerHelper('docheader', function(type)
+	{
+		if (type == 'NONE')
+			return '{{agile_lng_translate "documents" "preview-edocument"}}';		
+		else
+			return '{{agile_lng_translate "documents" "edit-document"}}';
+	});
+
+	Handlebars.registerHelper('newdocheader', function(type)
+	{
+
+		if (type == 'NONE')
+			return '{{agile_lng_translate "documents" "newedocument"}}';		
+		else
+			return '{{agile_lng_translate "modals" "new-document"}}';
 	});
 
 	/**
@@ -1121,10 +1140,20 @@ $(function()
 	/**
 	 * Returns currency symbol based on the currency value (deals)
 	 */
+	Handlebars.registerHelper('currencyType', function(currency_type)
+	{
+		var value = (currency_type ? currency_type : CURRENT_USER_PREFS.currency);
+		value = (value ? value : "USD-$");
+		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
+		return symbol;
+	});
 	Handlebars.registerHelper('currencySymbol', function()
 	{
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+	    return symbol;
 		if(symbol=='Rs')
 			symbol='Rs.';
 		return symbol;
@@ -3684,11 +3713,8 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
-						var default_additional_style = "";
-						if(CURRENT_USER_PREFS.theme == "15")
-							default_additional_style = "border:1px solid #ddd !important;";
 
-						var default_return = "src='"+updateImageS3Path('img/com-default-img.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + default_additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/com-default-img.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
 
 						// when the image from uploaded one or favicon can't be
@@ -8274,6 +8300,7 @@ Handlebars.registerHelper('contact_separated_comma', function(contacts,options)
 		html=html.substring(0, html.length - 1)
 	return html;
 });
+
 Handlebars.registerHelper('splitMeetingTime', function(time, type){
 		if(time){
  			var data = time.split('mins')[0];
@@ -8309,3 +8336,50 @@ Handlebars.registerHelper('is_enable_lcf_rel_cond', function(options)
 	}
 	return options.inverse(this);
 });
+Handlebars.registerHelper('splitNumberandSymbol', function(value)
+{
+	if(!value)
+		return
+	var symbol = value.split(/_(.+)/)[1];
+	var number = value.split(/_(.+)/)[0];	
+	symbol += number.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '').replace('.0', '');
+	return symbol;
+});
+
+/**
+	 * Returns remaining email count for smtp and gmail with progress bar
+	 * 
+	 */
+	Handlebars.registerHelper('get_remaining_email_count', function(maxEmailLimit, emailRemain)
+	{
+		var type = "bg-light dk text-tiny";
+		var badge="";
+		var emailSent = maxEmailLimit -emailRemain;
+
+		var value = parseInt((emailRemain * 100) / maxEmailLimit);
+
+		if (value > 1 && value < 40)
+		{
+			type = "label-danger text-tiny";
+			badge="progress-bar-danger";
+		}
+		else if (value >= 40 && value < 75)
+		{
+			type = "label-warning text-tiny";
+			badge="progress-bar-warning";
+		}
+		else if (value >= 75 && value < 90)
+		{
+			type = "label-primary text-tiny";
+			badge="progress-bar-info";
+		}
+		else if (value >= 90)
+		{
+			type = "label-success text-tiny";
+			badge="progress-bar-success"
+		}
+		var data = {'type':type, 'maxEmailLimit':maxEmailLimit, 'emailRemain':emailRemain, 'value':value,'badge':badge};
+		var html = getTemplate("email-remaining-progress", data);
+		return html;
+
+	});

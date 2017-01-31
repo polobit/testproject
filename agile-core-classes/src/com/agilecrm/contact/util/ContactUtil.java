@@ -51,6 +51,7 @@ import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.CountryUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.amazonaws.services.route53domains.model.ContactType;
@@ -60,6 +61,7 @@ import com.campaignio.tasklets.agile.CheckCampaign;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.modules.ModulesService;
 import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.search.Document.Builder;
@@ -68,6 +70,12 @@ import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.code.geocoder.Geocoder;
+import com.google.code.geocoder.GeocoderRequestBuilder;
+import com.google.code.geocoder.model.GeocodeResponse;
+import com.google.code.geocoder.model.GeocoderRequest;
+import com.google.code.geocoder.model.GeocoderResult;
+import com.google.code.geocoder.model.GeocoderStatus;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
@@ -2567,5 +2575,75 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	}
 
 	return oldContact;
+    }
+    
+    /**
+     * Based on given address it sets GeoPoint for 
+     * contact with latitude and longitude values.
+     * 
+     * @param {@Contact} contact
+     */
+    public static void setGeoPoint(Contact contact)
+    {
+    	if(contact == null)
+    	{
+    		return;
+    	}
+    	
+    	ContactField addressField = contact.getContactField(Contact.ADDRESS);
+    	
+    	if(addressField == null || (addressField != null && StringUtils.isBlank(addressField.value)))
+    	{
+    		return;
+    	}
+    	
+    	StringBuffer addressString = new StringBuffer();
+    	try 
+    	{
+    		org.json.JSONObject addressJSON = new org.json.JSONObject(addressField.value);
+    		if(addressJSON != null)
+        	{
+        		if(addressJSON.has("address") && StringUtils.isNotBlank(addressJSON.getString("address")))
+        		{
+        			addressString.append(addressJSON.getString("address")).append(", ");
+        		}
+        		if(addressJSON.has("city") && StringUtils.isNotBlank(addressJSON.getString("city")))
+        		{
+        			addressString.append(addressJSON.getString("city")).append(", ");
+        		}
+        		if(addressJSON.has("state") && StringUtils.isNotBlank(addressJSON.getString("state")))
+        		{
+        			addressString.append(addressJSON.getString("state")).append(", ");
+        		}
+        		if(addressJSON.has("country") && StringUtils.isNotBlank(addressJSON.getString("country")))
+        		{
+        			addressString.append(CountryUtil.getCountryName(addressJSON.getString("country"))).append(", ");
+        		}
+        		if(addressJSON.has("zip") && StringUtils.isNotBlank(addressJSON.getString("zip")))
+        		{
+        			addressString.append(addressJSON.getString("zip"));
+        		}
+        	}
+		} 
+    	catch (Exception e) 
+    	{
+			e.printStackTrace();
+    	}
+        
+        if(StringUtils.isNotBlank(addressString.toString()))
+        {
+        	System.out.println("addressString------"+addressString.toString());
+        	GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(addressString.toString()).setLanguage("en").getGeocoderRequest();
+            GeocodeResponse geocoderResponse = Geocoder.geocode(geocoderRequest);
+            if (geocoderResponse.getStatus() == GeocoderStatus.OK) 
+            {
+            	GeocoderResult firstResult = geocoderResponse.getResults().get(0); 
+            	GeoPt geopoint = new GeoPt(firstResult.getGeometry().getLocation().getLat().floatValue(), firstResult.getGeometry().getLocation().getLng().floatValue());
+            	if(geopoint != null)
+            	{
+            		contact.setGeo_point(geopoint);
+            	}
+            }
+        }
     }
 }

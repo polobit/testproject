@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -37,7 +38,9 @@ import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.EmailPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
@@ -569,7 +572,7 @@ public class EmailsAPI
     @Path("verify-from-email")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void sendVerificationEmail(@FormParam("email") String email)
+    public void sendVerificationEmail(@FormParam("email") String email,@FormParam("isEmailDomainValid") @DefaultValue("false") Boolean isEmailDomainValid)
     {
     	
     	VerifiedEmails verifiedEmails = VerifiedEmailsUtil.getVerifiedEmailsByEmail(email);
@@ -588,10 +591,15 @@ public class EmailsAPI
     	if(verifiedEmails == null)
     		verifiedEmails = new VerifiedEmails(email, String.valueOf(System.currentTimeMillis()));
     	
+    	// If isEmailDomainValid is true then verify email here itself
+    	if(isEmailDomainValid)
+    		verifiedEmails.verified = Verified.YES;
+    	
     	verifiedEmails.save();
     	
     	// Send Verification email
-    	verifiedEmails.sendEmail();
+    	if(!isEmailDomainValid)
+    		verifiedEmails.sendEmail();
     	
     	// If email exists already and not verified yet, send email again and throw exception
     	if(exists)
@@ -719,6 +727,48 @@ public String validateSendgridWhitelabelDomain(@QueryParam("emailDomain") String
 	return SendGridUtil.validateSendgridWhiteLabelDomain(emailDomain, emailGateway, domain);
 }
 
+
+/**
+ * This method will return sendgrid reputation
+ * 
+ * @return String
+ * @throws Exception
+ */
+@Path("/sendgrid/whitelabel/reputation")
+@GET
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+public boolean getSendgridReputation(@QueryParam("emailSent") int emailSent) throws Exception
+{
+	try
+	{
+		  String domain = NamespaceManager.get();
+		  System.out.println("Email sent task added for : " + emailSent);
+		  
+		  long  domainCreatedTimestamps = BillingRestrictionUtil.getBillingRestrictionFromDB().created_time;
+		  
+		  //if domain is old then don't check any thing
+		  if(domainCreatedTimestamps < SendGridSubUser.DOMAIN_CREATED_TIME)
+		     return true;
+		
+		  JSONArray reputationOBJ=new JSONArray(SendGridSubUser.getSendGridUserReputation(domain, null));	
+		  int reputation = reputationOBJ.getJSONObject(0).getInt(SendGridSubUser.REPUTATION);
+		
+		  System.out.println("Reputation object of domain : " + domain + reputationOBJ.toString());
+		  
+		  if(reputation < 80)
+		  {
+			  if((SendGridSubUser.PER_DAY_EMAIL_SENT_LIMIT - SendGridSubUser.getPerDayEmailSent(domain)) > emailSent)
+				  return true;
+		  }
+			  
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while checking sendgrid reputation.." + e.getMessage());
+	    e.printStackTrace();
+	}
+	return false;
+}
 /**
  * This method will validate  sendgrid whitelabel host and key
  * 
@@ -849,4 +899,50 @@ public String getSendgridWhitelabelPermission() throws Exception
 	    return null;
 	}
     }
+    
+	/**
+	 * Sends Email to non-contact.
+	 * 
+	 * @param fromEmail
+	 *            - from email
+	 * @param fromName
+	 *            - from Name
+	 * @param to
+	 *            - to email
+	 * @param subject
+	 *            - subject
+	 * @param textEmail
+	 *            - textEmail
+	 * @param htmlEmail
+	 *            - htmlEmail
+	 * @param replyToEmail
+	 *            - replyToEmail
+	 */
+	@Path("send-email-new")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String sendEmail(@FormParam("from_name") String fromName,
+			@FormParam("from_email") String fromEmail,
+			@FormParam("to_email") String toEmail,
+			@FormParam("subject") String subject,
+			@FormParam("text_email") String textEmail,
+			@FormParam("html_email") String htmlEmail,
+			@FormParam("replyto_email") String replyToEmail) {
+
+		try {
+			//getting email sender
+			EmailSender emailSender = EmailSender.getEmailSender();
+
+			emailSender.sendEmail(fromEmail, fromName, toEmail, null, null,
+					subject, replyToEmail, htmlEmail, textEmail, null, null,
+					null);
+
+		} catch (Exception e) {
+			System.err.println("Exception occured while sending test email..."
+					+ e.getMessage());
+			e.printStackTrace();
+		}
+
+		return fromEmail;
+	}
 }

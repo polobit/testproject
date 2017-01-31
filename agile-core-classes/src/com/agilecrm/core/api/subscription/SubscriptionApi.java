@@ -1,6 +1,5 @@
 package com.agilecrm.core.api.subscription;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -20,16 +19,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 
-import net.sf.json.JSONObject;
-
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.Subscription.BlockedEmailType;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
@@ -46,7 +44,6 @@ import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
@@ -59,6 +56,7 @@ import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Invoice;
+import com.thirdparty.sendgrid.SendGrid;
 
 /**
  * <code>SubscriptionApi</code> class includes REST calls to interact with
@@ -123,8 +121,13 @@ public class SubscriptionApi {
 			 */
 
 			if (subscribe.card_details != null) {
-				if (subscribe.plan != null || subscribe.emailPlan != null)
+				if (subscribe.plan != null || subscribe.emailPlan != null){
+					String countryName = request.getHeader("X-AppEngine-Country");
+					System.out.println("countryName:::: "+countryName);
+					if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+						throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 					subscribe.createNewCustomer();
+				}
 				else
 					subscribe = updateCreditcard(subscribe.card_details);
 
@@ -146,6 +149,10 @@ public class SubscriptionApi {
 				subscribe = changePlan(subscribe.plan, request);
 
 			else if (subscribe.emailPlan != null) {
+				String countryName = request.getHeader("X-AppEngine-Country");
+				System.out.println("countryName:::: "+countryName);
+				if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+					throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 				subscribe = addEmailPlan(subscribe.emailPlan);
 				return subscribe;
 
@@ -524,10 +531,14 @@ public class SubscriptionApi {
 	// Life time emails purchase 
 	@Path("/purchaseEmailCredits")
 	@POST
-	public void purchaseEmailCredits(@QueryParam("quantity") Integer quantity)
+	public void purchaseEmailCredits(@Context HttpServletRequest request, @QueryParam("quantity") Integer quantity)
 	{
 		Subscription subscription = SubscriptionUtil.getSubscription();
 		try {
+			String countryName = request.getHeader("X-AppEngine-Country");
+			System.out.println("countryName:::: "+countryName);
+			if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+				throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 			if(SubscriptionUtil.isEmailsPurchaseStatusBlocked(subscription))
 				throw new Exception(ExceptionUtil.EMAILS_PURCHASE_BLOCKED);
 			subscription.purchaseEmailCredits(quantity);
@@ -551,9 +562,13 @@ public class SubscriptionApi {
 	// Auto Renewal Credits 
 	@Path("/auto_recharge")
 	@POST
-	public void autoRecharge(@FormParam("isAutoRenewalEnabled") Boolean isAutoRenewalEnabled, @FormParam("nextRechargeCount") Integer nextRechargeCount, @FormParam("autoRenewalPoint") Integer autoRenewalPoint)
+	public void autoRecharge(@Context HttpServletRequest request, @FormParam("isAutoRenewalEnabled") Boolean isAutoRenewalEnabled, @FormParam("nextRechargeCount") Integer nextRechargeCount, @FormParam("autoRenewalPoint") Integer autoRenewalPoint)
 	{
 		try {
+			String countryName = request.getHeader("X-AppEngine-Country");
+			System.out.println("countryName:::: "+countryName);
+			if(StringUtils.equalsIgnoreCase(countryName, "TN"))
+				throw new Exception(ExceptionUtil.COUNTRY_BLOCKED);
 			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 			if(!restriction.isAutoRenewalEnabled){
 				Subscription subscription = SubscriptionUtil.getSubscription();
@@ -601,5 +616,29 @@ public class SubscriptionApi {
 				    .build());
 		}
 	}
-
+	
+	@GET
+	@Path("/downgradeRestrictions")
+	public String downgradeFreePlanRestrictions(){
+		try{
+			Map<String, Map<String, Object>> restrictions = SubscriptionUtil.downgradeFreePlanRestrictions();
+			if(restrictions.size() == 0){
+				Subscription subscription = SubscriptionUtil.getSubscription();
+				DomainUser user = DomainUserUtil.getCurrentDomainUser();
+				try{
+					String mailSubject = "Downgraded to free plan";
+					String html = "Domain: "+user.domain+"<br>Username: "+user.email+"<br>Plan: "+subscription.plan.plan_type.toString();
+			    	SendGrid.sendMail(user.email, user.domain, "venkat@agilecrm.com,mogulla@invox.com", null, null, mailSubject, null, html, null);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				cancelSubscription();
+			}
+			return new Gson().toJson(restrictions);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+				    .build());
+		}
+	}
 }

@@ -1,7 +1,7 @@
 <script id="typeahead-contacts-model-template" type="text/html">
 <div class="custom-color wrapper-sm overflow-hidden">
 	{{#if_equals type "COMPANY"}}
-	<div class="thumb-xs agile-img "  >
+	<div class="{{#isNewTheme}}thumb-sm{{else}}thumb-xs{{/isNewTheme}} agile-img "  >
 		<img class="img-inital r r-2x" style="height:34px;width:34px;" {{getCompanyImage "35"}} /></img>
 	</div>
 	<div class="agile-thumb text-ellipsis" style="margin-top: -3px;">
@@ -14,7 +14,7 @@
 	</div>
 	{{/if_equals}}
 		{{#if_equals type "PERSON"}}
-	<div class="thumb-xs agile-img ">
+	<div class="{{#isNewTheme}}thumb-sm{{else}}thumb-xs{{/isNewTheme}} agile-img ">
 		<img class="img-inital r r-2x"  style="height:34px;width:34px;" src="{{gravatarurl properties 40}}" /></img>
 	</div>
 	<div class="agile-thumb text-ellipsis" style="margin-top: -3px;">
@@ -48,7 +48,19 @@
 	</div>
 	<div class="agile-thumb text-ellipsis" >
 		<div class="text-ellipsis"> {{name}}</div>
-<div class="text-ellipsis" ><small>{{currencySymbol}}{{numberWithCommas expected_value}}</small>
+<div class="text-ellipsis" ><small>{{#if_equals currency_conversion_value "0"}}
+									  {{currencyType currency_type}}{{currency_conversion_value}}
+									{{else}}
+									  {{#if currency_conversion_value}}
+									    {{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}
+									  {{else}}
+									    {{#if_equals expected_value "0"}}
+									      {{currencySymbol}}{{expected_value}}
+									    {{else}}
+									      {{currencySymbol}}{{numberWithCommas expected_value}}
+									    {{/if_equals}}
+									  {{/if}}
+									{{/if_equals}}</small>
 <small>({{probability}}%)</small> </div>
 <div class="text-ellipsis"><small>{{description}}</small></div>
 	</div>

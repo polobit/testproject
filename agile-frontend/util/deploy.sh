@@ -9,8 +9,9 @@
 ##Localization language support
 
 ## declare an array variable (Ex : ("en" "sp" "fn"))
-declare -a agile_languages=("en" "es")
-
+declare -a agile_languages=("en" "es" "it" "ru" "fr")
+rm agile-precompile.sh
+echo "Preparing for precompilation for all languages"
 ## now loop through the above array
 for i in "${agile_languages[@]}"
 do
@@ -26,12 +27,17 @@ do
    sh yui-flat-full.sh "$i"
    sh tpl-flatfull.sh "$i"
 done
-#Delete locales
-rm -r ../WebContent/tpl/localestmp
-##End of localization support
+
 
 #java -jar precompile.jar ../WebContent/flatfull/tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
 java -jar precompile.jar ../WebContent/helpcenter/helpcenter-tpl ../../../tmp/handlebars ../WebContent/tpl/min/precompiled/flatfull
+echo "Precompilation started"
+sh agile-precompile.sh
+echo "Precompilation completed"
+rm agile-precompile.sh
+#Delete locales
+rm -r ../WebContent/tpl/localestmp
+##End of localization support
 
 
 #sh yui.sh

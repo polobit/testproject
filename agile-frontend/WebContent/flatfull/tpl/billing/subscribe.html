@@ -698,7 +698,7 @@ Proceed to Trial
 					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{users.count}} {{agile_lng_translate 'Plan-and-upgrade' 'users-limit-msg'}} {{users.limit}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
 				{{/if}}
 				{{#if contacts}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Contacts'}}</div></div>
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-or-companies-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-or-companies'}}</div></div>
 				{{/if}}
 				{{#if workflows}}
 					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{workflows.count}} {{agile_lng_translate 'Plan-and-upgrade' 'campaigns-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{workflows.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Campaigns'}}</div></div>
@@ -760,7 +760,7 @@ Proceed to Trial
 					{{agile_lng_translate 'Plan-and-upgrade' 'Users'}} - {{users.count}}; 
 				{{/if}}
 				{{#if contacts}}
-					{{agile_lng_translate 'Plan-and-upgrade' 'Contacts'}} - {{contacts.count}}; 
+					{{agile_lng_translate 'Plan-and-upgrade' 'contacts-or-companies'}} - {{contacts.count}}; 
 				{{/if}}
 				{{#if workflows}}
 					{{agile_lng_translate 'Plan-and-upgrade' 'Campaigns'}} - {{workflows.count}}; 

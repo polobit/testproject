@@ -98,22 +98,41 @@ define([
 						if(saveform[0].fields.agiletransparentbackground){
 								saveform[0].fields.agiletransparentbackground.label = "Transparency <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='If set to yes, the background of your website will be applied along with selected text color' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 								saveform[0].fields.agiletransparentbackground.value[1].label = "yes with text color: white";
+								saveform[0].fields.agiletransparentbackground.value[1].value = "agile-form-transparent";
+								
 								if(!saveform[0].fields.agiletransparentbackground.value[2]){
-									saveform[0].fields.agiletransparentbackground.value[2] = {value : " agile-form-blck-transparent", selected : false, label: "yes with text color: black"};
+									saveform[0].fields.agiletransparentbackground.value[2] = {value : "agile-form-blck-transparent", selected : false, label: "yes with text color: black"};
 								}
 								else{
 									saveform[0].fields.agiletransparentbackground.value[2].label = "yes with text color: black";
 								}
-						}
-						transparentBgVal = saveform[0].fields.agiletransparentbackground.value;
-							$.each(transparentBgVal, function(index,element){
+								transparentBgVal = saveform[0].fields.agiletransparentbackground.value;
+							        $.each(transparentBgVal, function(index,element){
    									if(element.selected){
 										$("#target").addClass(element.vlaue);
 									}
-							});
+							       });
+						}
+
+						if(typeof saveform[0].fields.description == "undefined"){
+							var description = {
+								"label": "Description <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='Give an introduction to your form' data-placement='right' style='text-decoration: none;''><sup style='font-size: 9px;''>?</sup></a>",
+                				"type": "input",
+                				"value": ""
+                			};
+							saveform[0].fields.description = description;
+						}
+						else{
+							saveform[0].fields.description.label = "Description <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='Give an introduction to your form' data-placement='right' style='text-decoration: none;''><sup style='font-size: 9px;''>?</sup></a>";
+						}
 						//Adding on top
 						for ( var j = 0; j < saveform.length; j++){
 
+							if(saveform[j]["title"]=="Search Input"){
+								saveform.splice(j,1);
+								j--;
+								continue;
+							}
 							if(saveform[j].title=="Text Area"){
 								if(saveform[j].fields.placeholder==undefined){
 									var placeholder={
@@ -219,6 +238,7 @@ define([
 			orderedSaveform[0].title = saveform[0].title;
 			orderedSaveform[0].fields = {};
 			orderedSaveform[0].fields["name"] = saveform[0].fields["name"]; 
+			orderedSaveform[0].fields["description"] = saveform[0].fields["description"]; 
 			orderedSaveform[0].fields["agileredirecturl"] = saveform[0].fields["agileredirecturl"];
 			orderedSaveform[0].fields["agileconfirmationmsg"] = saveform[0].fields["agileconfirmationmsg"];
 			orderedSaveform[0].fields["agilepreloadfields"] = saveform[0].fields["agilepreloadfields"];

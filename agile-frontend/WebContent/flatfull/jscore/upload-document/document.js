@@ -171,9 +171,16 @@ function updateDocument(ele) {
  */
 function saveDocumentURL(url, network, id)
 {
+   saveDocumentURL(url, network, id,'no')
+}
+
+
+function saveDocumentURL(url, network, id,fileName)
+{
 	id = id.split("?id=")[1];
 	var form_id = id.split("&")[0];
 	
+	if(fileName=='no'){
 	// Saving extension of document
 	var extension = url.split("?");
 	if(url.match("agilecrm/panel/uploaded-logo/"))
@@ -183,6 +190,10 @@ function saveDocumentURL(url, network, id)
 	}
 	else 
 		extension = "Google";
+    }
+    else
+    	extension = fileName;
+
 	
 	$('#' + form_id).find("#extension").val(extension);
 	$('#' + form_id).find("#network_type").val(network);

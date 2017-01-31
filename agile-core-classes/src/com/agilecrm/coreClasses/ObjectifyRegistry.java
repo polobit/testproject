@@ -3,6 +3,7 @@ package com.agilecrm.coreClasses;
 import com.agilecrm.account.EmailTemplateCategory;
 import com.agilecrm.affiliate.Affiliate;
 import com.agilecrm.affiliate.AffiliateDetails;
+import com.agilecrm.deals.CurrencyConversionRates;
 import com.agilecrm.affiliate.AffiliateDeal;
 import com.agilecrm.addon.AddOn;
 import com.agilecrm.customthemes.CustomTheme;
@@ -34,6 +35,7 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(NotificationTemplate.class);
 		ObjectifyService.register(Affiliate.class);
 		ObjectifyService.register(AffiliateDetails.class);
+		ObjectifyService.register(CurrencyConversionRates.class);
 		ObjectifyService.register(AffiliateDeal.class);
 		
 		ObjectifyService.register(CustomTheme.class);

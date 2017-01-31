@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.agilecrm.account.DocumentTemplates;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>DocumentTemplatesUtil</code> is the utility class for
@@ -47,6 +48,24 @@ public class DocumentTemplatesUtil
 	public static List<DocumentTemplates> getAllDocumentTemplates()
 	{
 		return dao.fetchAll();
+	}
+	
+	// find template by template name
+	private static List<DocumentTemplates> getTemplateByName(String name){
+		Query<DocumentTemplates> qdt = dao.ofy().query(DocumentTemplates.class).filter("name", name);
+		return dao.fetchAll(qdt);
+	}
+	
+	public static void findDuplicate(String... strings){
+		for(String s : strings){
+			int i =1;
+			List<DocumentTemplates> sameNameTemplate = getTemplateByName(s);
+			if(sameNameTemplate.size()>1){
+				for(;i<sameNameTemplate.size();i++){
+					sameNameTemplate.get(i).delete();
+				}
+			}
+		}
 	}
 
 	/**

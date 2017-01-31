@@ -2,9 +2,17 @@ package com.agilecrm.user.util;
 
 import java.util.List;
 
+import com.agilecrm.account.VerifiedEmails;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.scribe.api.GoogleApi;
+import com.agilecrm.thirdparty.gmail.GMail;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.GmailSendPrefs;
+import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -103,6 +111,147 @@ public class GmailSendPrefsUtil {
 				gmailSendPrefs.delete();
 		}
 		gmailPrefs.save();
+		
+		//Add email address as a verified email address
+		VerifiedEmailsUtil.addVerifiedEmail(gmailPrefs.email, VerifiedEmails.Verified.YES);
 	}
 
+	/**
+	 * Returns GmailSendPrefs object related to email address
+	 * 
+	 * @param Email
+	 *            - String
+	 *            
+	 * @return GmailSendPrefs.
+	 */
+	public static GmailSendPrefs getPrefs(String fromEmail) {
+		try
+		{
+			return dao.getByProperty("email", fromEmail);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * This method will set bulk email sending is true or false in memcache
+	 * @param fromEmail
+	 * @return boolean
+	 */
+	public static boolean setGmailSendPrefsIsBulk(String fromEmail, boolean isBulk)
+	{
+			SMTPBulkEmailUtil.setCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_BULK_MEMCACHE_KEY , isBulk);
+			return isBulk;
+	}
+	
+	/**
+	 * This method will fetch bulk email sending is true or false from Memcache
+	 * @param fromEmail
+	 * @return boolean
+	 */
+	public static boolean getGmailSendPrefsIsBulk(String fromEmail)
+	{
+		Object isBulk = SMTPBulkEmailUtil.getCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_BULK_MEMCACHE_KEY);
+		if(isBulk == null){
+			GmailSendPrefs gmailSendPrefs = getPrefs(fromEmail);
+			
+			if(gmailSendPrefs != null)
+			    return setGmailSendPrefsIsBulk(fromEmail ,gmailSendPrefs.bulk_email);
+		   else
+			   return setGmailSendPrefsIsBulk(fromEmail , false);
+		}
+		return (boolean)isBulk;
+	}
+	
+	/**
+	 * This method will set max limit of Gmail preference in Memcache
+	 * 
+	 * @param fromEmail
+	 * 				- String
+	 * @param domain
+	 * 				-  String
+	 * @return max email count
+	 * 				- long
+	 */
+	public static long setGmailSendPrefsMaxLimit(String fromEmail)
+	{
+		GmailSendPrefs gmailSendPrefs = getPrefs(fromEmail);
+		
+		if(gmailSendPrefs != null){
+			SMTPBulkEmailUtil.setCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY , gmailSendPrefs.max_email_limit, SMTPBulkEmailUtil.SMTP_EMAIL_LIMIT_TIME);
+			return gmailSendPrefs.max_email_limit;
+		}
+	 return 0;
+	}
+	
+	/**
+	 * This method will set max limit of Gmail preference in Memcache
+	 * 
+	 * @param fromEmail
+	 * 				- String
+	 * @param domain
+	 * 				-  String
+	 * @return max email count
+	 * 				- long
+	 * 
+	 */
+	public static long getGmailSendPrefsEmailsLimit(String fromEmail)
+	{
+		Object maxEmailLimit = SMTPBulkEmailUtil.getCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY);
+		if(maxEmailLimit == null)
+			return setGmailSendPrefsMaxLimit(fromEmail);
+		
+		return (long)maxEmailLimit;
+	}
+	
+	/**
+	 * This method will decrease email limit of Gmail preference in Memcache
+	 * 
+	 * @param fromEmail
+	 * 				- String
+	 * @param domain
+	 * 				-  String
+	 * @return max email count
+	 * 				- long
+	 * 
+	 */
+	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, long count)
+	{
+		SMTPBulkEmailUtil.updateCacheLimit(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY, -count);
+		
+	}
+	
+	
+	public static Credential getGoogleAuthCredential(GmailSendPrefs gmailSendPrefs){
+		try{
+			//Get Gmail authentication credential object
+			Credential gcredential = new GoogleCredential
+				.Builder()
+				.setTransport(GMail.HTTP_TRANSPORT)
+				.setJsonFactory(GMail.JSON_FACTORY)
+				.setClientSecrets(GoogleApi.SMTP_OAUTH_CLIENT_ID, GoogleApi.SMTP_OAUTH_CLIENT_SECRET)
+				.build()
+				.setAccessToken(gmailSendPrefs.token)
+				.setRefreshToken(gmailSendPrefs.refresh_token);
+			
+			// Chech if gmail auth token is expired then create new one
+			if(gmailSendPrefs.expires_at == null || gmailSendPrefs.expires_at < System.currentTimeMillis()) {
+				gcredential.refreshToken();
+				gmailSendPrefs.refresh_token = gcredential.getRefreshToken();
+				gmailSendPrefs.token = gcredential.getAccessToken();
+				gmailSendPrefs.expires_at = gcredential.getExpirationTimeMilliseconds();
+				
+				//Update gmail prefs
+				gmailSendPrefs.save();
+			}
+			return gcredential;
+	     }
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Exception occured while getting google Credential : " +e.getMessage());
+			return null;
+		}
+    }
 }

@@ -27,7 +27,7 @@
 		{{#is_mobile}}
 
 			<a href="#user-prefs" class="user-prefs-tab   select"><i class="icon icon-wrench"></i></a>
-			<a href="#email" class="email-tab "><i class="icon icon-envelope"></i></a>
+			<a href="#email" class="email-tab "><i class="icon icon-envelope"></i></a>		
 			<a href="#add-widget" class="add-widget-prefs-tab"><i class="icon icon-settings"></i></a>
 			<a href="#sync" class="contact-sync-tab"><i class="icon icon-layers"></i></a>
 			<!-- <a href="#importcrm" class="contact-import-tab">Import From CRMs</a> -->
@@ -38,7 +38,7 @@
 		{{else}}
 			
 			<a href="#user-prefs" class="user-prefs-tab list-group-item  select">{{agile_lng_translate 'preferences' 'settings'}}</a>
-			<a href="#email" class="email-tab list-group-item ">{{agile_lng_translate 'other' 'email'}}</a>			
+			<a href="#email" class="email-tab list-group-item ">{{agile_lng_translate 'other' 'email'}}</a>
 			<a href="#add-widget" class="add-widget-prefs-tab list-group-item ">{{agile_lng_translate 'preferences' 'widgets'}}</a>
 			<a href="#sync" class="contact-sync-tab list-group-item ">{{agile_lng_translate 'preferences' 'data-sync'}}</a>
 			<!-- <a href="#importcrm" class="contact-import-tab list-group-item ">Import From CRMs</a> -->
@@ -61,4 +61,49 @@
 </div>
 </div>
 </div>
+</script>
+
+<script id="settings-template-list-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div id="documents-top-view">
+  <div>
+     <div class="wrapper-md lter bg-light b-b agile-page-header">
+       <div class="btn-group dropdown m-l-none documentsheading" style="float: none">
+         <h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'document' 'document-list-templates'}} <small></small></h3>
+       <div>
+     </div>
+   </div>
+   <div class="pull-right add-btn-mobile add-doc-template-btns">
+        <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp" id="addDocumentTemplate"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
+    </div>
+</div>	
+
+<div class="wrapper-md agile-p-t-xs">
+<div class="row">
+<div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
+			<div class="tabs" id="prefs-tabs-content"></div>
+    </div>
+    </div>
+    </div>
+</script>
+
+<script id="settings-template-new-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div id="documents-top-view">
+  <div>
+     <div class="wrapper-md lter bg-light b-b agile-page-header">
+       <div class="btn-group dropdown m-l-none documentsheading" style="float: none">
+         <h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'document' 'document-list-templates'}} <small></small></h3>
+       <div>
+     </div>
+   </div>
+</div>	
+
+<div class="wrapper-md agile-p-t-xs">
+<div class="row">
+<div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
+			<div class="tabs" id="prefs-tabs-content"></div>
+    </div>
+    </div>
+    </div>
 </script>

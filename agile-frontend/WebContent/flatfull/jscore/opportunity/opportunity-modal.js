@@ -471,6 +471,22 @@ function updateDeal(ele, editFromMilestoneView)
 	}
 	
     $("#opportunityUpdateModal").modal('show');
+    if(ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE"))
+    {
+    	$("#opportunityUpdateModal").find('input[name=currency_conversion_value]').css('width','48%');
+    	$("#opportunityUpdateModal").find("#currencies-list").removeClass('hidden');
+	    $("#opportunityUpdateModal").find("#currency-conversion-symbols").html(getTemplate("currency-conversion-symbols-list", {}));
+	    if(value.currency_type){
+	    	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(value.currency_type);
+	    }
+	    else{
+	    	var currency_value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+	    	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(currency_value);
+	    }
+
+	}
+
+
 	// Hide archive button, if the is already archived.
 	if (value.archived)
 	{
@@ -600,7 +616,7 @@ function updateDeal(ele, editFromMilestoneView)
 	setup_tags_typeahead();
 
 }
-
+var currencyRatesResponse ;
 /**
  * Show new deal popup
  */
@@ -617,7 +633,16 @@ function show_deal()
 	// Disable color input field
     $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
 
-  	add_custom_fields_to_form({}, function(data)
+    if(ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE"))
+    {	
+    	$("#opportunityForm").find('input[name=currency_conversion_value]').css('width','48%');
+	    $("#opportunityForm").find("#currency-conversion-symbols").html(getTemplate("currency-conversion-symbols-list", {}));
+	    var currencyType = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+	    $("#opportunityForm").find("#currencies-list").removeClass('hidden');
+	    $("#opportunityForm").find("#currency-conversion-symbols").val(currencyType);
+	}
+
+	add_custom_fields_to_form({}, function(data)
 	{
 		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], [
 			"modal"
@@ -739,6 +764,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 	{
 		var container = $('#' + formId).closest('.modal');
 		var ele = $('#' + formId).find('.single-error').first();
+		if(ele && ele.offset())
 		container.scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 		// Removes disabled attribute of save button
 		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');

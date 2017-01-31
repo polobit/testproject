@@ -153,7 +153,19 @@
 			<div class="w-full pull-left text-ellipsis text-cap custom-link">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
 		</div>
 		<div class="pull-right text-right font-bold m-b-xs text-ellipsis" style="width: 30%; white-space: nowrap;">
-			<span>{{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if_equals}}</span>
+			<span>{{#if_equals currency_conversion_value "0"}}
+					{{currencyType currency_type}}{{currency_conversion_value}}
+				{{else}}
+					{{#if currency_conversion_value}}
+						{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}
+					{{else}}
+						{{#if_equals expected_value "0"}}
+							{{currencySymbol}}{{numberWithCommas expected_value}}
+						{{else}}
+							{{currencySymbol}}{{expected_value}}
+						{{/if_equals}}
+					{{/if}}
+				{{/if_equals}}</span>
 		</div>
 		<!-- <div class="clearfix"></div> -->
 	</div>
@@ -1753,9 +1765,28 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{agile_lng_translate 'contacts-view' 'created-deal'}} {{#if entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
 {{#if custom2}}
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}} {{/unless}}Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommasForActivities custom2}}{{/if_equals}} - {{custom3}}%) {{agile_lng_translate 'contacts-view' 'added'}} {{#if entityObject}}to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}} {{/unless}}Deal ({{#if custom5}}
+	{{splitNumberandSymbol custom5}}
 {{else}}
-<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'added-to-track'}} '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+	{{#if_equals entityObject.expected_value "0"}}
+		{{currencySymbol}}{{entityObject.expected_value}}
+	{{else}}
+		{{currencySymbol}}{{numberWithCommasForActivities custom2}}{{/if_equals}}
+{{/if}} - {{custom3}}%) {{agile_lng_translate 'contacts-view' 'added'}} {{#if entityObject}}to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+{{else}}
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'added-to-track'}} '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 {{/if}}	
 </small></div>	
 {{/if_equals}}
@@ -1764,14 +1795,38 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_ARCHIVE" activity_type}}
  {{agile_lng_translate 'contacts-view' 'archived-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} 
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'archived'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'archived'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
 {{#if_equals "DEAL_RESTORE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'restored-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} 
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'restored-item'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'restored-item'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1780,7 +1835,19 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_CLOSE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'won-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1788,7 +1855,19 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_EDIT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'modified-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1807,19 +1886,55 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 {{agile_lng_translate 'contacts-view' 'removed-contacts-from-deal'}}{{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}} {{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}} {{#if this.entityObject}}({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </small><div>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
 {{agile_lng_translate 'contacts-view' 'removed-contacts-from-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}}{{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}}{{#if this.entityObject}}({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </small></div>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
 {{agile_lng_translate 'contacts-view' 'added-contacts-to-deal'}}{{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
- <i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'campaigns' 'added-to-deal'}} {{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+ <i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'campaigns' 'added-to-deal'}} {{#if this.entityObject}}({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </small></div>
 {{/if_equals}}
 {{else}}
@@ -1843,7 +1958,19 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'reassigned-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal{{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
+<i class="icon-money icon-white"></i> {{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal{{#if this.entityObject}}({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
 </small></div>
 {{/if_equals}}
 
@@ -1853,7 +1980,19 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'changed-milestone-of-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small> 
-<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}}{{#if this.entityObject}}Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}  {{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} '{{custom2}}' {{agile_lng_translate 'contacts-view' 'to'}} '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}}{{#if this.entityObject}}Deal ({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%){{/if}}  {{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} '{{custom2}}' {{agile_lng_translate 'contacts-view' 'to'}} '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1887,7 +2026,19 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_LOST" activity_type}}
 {{agile_lng_translate 'contacts-view' 'lost-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i>{{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i>{{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}}({{#if_equals entityObject.currency_conversion_value "0"}}
+  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+{{else}}
+  {{#if entityObject.currency_conversion_value}}
+    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+  {{else}}
+    {{#if_equals entityObject.expected_value "0"}}
+      {{currencySymbol}}{{entityObject.expected_value}}
+    {{else}}
+      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+    {{/if_equals}}
+  {{/if}}
+{{/if_equals}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 

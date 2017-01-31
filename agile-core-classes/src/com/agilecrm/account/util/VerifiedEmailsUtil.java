@@ -51,5 +51,54 @@ public class VerifiedEmailsUtil
 		return dao.getByProperty(searchMap);
 	}
 	
+	/**
+	 * This method will add email address as a verified email address
+	 * If email address is old then it will update
+	 * 
+	 * @param emails
+	 * 				- String
+	 * @param verified
+	 * 				- Verified
+	 * @author Prashannjeet
+	 */
+	public static void addVerifiedEmail(String email, Verified verified){
+		// if email is blank
+		if(StringUtils.isBlank(email))
+			return;
+		
+		try{	
+			VerifiedEmails verifiedEmails = getVerifiedEmailsByEmail(email);
+			
+			if(verifiedEmails !=null)
+				verifiedEmails.verified = verified;
+			else
+			{
+				verifiedEmails = new VerifiedEmails(email, String.valueOf(System.currentTimeMillis()/1000L));
+				verifiedEmails.verified = verified;
+			}
+			verifiedEmails.save();
+		}
+		catch(Exception e){
+			System.out.println("Exception ocurred while adding verifiy email address : " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * This method will delete verified email address
+	 * 
+	 * @param user_name
+	 */
+	public static void deleteVerifiedEmail(String email){
+		
+		try{
+			  VerifiedEmails verifiedEmails = getVerifiedEmailsByEmail(email);
+			
+			if(verifiedEmails !=null)
+				dao.delete(verifiedEmails);
+		}
+		catch(Exception e){
+			System.out.println("Exception ocurred while deleting verifiy email address : " + e.getMessage());
+		}
+	}
 }
 

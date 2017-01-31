@@ -16,6 +16,7 @@ import org.json.JSONException;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
 import com.analytics.util.AnalyticsUtil;
 import com.campaignio.wrapper.CampaignLogWrapper;
 import com.google.appengine.api.NamespaceManager;

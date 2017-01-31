@@ -100,8 +100,11 @@ public class SearchUtil
 		if (customField == null || !customField.searchable)
 		    continue;
 	    }
-
-	   
+	    
+	    if(customField != null)
+	    {
+	    	System.out.println("customField in getFieldsMap-------"+customField.toString());
+	    }
 
 	    //System.out.println(field_name);
 	    /*
@@ -111,6 +114,7 @@ public class SearchUtil
 
 	    if (customField != null && customField.field_type == CustomFieldDef.Type.DATE)
 	    {
+	    System.out.println("-----Custom field type matched with date field in getFieldsMap-----");
 		try
 		{
 		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")

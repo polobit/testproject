@@ -780,6 +780,10 @@ function populate_deal_products(el, value,form_id){
 						{
 							me.calculateGrandTotal(e);
 						});
+						$(me._form_id).on("change","#currency-conversion-symbols", function(e)
+						{
+							me.calculateGrandTotal(e);
+						});
 						$(me._form_id).on("keypress",".dealproducts_qty_input",
 								function(e)
 								{
@@ -1148,8 +1152,28 @@ function populate_deal_products(el, value,form_id){
 
 					if(iTotal.toFixed)
 						iTotal=iTotal.toFixed(2)
-					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
-						$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
+					if($("input[name='currency_conversion_value']",$(me._form_id)).length){
+						if (ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE") && ($("select[id='currency-conversion-symbols']",$(me._form_id)).val(),$(me._form_id)))
+    					{
+    						var accountCurrency = ACCOUNT_PREFS.currency.substring(0, 3);
+							var dealCurrency = $("select[id='currency-conversion-symbols']",$(me._form_id)).val().substring(0, 3);
+							var finalTotal ;
+							if(accountCurrency == dealCurrency)
+								finalTotal = iTotal ;
+							else{
+	    						if(!currencyRatesResponse)
+	    							currencyRatesResponse = $.ajax({type : "GET",cache : false,async : false,url : "core/api/opportunity/newDeal/currencyRates",contentType : "application/json",}).responseJSON; 
+								var listJson = $.parseJSON(currencyRatesResponse.currencyRates);
+								var numer = listJson[accountCurrency];
+								var denom = listJson[dealCurrency];
+								finalTotal = (iTotal * denom) / numer ;
+								finalTotal = finalTotal.toFixed(2);
+							}
+							$("input[name='currency_conversion_value']",$(me._form_id)).val(finalTotal);
+						}
+						else
+							$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
+					}
 					else
 						{
 							if(selected>0)
@@ -1291,6 +1315,7 @@ function populateDealSources(el, value){
 function fetchDealsList(data){
 	var filters_collection = data;
 	var dealTag;
+	var reportFilter;
     if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
     {
     	filters_collection = App_Deals.deal_filters.collection;
@@ -1299,10 +1324,56 @@ function fetchDealsList(data){
     {
 		dealTag = filters_collection.dealToFilter ;
 	}
+	if(filters_collection.reportFilter)
+    {
+		reportFilter = filters_collection.reportFilter ;
+	}
     setNewDealFilters(filters_collection);
 	var query = ''
 	var url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name')+'?order_by='+getDealSortFilter();
     
+    if(reportFilter)
+    {
+    	var input = {};
+    	input.filterJson=reportFilter;
+    	
+    	url = 'core/api/deal/filters/filter/report-filter'+'?order_by='+getDealSortFilter();
+    	App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,request_method : 'POST',post_data : input,
+        templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false,cursor : true, page_size : getMaximumPageSize(),
+        postRenderCallback : function(el)
+        {
+
+        	$("#deals-new-milestone-view", $("#opportunity-listners")).hide();
+        	$('#deals-tracks',$("#opportunity-listners")).hide();
+        	$("#deals-new-list-view", $("#opportunity-listners")).show();
+        	if (pipeline_id == 1)
+            {
+                pipeline_id = 0;
+            }
+            appendCustomfields(el, false);
+            // Showing time ago plugin for close date
+            includeTimeAgo(el);
+            initializeDealListners(el);
+            contactListener();
+            getRelatedContactImages(App_Deals.opportunityCollectionView.collection);
+
+            setTimeout(function(){
+                $('#delete-checked',el).attr("id","deal-delete-checked");
+            },500);
+        }, appendItemCallback : function(el)
+        {
+            appendCustomfields(el, true);
+
+            // To show timeago for models appended by infini scroll
+            includeTimeAgo(el);
+            getRelatedContactImages(App_Deals.opportunityCollectionView.collection);
+
+        } });
+
+    App_Deals.opportunityCollectionView.collection.fetch();
+    $('.new-collection-deal-list', $("#opportunity-listners")).html(App_Deals.opportunityCollectionView.render().el);
+    }
+    else{
     if(dealTag)
     {
     	url = 'core/api/deal/filters/query/list/tags/'+dealTag+'?order_by='+getDealSortFilter();
@@ -1343,6 +1414,7 @@ function fetchDealsList(data){
 
     App_Deals.opportunityCollectionView.collection.fetch();
     $('.new-collection-deal-list', $("#opportunity-listners")).html(App_Deals.opportunityCollectionView.render().el);
+  }
 }
 
 function setupMilestoneViewWidth(){

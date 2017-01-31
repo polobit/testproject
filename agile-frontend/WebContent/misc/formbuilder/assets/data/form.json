@@ -6,6 +6,11 @@
                 "label": "Form Name",
                 "type": "input",
                 "value": "Form Name"
+            },
+            "description": {
+                "label": "Description <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='Give an introduction to your form' data-placement='right' style='text-decoration: none;''><sup style='font-size: 9px;''>?</sup></a>",
+                "type": "input",
+                "value": ""
             }
         }
     }

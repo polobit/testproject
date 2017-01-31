@@ -218,7 +218,8 @@
                 'source/elements/css/style-portfolios.css',
                 'source/elements/css/style-pricing.css',
                 'source/elements/css/style-team.css',
-                'source/elements/css/nivo-slider.css'
+                'source/elements/css/nivo-slider.css',
+                'source/elements/css/newtemplate.css'
             ],
             CSSBUILD_DIR + 'skeleton.min.css',
             function (error) {

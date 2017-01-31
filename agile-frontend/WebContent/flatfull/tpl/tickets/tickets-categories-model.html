@@ -27,12 +27,13 @@
 	</td>
 	<td>
 	</td>
-    <td data-id="{{id}}">
-  		<a title= "{{agile_lng_translate 'contact-details' 'edit'}}" style="padding-left:10px;padding-right:5px;" href="#knowledgebase/{{id}}/edit-category"> <small class="text-muted m-b-sm"><i class="fa fa-pencil-square-o"></i></small></a>
-  		<a  data-id="{{id}}" class="deal-source-move text-l-none-hover c-p text-sm m-l-sm hover-show">
-			<small class="text-muted m-b-sm"><i data-id="{{id}}" title="{{agile_lng_translate 'admin-settings-deals' 'drag-source'}}" class="icon-move"></i></small>
-		</a>
-
+    <td data-id="{{id}}" class="">
+	    <div class="{{#isNewTheme}}text-center p-l-xxl{{/isNewTheme}}">
+	  		<a title= "{{agile_lng_translate 'contact-details' 'edit'}}" style="padding-left:10px;padding-right:5px;" href="#knowledgebase/{{id}}/edit-category"> <small class="text-muted m-b-sm"><i class="fa fa-pencil-square-o"></i></small></a>
+	  		<a  data-id="{{id}}" class="deal-source-move text-l-none-hover c-p text-sm m-l-sm hover-show">
+				<small class="text-muted m-b-sm"><i data-id="{{id}}" title="{{agile_lng_translate 'admin-settings-deals' 'drag-source'}}" class="icon-move"></i></small>
+			</a>
+		</div>
   </td>
   {{/is_mobile}}
 </script>

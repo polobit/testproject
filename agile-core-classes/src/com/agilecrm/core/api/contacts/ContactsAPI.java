@@ -386,8 +386,12 @@ public class ContactsAPI
 		    .entity("Sorry, duplicate lead found with the same email address.").build());
 	}
 
-	contact.save();
 	UserInfo user_info = SessionManager.get();
+	// developer rest API source identification
+	if(user_info != null && ("agilecrm.com/dev").equals(user_info.getClaimedId())){
+	    contact.source = "developer";
+	}
+	contact.save();
 	if (user_info != null && !("agilecrm.com/js").equals(user_info.getClaimedId())
 		&& !("agilecrm.com/dev").equals(user_info.getClaimedId())
 		&& !("agilecrm.com/php").equals(user_info.getClaimedId()))

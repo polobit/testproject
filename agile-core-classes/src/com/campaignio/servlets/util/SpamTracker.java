@@ -11,6 +11,8 @@ import com.agilecrm.util.EmailLinksConversion;
 public class SpamTracker 
 {
 	
+	public static final String[] blockedDomains = {"case-3020", "case-3022", "secure342", "billing-upgrade"};
+	
 	public static boolean isSpamDomain(String url)
 	{
 		try {
@@ -38,7 +40,17 @@ public class SpamTracker
 			if(tokens.length < 3)
 				return false;
 			
-			for(String domain : EmailLinksConversion.blockedURLDomains)
+			// Checks whether domain is blocked
+			for(String domain : blockedDomains)
+			{
+				if(StringUtils.containsIgnoreCase(tokens[1], domain))
+				{
+					System.err.println("Obtained URL " + url + " matches with our Spam rules.");
+					return true;
+				}
+			}
+			
+			for(String domain : EmailLinksConversion.skippedURLDomains)
 			{
 				// Check whether subdomain is same as root domain. Eg; apple.apple.com
 				if(StringUtils.containsIgnoreCase(tokens[0], domain)
@@ -57,7 +69,7 @@ public class SpamTracker
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(isSpamDomain("https://appleid.ddddd.com"));
+		System.out.println(isSpamDomain("https://apple.apple.com"));
 	}
 
 }
