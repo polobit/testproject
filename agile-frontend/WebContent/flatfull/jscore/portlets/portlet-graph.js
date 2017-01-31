@@ -9,6 +9,8 @@ var portlet_graph_utility = {
 	dealsByMilestonePieGraph : function(selector, milestonesList,
 			milestoneValuesList, milestoneNumbersList) {
 		setupCharts(function(){
+			               if(buttons[buttons.length-1].text=="View Data")
+			               	buttons.pop();
 							var emptyFlag = true;
 							$.each(milestoneValuesList, function(index, value) {
 								if (value > 0)
@@ -1764,7 +1766,7 @@ setupCharts(function(){
 											});
 						});
 	},
-	dealGoalsPieGraph : function(selector, data1,data2,colors)
+	dealGoalsPieGraph : function(selector, data1,data2,colors,exporting_option)
 	{
 			var series = [];
 							series.push([ "Goals Left",
@@ -1857,8 +1859,9 @@ setupCharts(function(){
 													data : series
 												} ],
 								                 exporting : {
-														buttons: {
+								                 	buttons: {
 											   			 contextButton: {
+											   			 	enabled : exporting_option == "disableExporting" ? false : true,
 								       					    menuItems: buttons.slice(0,8)
 								       					  },
 								       					}

@@ -968,7 +968,7 @@ var portlet_graph_data_utility = {
 					else{
 						if(data["dealcount"]>=data["goalCount"])
 							$('#'+selector).find('.goal_count_success').show();
-						portlet_graph_utility.dealGoalsPieGraph(graphSelector1,data["dealcount"],data["goalCount"],colors1);
+						portlet_graph_utility.dealGoalsPieGraph(graphSelector1,data["dealcount"],data["goalCount"],colors1,"disableExporting");
 					}
 						
 
@@ -982,7 +982,7 @@ var portlet_graph_data_utility = {
 					 else{
 					 	if(data["dealAmount"]>=data["goalAmount"])
 							$('#'+selector).find('.goal_amount_success').show();
-					portlet_graph_utility.dealGoalsPieGraph(graphSelector2,data["dealAmount"],data["goalAmount"],colors2);
+					portlet_graph_utility.dealGoalsPieGraph(graphSelector2,data["dealAmount"],data["goalAmount"],colors2,"disableExporting");
 					}
 	},
 	/**
