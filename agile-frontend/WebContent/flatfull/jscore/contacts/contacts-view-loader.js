@@ -240,7 +240,10 @@ var contacts_view_loader = {
 				count = App_Contacts.contactsListView.collection.models[0].attributes.count || App_Contacts.contactsListView.collection.models.length;
 			}
 			var count_message = "<small> (" + count + " Total) </small>";
-			$('#contacts-count', el).html(count_message);
+			if(Current_Route == "contacts")
+			{
+				$('#contacts-count', el).html(count_message);
+			}
 		}
 		else if((_agile_get_prefs("dynamic_contact_filter") || _agile_get_prefs("contact_filter")) && count)
 		{
