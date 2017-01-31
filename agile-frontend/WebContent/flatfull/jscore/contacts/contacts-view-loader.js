@@ -240,7 +240,7 @@ var contacts_view_loader = {
 				count = App_Contacts.contactsListView.collection.models[0].attributes.count || App_Contacts.contactsListView.collection.models.length;
 			}
 			var count_message = "<small> (" + count + " Total) </small>";
-			if(window.location.hash == "contacts")
+			if(window.location.hash == "#contacts")
 			{
 				$('#contacts-count', el).html(count_message);
 			}
