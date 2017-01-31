@@ -74,7 +74,7 @@ public class SMTPBulkEmailUtil {
 	 /**
 	  * Memcache per day Email limit expire time in millisecond
 	  */
-	 public static final int SMTP_EMAIL_LIMIT_TIME = 60*60*1000;
+	 public static final int SMTP_EMAIL_LIMIT_TIME = 24 * 60 * 60 * 1000;
 	 
 	 /**
 	  * SMTP email sent log type
