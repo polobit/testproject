@@ -3426,7 +3426,7 @@ public class OpportunityUtil
     	}
 	   	
 	   	if(expectedValue.length()!=0 && expectedValue!=null)   
-    		opportunityObj.expected_value=expectedValueD;
+    		opportunityObj.currency_conversion_value=expectedValueD;
 	   	
 	   	System.out.println("updateDeal------------Checking ACLs for creating deal");
 	   	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunityObj, CRUDOperation.CREATE, true);

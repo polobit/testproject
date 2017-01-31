@@ -2825,7 +2825,7 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 }
 .dashboard-select.small .dropdown-menu{
     margin-left: -79px !important;
-    margin-top: 0px;
+    margin-top: 3px;
 }
 .dashboard-select a i:nth-child(2){
     margin-top: 3px;
@@ -2869,7 +2869,7 @@ div#need_help_header a:hover {
   }
 .dashboard-select.small .dropdown-menu{
     margin-left: -79px !important;
-    margin-top: 0px;
+    margin-top: 3px;
 }
 .dashboard-select a i:nth-child(2){
     margin-top: 3px;
@@ -3938,4 +3938,9 @@ margin-top:0px;
 
 .grid-dropdown-menu li a:hover{
   border-radius: 4px !important;
+}
+
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
+    color: #11a0f8;
+    font-weight: 700 !important;
 }

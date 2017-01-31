@@ -9,8 +9,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.SocialPrefs.Type;
+import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -81,7 +83,25 @@ public class GmailSendPrefs implements Serializable {
     public String email = null;
 
 	public String oauth_code;
+	
+	 /**
+     * User can send bulk email
+     */
+    @NotSaved(IfDefault.class)
+    public boolean bulk_email = false;
     
+    /**
+     * Max per day limit of gmail
+     */
+    @NotSaved(IfDefault.class)
+    public long max_email_limit = 200L;
+    
+    /**
+     * Email sent we will append while showing from Memcache
+     */
+    @NotSaved
+    public long email_sent_count = 0;
+
 	@Parent
 	@JsonIgnore
 	private Key<AgileUser> agileUser;
@@ -141,6 +161,8 @@ public class GmailSendPrefs implements Serializable {
 	 */
 	public void save() {
 		dao.put(this);
+		//Save gmail can send bulk email in Memcache
+		GmailSendPrefsUtil.setGmailSendPrefsIsBulk(this.email, this.bulk_email);
 	}
 
 	/**
@@ -148,6 +170,10 @@ public class GmailSendPrefs implements Serializable {
 	 */
 	public void delete() {
 		dao.delete(this);
+		
+		GmailSendPrefsUtil.setGmailSendPrefsIsBulk(this.email, false);
+		//While deleting prefs delete email from verified list
+		VerifiedEmailsUtil.deleteVerifiedEmail(this.email);
 	}
 
 

@@ -153,7 +153,7 @@
 			</center>
 		</div>
 		<div class="panel-body">
-			<div  style="min-height: 85px;"> 
+			<div  style="min-height: 65px;"> 
 				{{#if id}}
 				  	<div class="m-b-md p-b-xs">
 			   	 		<div class="l-h word-break">{{agile_lng_translate 'settings' 'server'}}: {{server_url}}</div>
@@ -166,8 +166,12 @@
 					</div>
 				{{/if}}
 			</div>
+			{{#if id}}
+			<div id="remaining_smtp_emails" style="margin-top: -9px;">Emails Remaining{{{get_remaining_email_count max_email_limit  email_sent_count}}}</div>
+			{{/if}}
 	        <center>
 				{{#if id}}
+
 					<a class="btn btn-sm btn-danger" href="#" id="smtp-prefs-delete" name="smtp" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
 					<a class="btn btn-sm btn-default" href="#smtp/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
 				{{else}}

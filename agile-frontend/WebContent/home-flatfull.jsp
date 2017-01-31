@@ -533,7 +533,7 @@ function isIE() {
                   </a>
               </li><li>
               <a href='#' class='menu-service-select menu-select-service' data-service-name='SERVICE' data-dashboard='dashboard'>
-                <div class="pull-left"><i class="material-icons purple-color" style="margin-top:-1px;">view_module</i></div>
+                <div class="pull-left"><i class="material-icons purple-color" style="margin-top:-3px;">view_module</i></div>
                       <div><span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
                   <div class="menu-shortcuts-service">
                   <span class="grid2-sub-nav">

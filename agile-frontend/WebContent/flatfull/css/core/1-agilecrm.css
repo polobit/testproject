@@ -5616,6 +5616,7 @@ div#need_help_header a:hover {
 }
 .dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
     color: #337ab7;
+    font-weight: 600;
 }
 
 .new-theme-add-modals .modal-cotent.ticket-modal-content,.new-theme-add-modals .modal-content{
@@ -5776,6 +5777,8 @@ display: table-cell !important;
   float: right !important;
   margin-bottom: 0px !important;
   line-height: 1 !important;
+  color:#78909c!important;
+  font-weight:normal!important;
 }
 .dashboard-select .dropdown-menu .grid2-sub-nav span:last-child p:last-child{
     display: none;
@@ -5797,4 +5800,9 @@ display: table-cell !important;
 }
 .grid-dropdown-menu li a:hover{
   border-radius: 4px !important;
+}
+
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
+    color: #337ab7;
+    font-weight: 600;
 }

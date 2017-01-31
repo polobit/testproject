@@ -446,6 +446,44 @@ var Settings_Modal_Events = Base_Model_View.extend({
         		}
         	}
         }
+    },
+	/**
+	 * Select Campaign for send email through SMTP settings
+	 */
+	onSMTPCampaignSelect : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var id = $(target_el).attr("oid");
+		var el = $(target_el).closest("div");
+		$(target_el).css("display", "none");
+		el.find(".smtp-campaign-share-settings-txt").css("display",
+				"none");
+		el.find(".smtp-campaign-share-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+		fillSelect(
+				'smtp-campaign-share-campaign-select',
+				'core/api/workflows/partial',
+				'workflow',
+				function fillNew() {
+					$(
+							"#smtp-campaign-share-campaign-select .default-select",
+							el).remove();
+				}, optionsTemplate, false, el);
+	},
+
+	/**
+	 * To cancel the Campaign selected for SMTP settings
+	 */
+	onSMTPCampaignCancel :  function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+		var el = $(target_el).closest("div");
+
+		el.find("#smtp-campaign-share-campaign-select").empty();
+		el.find(".smtp-campaign-share-select").css("display", "none");
+		el.find(".smtp-campaign-share-settings-select").css("display", "inline");
+		el.find(".smtp-campaign-share-settings-txt").css("display", "inline");
 	},
 
 
@@ -460,6 +498,8 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',
 		'click .office-folders-settings-click': 'onOfficeFoldersOptionsSelect',	
 		'change select#office-folders-multi-select': 'onChangeOfficeFolder',
+		'click .smtp-campaign-share-settings-select': 'onSMTPCampaignSelect',
+		'click .smtp-campaign-share-settings-cancel': 'onSMTPCampaignCancel',	
 	},
 
 });
@@ -590,7 +630,6 @@ var Settings_Collection_Events = Base_Collection_View.extend({
 			});
 		});		
 	},
-
 });
 
 
