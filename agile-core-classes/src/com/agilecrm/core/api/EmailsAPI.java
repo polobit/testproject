@@ -734,40 +734,39 @@ public String validateSendgridWhitelabelDomain(@QueryParam("emailDomain") String
  * @return String
  * @throws Exception
  */
-@Path("/sendgrid/whitelabel/reputation")
+@Path("/sendgrid/emailsent/limit")
 @GET
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public boolean getSendgridReputation(@QueryParam("emailSent") int emailSent) throws Exception
+public String getSendgridReputation(@QueryParam("selectedCount") int selectedCount) throws Exception
 {
 	try
 	{
 		  String domain = NamespaceManager.get();
-		  System.out.println("Email sent task added for : " + emailSent);
+		  System.out.println("Email sent task added for : " + selectedCount);
 		  
-		  long  domainCreatedTimestamps = BillingRestrictionUtil.getBillingRestrictionFromDB().created_time;
+		 //Fetch per day email sent count for current day
+		  int todayEmailSent = SendGridSubUser.getPerDayEmailSent(domain);
 		  
-		  //if domain is old then don't check any thing
-		  if(domainCreatedTimestamps < SendGridSubUser.DOMAIN_CREATED_TIME)
-		     return true;
-		
-		  JSONArray reputationOBJ=new JSONArray(SendGridSubUser.getSendGridUserReputation(domain, null));	
-		  int reputation = reputationOBJ.getJSONObject(0).getInt(SendGridSubUser.REPUTATION);
-		
-		  System.out.println("Reputation object of domain : " + domain + reputationOBJ.toString());
+		  int emailSentLimit = SendGridUtil.getSubUserEmailLimit(domain);
 		  
-		  if(reputation < 80)
-		  {
-			  if((SendGridSubUser.PER_DAY_EMAIL_SENT_LIMIT - SendGridSubUser.getPerDayEmailSent(domain)) > emailSent)
-				  return true;
-		  }
-			  
+		  int remainingEmail = emailSentLimit - todayEmailSent;
+		  
+		  if(remainingEmail < 0)
+			  remainingEmail = 0;
+		  
+		  JSONObject objJSON = new JSONObject();
+		  
+		  objJSON.put("remaining", remainingEmail);
+		  objJSON.put("total", emailSentLimit);
+		  
+		  return objJSON.toString();	  
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured while checking sendgrid reputation.." + e.getMessage());
 	    e.printStackTrace();
 	}
-	return false;
+	return null;
 }
 /**
  * This method will validate  sendgrid whitelabel host and key
