@@ -75,6 +75,10 @@ $('body').on('click','#speechDectation',function(e){
 	}, 6000);
 
 });
+$(".aside-wrap").on('click','li',function(e){
+   console.log("sffas");
+   $(".grid-dropdown-menu").find(".grid-selector").removeClass("grid-menu-active");
+});
 $("#searchForm").on("submit",function(){
 
 	return false;
