@@ -191,7 +191,7 @@ var companies_view_loader = {
 				count = App_Companies.companiesListView.collection.models[0].attributes.count || App_Companies.companiesListView.collection.models.length;
 			}
 			var count_message = "<small> (" + count + " Total) </small>";
-			if(Current_Route == "companies")
+			if(window.location.hash == "companies")
 			{
 				$('#contacts-count', el).html(count_message);
 			}
