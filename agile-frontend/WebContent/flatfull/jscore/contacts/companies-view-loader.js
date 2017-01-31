@@ -204,6 +204,10 @@ var companies_view_loader = {
 			else
 				count_message = "<small> (" + count + " Total) </small>";
 			$('#contacts-count', el).html(count_message);
+
+			// Show bulk action checkbox
+			$(".thead_check", el).closest("label").css("visibility", "visible");
+			$("table", el).removeClass("hide-head-checkbox");
 		}
 	},
 
@@ -218,6 +222,10 @@ var companies_view_loader = {
 
 	getAndSetCompaniesCount : function(el, tag_id)
 	{
+		// Hide bulk action checkbox
+    	$(".thead_check", el).closest("label").css("visibility", "hidden");
+    	$("table", el).addClass("hide-head-checkbox");
+
 		var that = this;
 		var url = this.getCompaniesUrl(tag_id);
 		var slateKey = getCompanyPadcontentKey(url);

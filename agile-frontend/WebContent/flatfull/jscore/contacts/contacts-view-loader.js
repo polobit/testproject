@@ -253,6 +253,10 @@ var contacts_view_loader = {
 			else
 				count_message = "<small> (" + count + " Total) </small>";
 			$('#contacts-count', el).html(count_message);
+
+			// Show bulk action checkbox
+			$(".thead_check", el).closest("label").css("visibility", "visible");
+			$("table", el).removeClass("hide-head-checkbox");
 		}
 	},
 
@@ -267,6 +271,10 @@ var contacts_view_loader = {
 
 	getAndSetContactsCount : function(el, tag_id)
 	{
+		// Hide bulk action checkbox
+    	$(".thead_check", el).closest("label").css("visibility", "hidden");
+    	$("table", el).addClass("hide-head-checkbox");
+
 		var that = this;
 		var url = this.getContactsUrl(tag_id);
 		var slateKey = getContactPadcontentKey(url);
