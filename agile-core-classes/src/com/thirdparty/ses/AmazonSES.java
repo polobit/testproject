@@ -147,7 +147,7 @@ public class AmazonSES
 	 */
 	public void sendRawEmail(String fromEmail, String fromName, String to,
 			String cc, String bcc, String subject, String replyTo, String html,
-			String text, String campaignId, String domanName) throws MessagingException {
+			String text, String campaignId, String domainName) throws MessagingException {
 		
 		 Session session = Session.getInstance(new Properties(), null);
          MimeMessage mimeMessage = new MimeMessage(session);
@@ -210,9 +210,9 @@ public class AmazonSES
         
         
         //Add metadata
-        if(StringUtils.isNotBlank(campaignId) && StringUtils.isNotBlank(domanName))
+        if(StringUtils.isNotBlank(campaignId) && StringUtils.isNotBlank(domainName))
         {
-	        mimeMessage.addHeader(SUBACCOUNT_HEADER_NAME, domanName);
+	        mimeMessage.addHeader(SUBACCOUNT_HEADER_NAME, domainName);
 	        
 	        mimeMessage.addHeader(CAMPAIGN_ID_HEADER_NAME, campaignId);
         }

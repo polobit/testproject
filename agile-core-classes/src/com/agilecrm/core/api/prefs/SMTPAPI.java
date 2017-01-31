@@ -16,11 +16,15 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.contact.email.util.ContactEmailUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.account.VerifiedEmails;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.SMTPPrefs;
+import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.user.util.SMTPPrefsUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil.PrefsType;
 import com.googlecode.objectify.Key;
 
 /**
@@ -44,8 +48,14 @@ public class SMTPAPI {
 		List<SMTPPrefs> prefsList = SMTPPrefsUtil.getSMTPPrefsList(AgileUser.getCurrentAgileUser());
 
 		for(SMTPPrefs prefs : prefsList) {
-			if(prefs != null)
+			if(prefs != null){
 				prefs.password = SMTPPrefs.MASKED_PASSWORD;
+					Object count = SMTPBulkEmailUtil.getCache(prefs.user_name + SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY);
+					if(count != null)
+						prefs.email_sent_count =  (long)count;
+					else
+						prefs.email_sent_count =  prefs.max_email_limit;
+			}
 		}
 		return prefsList;
 	}
@@ -61,13 +71,14 @@ public class SMTPAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public SMTPPrefs createSMTPPrefs(SMTPPrefs prefs) {
-		/*int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null)
-				.getCurrentLimits().getEmailAccountLimit();
-		int smtpPrefsCount = ContactEmailUtil.getSMTPPrefsCount();
-		if(smtpPrefsCount < emailAccountLimitCount) { */
+		
 			prefs.setAgileUser(new Key<AgileUser>(AgileUser.class,
 					AgileUser.getCurrentAgileUser().id));
 			prefs.save();
+			
+			//Add email address as a verified email address and set limit to cache
+			VerifiedEmailsUtil.addVerifiedEmail(prefs.user_name, VerifiedEmails.Verified.YES);
+			
 			return prefs;
 		/*} else
 			return null;*/
@@ -85,7 +96,16 @@ public class SMTPAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public SMTPPrefs updateSMTPPrefs(SMTPPrefs prefs) {
 		prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
+		
+		//fetch increase or decrease count
+		long value = prefs.max_email_limit;
+		SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(prefs.user_name);
+				
+				 if(smtpPrefs != null)
+					value = value - smtpPrefs.max_email_limit;
 		prefs.save();
+		
+		SMTPBulkEmailUtil.updateSMTPEmailLimit(prefs.user_name, value, PrefsType.SMTP);
 		return prefs;
 	}
 
@@ -102,8 +122,9 @@ public class SMTPAPI {
 				Long id = Long.parseLong(sid);
 				if(id != null) {
 					SMTPPrefs prefs = SMTPPrefsUtil.getSMTPPrefs(id, agileUserKey);
-					if(prefs != null)
+					if(prefs != null){
 						prefs.delete();
+					}
 				}
 			}
 		} catch(Exception e) {

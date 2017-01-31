@@ -55,6 +55,8 @@ var SettingsRouter = Backbone.Router
 			/* Gmail send preferences */
 			"gmail-send" : "gmailSendPrefs",
 
+			/* Gmail preferences setting for outbound*/
+			"gmail-setting/:id" : "gmailSettings",
 
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
@@ -597,6 +599,41 @@ var SettingsRouter = Backbone.Router
 				}, "#content");
 			},
 
+			/**
+			* Gmail outbound settings
+			*/
+			gmailSettings : function(id)
+			{
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					if (App_Settings.gmailSendListView === undefined)
+					{
+						App_Settings.navigate("email", { trigger : true });
+						return;
+					}
+					var gmail_model = App_Settings.gmailSendListView.collection.get(id);
+					// Gets GMAIL Prefs
+					var gmailSendView = new Settings_Modal_Events({ url : '/core/api/email-send/setting/' + id, model : gmail_model,
+						template : "settings-outbound-gmail-send", postRenderCallback : function(el)
+						{
+							
+						}, saveCallback : function()
+						{
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+
+					// Appends Gmail
+					$('#prefs-tabs-content').html(gmailSendView.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
+			},
 
 			/**
 			 * Gmail sharing settings
