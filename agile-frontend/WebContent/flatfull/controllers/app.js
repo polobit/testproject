@@ -233,11 +233,15 @@ Backbone.History.prototype.loadUrl = function (fragment, options) {
     var nextRoute = Backbone.history.fragment = Backbone.history.getFragment(fragment);
     var is_campaign_unsave = getCampaignAction(Current_Route);
     var currentRoute = Current_Route;
+    if(nextRoute == 'navigate-dashboard'){
+    	var userRole = CURRENT_DOMAIN_USER.role;
+    }
     try{
     	// Validation for unsave Campaign, If we are in middle of designing a Campaign and trigger another route then show confirmation popup
 	    //if (is_campaign_unsave && fragment === void (0) && options === void (0) && this.confirmationDisplay !== void(0))
 	    if (is_campaign_unsave && SHOW_EXIT_CAMPAIGN_POPUP == false)
-	    {    
+	    {   	    	
+	    	$("#agile-menu-navigation-container").html(getTemplate("marketing-menu-items", {due_tasks_count : due_tasks_count}));
 	    	SHOW_EXIT_CAMPAIGN_POPUP = true;	
 			var response = false;
 			// Showing modal for unsave Campaign
@@ -248,7 +252,10 @@ Backbone.History.prototype.loadUrl = function (fragment, options) {
 					{
 						// Yes callback
 						response = true;
-						Backbone.history.navigate(nextRoute, { trigger : true });
+						if(nextRoute == 'navigate-dashboard')
+							$('.menu-service-select').attr('data-service-name',userRole).click();
+						else
+							Backbone.history.navigate(nextRoute, { trigger : true });
 						return;
 					},function()
 					{
