@@ -46,6 +46,8 @@ $(function() {
 		if ($("#hiddentask").val() == "task") {
 			save_task('taskForm', 'activityTaskModal', false, this);
 		} else {
+			var status = $('#sendInviteEmail').prop('checked');
+		    _agile_set_prefs('send-invite-status',status);
 			var currentDiv = $('#activityModal').find("#current_div").val();
 			// Save functionality for event
 			save_event('activityForm', 'activityModal', false, this,currentDiv,function(data){
@@ -53,8 +55,7 @@ $(function() {
 						if(eventCollectionView){
 									eventCollectionView.collection.add(data.toJSON());
 									eventCollectionView.collection.sort();
-						}
-							
+						}						
 			});
 		}
 	}); // End of Task and Event Validation function
