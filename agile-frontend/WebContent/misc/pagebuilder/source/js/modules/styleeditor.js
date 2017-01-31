@@ -1086,7 +1086,10 @@
 
             }).join();
 
-            $('select#icons option').each(function(){
+            $("select#icons").val(get).change();
+            $('#icons').trigger('chosen:updated');
+
+            /*$('select#icons option').each(function(){
 
                 if( $(this).val() === get ) {
 
@@ -1096,7 +1099,7 @@
 
                 }
 
-            });
+            });*/
 
         },
 
