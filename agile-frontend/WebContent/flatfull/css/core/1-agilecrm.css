@@ -5777,6 +5777,8 @@ display: table-cell !important;
   float: right !important;
   margin-bottom: 0px !important;
   line-height: 1 !important;
+  color:#78909c!important;
+  font-weight:normal!important;
 }
 .dashboard-select .dropdown-menu .grid2-sub-nav span:last-child p:last-child{
     display: none;

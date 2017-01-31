@@ -101,7 +101,7 @@
 					 </div>
 					   
         				<div class="control-group form-group">
-			                <label class="control-label">Per day limit 
+			                <label class="control-label">{{agile_lng_translate 'smtp-bulk' 'per-day-limit'}} 
 			               
 			               </label>
 			                   <div class="controls">
@@ -111,7 +111,7 @@
 			              <div class="control-group form-group">
 			            	<div class="checkbox">
 			                <label class="i-checks i-checks-sm">
-			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Send campaign emails from Gmail
+			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>{{agile_lng_translate 'smtp-bulk' 'campaign-email'}} Gmail
 			                </label>
 			         	   </div>
         				</div>
@@ -128,15 +128,17 @@
 	<div class="col-md-4 col-sm-6 col-xs-12 "></div>
 	<div class="col-md-4 col-sm-6 col-xs-12 ">
          <div style="margin-top:0px; text-align : justify;">
+         		<b>{{agile_lng_translate 'smtp-bulk' 'note'}}</b>
+         		<br>
                 <p>
-                  Send personal and campaign emails from your Gmail account. 
+                  {{agile_lng_translate 'smtp-bulk' 'note1'}}
                 </p>
-                 <p> <b>Per day limit:</b>The value for maximum number of emails to be sent from Agile via your Gmail account. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway. Moreover the value should be less than or equal to with your Gmail sending limits. For more info on Gmail limits click <span><a href="https://support.google.com/a/answer/166852" style="color: #19a9d5;!important">here</a></span>
+                 <p> <b>{{agile_lng_translate 'smtp-bulk' 'per-day-limit'}} :</b> {{agile_lng_translate 'smtp-bulk' 'note2'}} <span><a target="_blank" href="https://support.google.com/a/answer/166852" style="color: #19a9d5;!important">here</a>.</span>
                  </p>
                 <p>
-                <b>Send Campaign emails from Gmail:</b> The campaign and bulk emails will be sent through the connected Gmail account. 
+                <b>{{agile_lng_translate 'smtp-bulk' 'campaign-email'}} Gmail:</b> {{agile_lng_translate 'smtp-bulk' 'note3'}}
                 </p>
-                 <p>Bounces and Spam Complaints will not be shown on Agile Reports.</p>
+                 <p>{{agile_lng_translate 'smtp-bulk' 'bounces'}}</p>
          </div>
       </div>
       </div>
