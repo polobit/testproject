@@ -222,6 +222,8 @@ var companies_view_loader = {
 
 	getAndSetCompaniesCount : function(el, tag_id)
 	{
+		abortCountQueryCall();
+		
 		// Hide bulk action checkbox
     	$(".thead_check", el).closest("label").css("visibility", "hidden");
     	$("table", el).addClass("hide-head-checkbox");

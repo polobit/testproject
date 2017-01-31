@@ -271,6 +271,8 @@ var contacts_view_loader = {
 
 	getAndSetContactsCount : function(el, tag_id)
 	{
+		abortCountQueryCall();
+		
 		// Hide bulk action checkbox
     	$(".thead_check", el).closest("label").css("visibility", "hidden");
     	$("table", el).addClass("hide-head-checkbox");
