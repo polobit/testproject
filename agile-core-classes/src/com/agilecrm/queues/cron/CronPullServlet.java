@@ -56,7 +56,7 @@ public class CronPullServlet extends HttpServlet
 		   long currentTime = startTime;
 		   
 		   // Iterates upto maxTime
-		//   while(currentTime <= maxTime){
+		   while(currentTime <= maxTime){
    	 			try
    	 			{
    	 				runTasks(queueName);
@@ -90,7 +90,7 @@ public class CronPullServlet extends HttpServlet
    	 				System.out.println("Time taken for this iteration is " + (System.currentTimeMillis() - currentTime));
    	 				currentTime = System.currentTimeMillis();
    	 			}
-		//   }
+		   }
 		   
 		   System.out.println("Loop checking tasks of " + queueName + " is completed and time taken is " + (System.currentTimeMillis() - startTime) + " millis");
 	}
