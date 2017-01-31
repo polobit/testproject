@@ -42,7 +42,7 @@
                 </div>
             </div>
              <div class="control-group form-group">
-                <label class="control-label">Per day limit 
+                <label class="control-label">{{agile_lng_translate 'smtp-bulk' 'per-day-limit'}} 
                
                </label>
                      <div class="controls">
@@ -64,7 +64,7 @@
          <div class="control-group form-group">
             <div class="checkbox">
                 <label class="i-checks i-checks-sm">
-                    <input type="checkbox" id="smtp-bulk-email-checked" name="bulk_email" title="Send bulk email"><i></i>Send campaign emails from SMTP
+                    <input type="checkbox" id="smtp-bulk-email-checked" name="bulk_email" title="Send bulk email"><i></i>{{agile_lng_translate 'smtp-bulk' 'campaign-email'}} SMTP
                 </label>
             </div>
         </div>
@@ -103,16 +103,17 @@
 <div class="col-md-4 col-sm-6 col-xs-12 "></div>
     <div class="col-md-4 col-sm-6 col-xs-12 ">
          <div style="margin-top:0px; text-align : justify;">
-               
+               <b>{{agile_lng_translate 'smtp-bulk' 'note'}}</b>
+                <br>
                 <p>
-                  Send personal and campaign emails from your email provider. 
+                 {{agile_lng_translate 'smtp-bulk' 'note6'}}
                 </p>
-                 <p> <b>Per day limits:</b> Maximum number of emails to be sent from Agile via your email provider. Check with your email provider on sending limits for your account. Some email providers may only allow you to send a limited number of emails per day or per hour.
+                 <p> <b>{{agile_lng_translate 'smtp-bulk' 'per-day-limit'}}:</b>  {{agile_lng_translate 'smtp-bulk' 'note4'}}
                  </p>
                 <p>
-                <b>Send campaign emails from SMTP:</b> The campaign and bulk emails will be sent through the connected email provider. If the per day max limit is reached, then the emails will be sent from Agile’s default email gateway.
+                <b>{{agile_lng_translate 'smtp-bulk' 'campaign-email'}} SMTP:</b>   {{agile_lng_translate 'smtp-bulk' 'note5'}}
                 </p>
-                 <p>Bounces and Spam Complaints will not be shown on Agile Reports.</p>
+                 <p>{{agile_lng_translate 'smtp-bulk' 'bounces'}}</p>
          </div>
       </div>
 </div>
