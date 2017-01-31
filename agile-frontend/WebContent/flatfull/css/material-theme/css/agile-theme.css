@@ -3939,3 +3939,8 @@ margin-top:0px;
 .grid-dropdown-menu li a:hover{
   border-radius: 4px !important;
 }
+
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
+    color: #11a0f8;
+    font-weight: 700 !important;
+}
