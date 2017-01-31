@@ -236,6 +236,11 @@ figure {
         margin-top: 10px;
     }    
 }
+@media (max-width: 410px) and (min-width: 300px){
+    .play-store-res img{
+        margin-top: 10px;
+    }    
+}
 @media (max-width: 425px) and (min-width: 300px){
     .play-store {
         margin-left: 0px;
