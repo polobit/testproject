@@ -51,7 +51,12 @@ function subscribeClientChannel(callback)
 			}
 			//alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
 			if((message || {}).type  == "call"){
-				handleCallRequest(message);
+				if((message || {}).check){
+					
+					handleCallRequest(message);
+				}else{
+					handleCallRequest(message);
+				}
 			}else{
 				// Display message in stream.
 				handleMessage(message);	

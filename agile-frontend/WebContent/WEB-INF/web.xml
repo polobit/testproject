@@ -278,7 +278,15 @@
 		<url-pattern>/feedbackapi/*</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>AsteriskCallNotification</servlet-name>
+		<servlet-class>com.call.notification.AsteriskCallNotificatoin</servlet-class>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>AsteriskCallNotification</servlet-name>
+		<url-pattern>/ascallnoty</url-pattern>
+	</servlet-mapping>
 
 
 	<servlet>

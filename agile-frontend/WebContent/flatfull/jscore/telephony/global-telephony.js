@@ -19,6 +19,25 @@ function androidSetup(){
 	});
 }
 
+function asteriskSetup(){
+	var requestURL = "core/api/widgets/knowlarity/getPrefs";
+	$.ajax({
+		url : requestURL,
+		type : "GET",	
+		success : function(result) {
+			if(result && result.length > 0){
+				console.log(result);
+				KnowlarityWidgetPrefs = JSON.parse(result);				
+				head.js('widgets/knowlarity.js', function(){ 
+					if(!knowlaritySource){
+						knowlarityEventsFinder(KnowlarityWidgetPrefs);
+					}					
+				});								
+			}
+		}
+	});
+}
+
 function knowlaritySetup(){
 	var requestURL = "core/api/widgets/knowlarity/getPrefs";
 	$.ajax({
