@@ -4556,3 +4556,9 @@ div.list-tasks.panel-body:hover
 /*.task-model-list .alert:first-child{
   margin-left:10px;
 }*/
+/****inbox***/
+.img-circle-inbox
+{
+  border: 1px solid !important ;
+  background-color: #3498DB !important;
+}

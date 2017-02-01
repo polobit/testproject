@@ -31,7 +31,7 @@ import com.agilecrm.imap.OAuth2Authenticator;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPSSLStore;
 import com.sun.mail.imap.IMAPStore;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+//import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 
 @SuppressWarnings("serial")
 public class IMAPInboxServlet extends HttpServlet
@@ -171,6 +171,7 @@ public class IMAPInboxServlet extends HttpServlet
     public static JSONArray getGmailEmailsUsingOAuth2(String host, int port, String userEmail, String oauthToken,
 	    String searchEmail, String searchEmailSubject, int offset, int count,String folderNames, String search_content) throws Exception{
 		IMAPStore store = OAuth2Authenticator.connectToImap(host, port, userEmail, oauthToken, true);
+		//store.close();
 		return searchEmailsFromStore(store, searchEmail, searchEmailSubject, offset, count, folderNames, search_content);
 
     }
@@ -207,7 +208,9 @@ public class IMAPInboxServlet extends HttpServlet
 	List<IMAPFolder> folders = null;
 	int messagecount = 0; 
 	try
-	{
+	{  if(StringUtils.isNotBlank(search_content)){
+		folderNames = "INBOX"; 
+	    }
 	    folders = IMAPInboxUtil.getListOfFolders(store, folderNames);
 	    List<Message> allItems = new ArrayList<Message>();
 	    for (IMAPFolder folder : folders)
@@ -253,6 +256,7 @@ public class IMAPInboxServlet extends HttpServlet
 		    IMAPFolder folder = folders.get(i);
 		    if (folder != null)
 			folder.close(false);
+		    folder.close(true);
 		}
 	    }
 	}
@@ -498,7 +502,7 @@ public class IMAPInboxServlet extends HttpServlet
 //
     }
     /**
-     * Raesh code
+     * Rajesh code
      */
     
     public String setFlagUsingOAuth(String host, int port, String userEmail, String oauthToken, String oauthTokenSecret, String consumerKey, String consumerSecret, String flagset,int[] msgnums, String foldername)throws Exception{

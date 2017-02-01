@@ -455,7 +455,7 @@ function initializeInboxListeners(){
 			if(server == "exchange")
 				url ="core/api/office/search-office-emails?";
 
-			url = url+"from_email="+from_email+"&search_content="+search_val;
+			url = url+"from_email="+from_email+"&search_content="+search_val+"&folder_name=INBOX";
 			helperFunction();
 			renderToMailList(url,offset,count);
 		}
@@ -508,7 +508,8 @@ function initializeInboxListeners(){
 			selectCheckBoxes("mail-unread")
 		}
 	});
-	$(".bulk-delete").unbind().click(function(e) {
+	$(".bulk-delete").off("click");
+	$(".bulk-delete").bind().click(function(e) {
 		idcol = [];
 		var msg_ele = "";
 		var folder_type = $('#inbox-email-type-select').attr("folder-type");
@@ -520,7 +521,7 @@ function initializeInboxListeners(){
 		showAlertModal(msg_ele, "confirm", function(){
 			var urlval = returnUrl();
 			if(urlval){
-				urlval = urlval+"&flag=DELETED";
+				urlval = urlval+"&flag=DELETED&folder_name=INBOX";
 				var server_type = $("#inbox-email-type-select").attr("data-server");
 				if(server_type == "exchange"){
 					var url_exchange = "core/api/office/setFlags";
