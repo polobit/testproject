@@ -118,6 +118,18 @@ function subscribeToPubNub(domain)
 			
 			// shows call notification
 			if(message.type == "CALL"){
+				if(message.callType == "Asterisk"){
+					if(message.extension && AsteriskWidgetPrefs.asterisk_call_channel){
+						if(AsteriskWidgetPrefs.asterisk_call_channel.indexOf(message.extension) != -1){
+							if(message.state != "ringing"){
+					    		globalCall.callStatus = "Connected";
+					    	}
+					    	handleCallRequest(message);
+					    }						
+					}
+					return;
+				}
+				
 				message.type = "PERSON";
 				getTemplate('call-notification', message, undefined, function(template_ui){
 					if(!template_ui)

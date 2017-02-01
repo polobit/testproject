@@ -67,10 +67,6 @@ function subscribeClientChannel(callback){
 				// Display message in stream.
 				handleMessage(message);	
 			}
-		}catch (e) {
-		}
-
-			}
 		},presence : function(message, env, channel){
 			// RECEIVED A MESSAGE.
 			console.log(message);
