@@ -297,6 +297,8 @@
 			 <div class="m-b-sm">
 			 	<div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
 			 </div>
+			 {{#if event.status}}
+			 <div class="pull-left text-ellipsis p-b-xs text-cap" style="width:100%;">{{agile_lng_translate 'admin-settings-users' 'status'}}: {{event.status}}</div>{{/if}}
 		 	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}</div>
 		 	<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
@@ -316,6 +318,8 @@
 	       		<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
 	       	</div>
 	       	<div class="line b-b b-light"></div>
+	       	{{#if event.status}}
+	       	<div class="pull-left text-ellipsis p-b-xs text-cap" style="width:100%;">{{agile_lng_translate 'admin-settings-users' 'status'}}: {{event.status}}</div>{{/if}}
 	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
 					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
@@ -338,6 +342,8 @@
 			<div class="m-b-sm">
 				<div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
 			</div>
+			{{#if event.status}}
+			<div class="pull-left text-ellipsis p-b-xs text-cap" style="width:100%;">{{agile_lng_translate 'admin-settings-users' 'status'}}: {{event.status}}</div>{{/if}}
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}</div>
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
@@ -357,6 +363,8 @@
 				<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
 			</div>
 			<div class="line b-b b-light"></div>
+			{{#if event.status}}
+			<div class="pull-left text-ellipsis p-b-xs text-cap" style="width:100%;">{{agile_lng_translate 'admin-settings-users' 'status'}}: {{event.status}}</div>{{/if}}
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
 					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
@@ -379,6 +387,8 @@
 			<div class="m-b-sm">
 				<div class="pull-left text-flow-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
 			</div>
+			{{#if event.status}}
+			<div class="pull-left text-ellipsis p-b-xs text-cap" style="width:100%;">{{agile_lng_translate 'admin-settings-users' 'status'}}: {{event.status}}</div>{{/if}}
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}</div>
 			<div class="text-ellipsis">
 		 	    {{get_template_type "calendar-popover-contacts"}}
@@ -398,6 +408,8 @@
 				<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}}</div>
 			</div>
 			<div class="line b-b b-light"></div>
+			{{#if event.status}}
+			<div class="pull-left text-ellipsis p-b-xs text-cap" style="width:100%;">{{agile_lng_translate 'admin-settings-users' 'status'}}: {{event.status}}</div>{{/if}}
 			<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
 					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
@@ -421,6 +433,9 @@
 	       		<div class="pull-left text-ellipsis p-b-xs" style="width:100%;">{{event.title}} </div>
 	       	</div>
 	       	<div class="line b-b b-light"></div>
+	       	{{#if event.status}}
+	       	<span style="position: relative;top: -4px;">{{agile_lng_translate 'admin-settings-users' 'status'}}: {{event.status}}
+	       	</span>{{/if}}
 	       	<div><i class="icon-clock text-muted m-r-xs"></i>{{event_format_time event.start 'dd-mmm-yyyy HH:MM'}}
 				<div class="pull-right" style="width:10%;">
 					<img class="r-2x" src="{{event.owner.pic}}" height="20px" width="20px" title="{{event.owner.name}}"/>
