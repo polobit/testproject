@@ -54,12 +54,14 @@ public class CallNotification extends HttpServlet {
 			String event = req.getParameter("t");
 			String durationStr = req.getParameter("d");
 			int duration = 0;
-			try{
-				duration = Integer.parseInt(durationStr);
-			}catch(Exception e){
-				res.sendError(HttpServletResponse.SC_BAD_REQUEST,
-						"Bad Request: Duration(d) should be numeric");
-				return;
+			if(durationStr != null){
+				try{
+					duration = Integer.parseInt(durationStr);
+				}catch(Exception e){
+					res.sendError(HttpServletResponse.SC_BAD_REQUEST,
+							"Bad Request: Duration(d) should be numeric");
+					return;
+				}
 			}
 		
 			if(event == null){
@@ -99,7 +101,7 @@ public class CallNotification extends HttpServlet {
 					obj.put("callType", "Asterisk");
 					obj.put("state", "lastCallDetail");
 					obj.put("type", "CALL");
-					obj.put("duration", 10);
+					obj.put("duration", duration);
 				}
 				PubNub.pubNubPush(namespace, obj);
 			} catch (Exception e) {
