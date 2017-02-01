@@ -31,7 +31,7 @@ import com.agilecrm.imap.OAuth2Authenticator;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPSSLStore;
 import com.sun.mail.imap.IMAPStore;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+//import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 
 @SuppressWarnings("serial")
 public class IMAPServlet extends HttpServlet
@@ -209,7 +209,11 @@ public class IMAPServlet extends HttpServlet
 	List<IMAPFolder> folders = null;
 	try
 	{
+	    if(StringUtils.isNotBlank(search_content)){
+		folderNames = "INBOX"; 
+	    }
 	    folders = IMAPUtil.getListOfFolders(store, folderNames);
+	    
 	    List<Message> allItems = new ArrayList<Message>();
 	    for (IMAPFolder folder : folders)
 	    {

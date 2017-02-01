@@ -4671,6 +4671,7 @@ div.list-tasks.panel-body:hover
   margin-left:10px;
 }*/
 
+
 #company-contacts ul li {
     padding-right: 0px!important;
 }
@@ -5860,3 +5861,10 @@ display: table-cell !important;
 .note-editable p img {
   max-width: 100%;
 }
+/****inbox***/
+.img-circle-inbox
+{
+  border: 1px solid !important ;
+  background-color: #3498DB !important;
+}
+
