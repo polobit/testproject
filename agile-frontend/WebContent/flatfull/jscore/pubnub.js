@@ -55,7 +55,7 @@ function subscribeClientChannel(callback){
 			//alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
 			if((message || {}).type  == "call"){
 				if((message || {}).check){	
-					if(message.extension && AsteriskWidgetPrefs.asterisk_call_channel){
+					if(message.extension && AsteriskWidgetPrefs && AsteriskWidgetPrefs.asterisk_call_channel){
 						if(AsteriskWidgetPrefs.asterisk_call_channel.indexOf(message.extension) != -1){
 					    	handleCallRequest(message);
 					    }						
