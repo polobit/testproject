@@ -28,12 +28,12 @@ import com.thirdparty.PubNub;
 public class CallNotification extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse res)
 			throws IOException, ServletException {
-		PrintWriter pw = res.getWriter();
+		//PrintWriter pw = res.getWriter();
 		String apiKey = req.getParameter("api-key");
 		String serviceType = req.getParameter("s");
 		
-		pw.print("apikey : "+apiKey);
-		pw.print("serviceType : "+serviceType);
+		//pw.println("apikey : "+apiKey);
+		//pw.println("serviceType : "+serviceType);
 		String namespace = AliasDomainUtil
 				.getCachedAliasDomainName(NamespaceManager.get());
 
@@ -43,14 +43,16 @@ public class CallNotification extends HttpServlet {
 			return;
 		}
 		
-//		if (!APIKeyUtil.isPresent(apiKey)) {
-//			res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-//					"Unauthorized: Invalid API Key");
-//			return;
-//		}
+		//pw.println("API KEY STATUS : "+APIKeyUtil.isPresent(apiKey));
+		
+		if (!APIKeyUtil.isPresent(apiKey)) {
+			res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+					"Unauthorized: Invalid API Key");
+			return;
+		}
 		
 		if (serviceType != null && serviceType.equals("asterisk")) {
-			pw.print("In asterisk block");
+			//pw.println("In asterisk block");
 			String event = req.getParameter("t");
 			String durationStr = req.getParameter("d");
 			int duration = 0;
