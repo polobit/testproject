@@ -764,6 +764,7 @@ public class SendEmail extends TaskletAdapter
 		 		EmailGatewayUtil.sendBulkEmail(
 		 		                 AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
 			 		        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
+				return;
 		  	}
 			else{
 			  // Send Email using email gateway
