@@ -118,7 +118,7 @@ public class PullQueueUtil
 	    Queue queue = QueueFactory.getQueue(currentQueueName);
 	    TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
 			    .method(Method.POST);
-	    queue.add(taskOptions);
+	    queue.addAsync(taskOptions);
 	}
 	catch (Exception e)
 	{
