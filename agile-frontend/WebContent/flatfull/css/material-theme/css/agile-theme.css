@@ -3944,3 +3944,6 @@ margin-top:0px;
     color: #11a0f8;
    /* font-weight: 700 !important;*/
 }
+#landingPageSettingForm #cnameSettingsFields .form-group label.input-group-addon {
+    padding: 14px 10px;
+}
