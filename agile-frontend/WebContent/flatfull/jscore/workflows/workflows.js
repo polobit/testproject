@@ -831,6 +831,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
     function popupCampaignContact ()
     {
             $("#workflow-save-popup").modal("hide");
+            IS_CAMPAIGN_SAVE = true;
            
           // window.location.hash="#contacts";
            Backbone.history.navigate("#contacts" , {
@@ -842,6 +843,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
      function popupCampaignTrigger ()
      {  
             $("#workflow-save-popup").modal("hide");
+            IS_CAMPAIGN_SAVE = true;
              
              Backbone.history.navigate("#trigger-add" , {
                 trigger: true

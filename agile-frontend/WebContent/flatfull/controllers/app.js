@@ -225,7 +225,7 @@ $(document).ready(function(){
 SUBSCRIBERS_SELECT_ALL = false;
 
 
-
+var IS_CAMPAIGN_SAVE = false;
 var SHOW_EXIT_CAMPAIGN_POPUP = false;
 // Observed route triggerring for Some unsafe changes like Campaign.
 Backbone.History.prototype.loadUrl = function (fragment, options) {
@@ -239,15 +239,17 @@ Backbone.History.prototype.loadUrl = function (fragment, options) {
     try{
     	// Validation for unsave Campaign, If we are in middle of designing a Campaign and trigger another route then show confirmation popup
 	    //if (is_campaign_unsave && fragment === void (0) && options === void (0) && this.confirmationDisplay !== void(0))
-	    if (is_campaign_unsave && SHOW_EXIT_CAMPAIGN_POPUP == false)
+	    if (is_campaign_unsave && SHOW_EXIT_CAMPAIGN_POPUP == false && $('#disable-switch').attr('data') == 'false' && IS_CAMPAIGN_SAVE == false)
 	    {   	    	
 	    	$("#agile-menu-navigation-container").html(getTemplate("marketing-menu-items", {due_tasks_count : due_tasks_count}));
+	    	if(nextRoute == 'navigate-dashboard')
+	    		$('[id="rolecontainer"]').text('MARKETING');
 	    	SHOW_EXIT_CAMPAIGN_POPUP = true;	
 			var response = false;
 			// Showing modal for unsave Campaign
 	    	showModalConfirmation(
 					"Campaign Alert",
-					"There are unsave changes are you want to continue?",
+					"There are unsave changes, Do you want to continue?",
 					function()
 					{
 						// Yes callback
@@ -277,6 +279,7 @@ Backbone.History.prototype.loadUrl = function (fragment, options) {
 		    return this;
 	    }
 	    else{ 
+	    	IS_CAMPAIGN_SAVE = false;
 		    //this.confirmationDisplay = true;
 		    return _.any(Backbone.history.handlers, function (handler) {
 		        if (handler.route.test(nextRoute)) {
