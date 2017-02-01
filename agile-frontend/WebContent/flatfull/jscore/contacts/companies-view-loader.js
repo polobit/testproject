@@ -41,7 +41,7 @@ var companies_view_loader = {
 		}
 		else if(_agile_get_prefs("dynamic_company_filter") || _agile_get_prefs("company_filter"))
 		{
-			companies_view_loader.getAndSetContactsCount(el, tag_id);
+			companies_view_loader.getAndSetCompaniesCount(el, tag_id);
 		}
 
 		//To disable bulk action buttons and remove check for select all checkbox
