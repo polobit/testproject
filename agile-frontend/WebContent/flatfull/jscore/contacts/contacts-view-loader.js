@@ -245,7 +245,7 @@ var contacts_view_loader = {
 				$('#contacts-count', el).html(count_message);
 			}
 		}
-		else if((_agile_get_prefs("dynamic_contact_filter") || _agile_get_prefs("contact_filter")) && count)
+		else if((_agile_get_prefs("dynamic_contact_filter") || _agile_get_prefs("contact_filter")) && count != undefined)
 		{
 			var count_message;
 			if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
@@ -297,7 +297,7 @@ var contacts_view_loader = {
 			App_Contacts.contactsListCountView.collection.fetch({
 				success : function(data)
 				{
-					if(data && data.models[0] && data.models[0].get("count"))
+					if(data && data.models[0] && data.models[0].get("count") != undefined)
 					{
 						contacts_view_loader.setUpContactsCount(el, data.models[0].get("count"));
 					}

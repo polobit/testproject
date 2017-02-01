@@ -196,7 +196,7 @@ var companies_view_loader = {
 				$('#contacts-count', el).html(count_message);
 			}
 		}
-		else if((_agile_get_prefs("dynamic_company_filter") || _agile_get_prefs("company_filter")) && count)
+		else if((_agile_get_prefs("dynamic_company_filter") || _agile_get_prefs("company_filter")) && count != undefined)
 		{
 			var count_message;
 			if (count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
@@ -248,7 +248,7 @@ var companies_view_loader = {
 			App_Companies.companiesListCountView.collection.fetch({
 				success : function(data)
 				{
-					if(data && data.models[0] && data.models[0].get("count"))
+					if(data && data.models[0] && data.models[0].get("count") != undefined)
 					{
 						companies_view_loader.setUpCompaniesCount(el, data.models[0].get("count"));
 					}
