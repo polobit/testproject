@@ -12,10 +12,25 @@ var messagefromcallback;
 var outboundmessage;
 var KnowlarityWidgetPrefs;
 var knowlaritySource;
+var AsteriskWidgetPrefs;
 
 function androidSetup(){
 	head.js('widgets/android.js', function(){
 		console.log("App Calling js file loaded");
+	});
+}
+
+function asteriskSetup(){
+	var requestURL = "core/api/widgets/getAsteriskPrefs";
+	$.ajax({
+		url : requestURL,
+		type : "GET",	
+		success : function(result) {
+			if(result && result.length > 0){
+				console.log(result);
+				AsteriskWidgetPrefs = JSON.parse(result);											
+			}
+		}
 	});
 }
 
@@ -57,6 +72,7 @@ $(function(){
 	if(!agile_is_mobile_browser()){
 		knowlaritySetup();
 		androidSetup();
+		asteriskSetup();
 	}
 });
 

@@ -368,11 +368,12 @@ public class WidgetsAPI {
 		// ArrayList<String> callOptionName = new ArrayList<>();
 
 		widgets.addAll(WidgetUtil.getWidget(WidgetType.CALL));
-	    
-		//Adding sms widgets if Plivo or twilio is there
-		/*Widget widget = SMSGatewayUtil.getSMSGatewayWidgetForSMS();
-		if(widget !=null)
-			widgets.add(widget);*/
+
+		// Adding sms widgets if Plivo or twilio is there
+		/*
+		 * Widget widget = SMSGatewayUtil.getSMSGatewayWidgetForSMS(); if(widget
+		 * !=null) widgets.add(widget);
+		 */
 		/*
 		 * if(!widgets.isEmpty()){ for(Widget widget : widgets){
 		 * callOptionName.add(widget.name); }
@@ -537,12 +538,13 @@ public class WidgetsAPI {
 		String result = null;
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 		DomainUser dmu = agileUser.getDomainUser();
-		
+
 		// Logic to find the admin user are active for widget or not.
 		if (dmu.is_admin) {
-			JSONArray userIdsJson = WidgetUtil.getWigdetsActiveUsersList(widgetName);
-			result = userIdsJson.toString();			
-		}		
+			JSONArray userIdsJson = WidgetUtil
+					.getWigdetsActiveUsersList(widgetName);
+			result = userIdsJson.toString();
+		}
 		return result;
 	}
 
@@ -563,13 +565,25 @@ public class WidgetsAPI {
 			String API_SECRET = prefsObj.getString("uv_secert_key");
 			String domain = prefsObj.getString("uv_domain_name");
 			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
-		} 
-//		else if (widget.name.equals("Knowlarity")) {
-//			String prefs = widget.prefs;
-//			KnowlarityUtil knowlarity = new KnowlarityUtil(prefs);
-//			result = knowlarity.checkAgentIsValid();
-//		  knowlarity.checkAgentIsValid();
-//		}
+		}
+		// else if (widget.name.equals("Knowlarity")) {
+		// String prefs = widget.prefs;
+		// KnowlarityUtil knowlarity = new KnowlarityUtil(prefs);
+		// result = knowlarity.checkAgentIsValid();
+		// knowlarity.checkAgentIsValid();
+		// }
 		return result;
+	}
+
+	@Path("getAsteriskPrefs")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String makeACall() throws Exception {
+		Widget widget = WidgetUtil.getWidget("Asterisk");
+		if (widget != null) {
+			JSONObject object = new JSONObject(widget.prefs);
+			return object.toString();
+		}
+		return null;
 	}
 }

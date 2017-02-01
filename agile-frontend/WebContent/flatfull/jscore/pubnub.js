@@ -49,15 +49,23 @@ function subscribeClientChannel(callback){
 				}catch(e){
 					return;
 				}
-				//alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
-				if((message || {}).type  == "call"){
-					handleCallRequest(message);
+			}catch(e){
+				return;
+			}
+			//alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
+			if((message || {}).type  == "call"){
+				if((message || {}).check){	
+					if(message.extension && AsteriskWidgetPrefs.asterisk_call_channel){
+						if(AsteriskWidgetPrefs.asterisk_call_channel.indexOf(message.extension) != -1){
+					    	handleCallRequest(message);
+					    }						
+					}										
 				}else{
-					// Display message in stream.
-					handleMessage(message);	
+					handleCallRequest(message);
 				}
-			}catch (e) {
-
+			}else{
+				// Display message in stream.
+				handleMessage(message);	
 			}
 		},presence : function(message, env, channel){
 			// RECEIVED A MESSAGE.

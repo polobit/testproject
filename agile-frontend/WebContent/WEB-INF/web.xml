@@ -278,9 +278,6 @@
 		<url-pattern>/feedbackapi/*</url-pattern>
 	</servlet-mapping>
 
-
-
-
 	<servlet>
 		<servlet-name>OpenIdServlet</servlet-name>
 		<servlet-class>com.agilecrm.session.OpenIdServlet</servlet-class>
