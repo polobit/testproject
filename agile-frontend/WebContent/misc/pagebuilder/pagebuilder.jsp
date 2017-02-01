@@ -2451,11 +2451,15 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
     </div><!-- /.modal -->
 
     <div class="modal fade chooseMedia" id="chooseMediaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 500px;">
+        <div class="modal-dialog" style="max-width: 500px;">            
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h5 class="modal-title" id="myModalLabel">Choose Media</h5>
+                </div>
                 <div class="modal-body" style="padding: 25px;">
                     <div class="col-md-6">Please choose one media type </div>
-                    <select name="choose-media" id="choose-media-option">
+                    <select name="choose-media" id="choose-media-option" class="form-control" style="width: 50%;margin-top: -7px;">
                         <option value="form">Form</option>
                         <option value="image">Image</option>
                         <option value="video">Video</option>
