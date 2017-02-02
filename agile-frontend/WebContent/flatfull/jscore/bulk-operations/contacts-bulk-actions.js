@@ -740,8 +740,8 @@ function show_bulk_owner_change_page()
               		    function(response){
               		     if(response.total != 50000 && response.remaining < selected_count)
               		    	{	 showModalConfirmation(
-		                                      "Alert",
-		                                      "You per day email sent limit is "+ response.total +" due to low email sending reputation. Your today remianing email limit is " + response.remaining + ". Please clean up your contact for increase your limit.",
+		                                      "Alert!",
+		                                      "Your Email sending reputation is low! Sending limit has been reduced to "+ response.total +". " + response.remaining + "200 Emails remaining for the day! <br<br>Tip: Keeping your contacts list clean improves sending reputation!",
 		                                       function()
 		                                      {
 		                                      		enable_save_button(saveButton);
