@@ -234,7 +234,7 @@
 	{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	<div class="pull-left">
 		
-        <small class="text-muted">
+        <small style="color:#777;">
 			{{#if close_date}}
             <i class="fa fa-clock-o m-r-xs"></i>
 			{{/if}}
@@ -302,10 +302,10 @@
 		{{/if_equals}}
 		{{#if this.contacts}}
 		  	{{#if_equals expected_value "0"}}
-		  		<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
+		  		<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #999"></span>
             {{/if_equals}}
 			{{#if expected_value}}
-				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
+				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #999"></span>
 			{{/if}}
 			{{#related_to_one contacts}}{{/related_to_one}}
 		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
@@ -338,7 +338,7 @@
 	{{/if_won_milestone}}
 
 	<div class="pull-left">
-		<small class="text-muted">
+		<small style="color:#777;">
 			{{#if close_date}}
             <i class="fa fa-clock-o m-r-xs"></i>
 			{{/if}}
