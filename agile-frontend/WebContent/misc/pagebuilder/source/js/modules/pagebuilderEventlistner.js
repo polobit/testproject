@@ -3,6 +3,7 @@
 
     var appUI = require('./ui.js').appUI;
     var styleEditor = require('./styleeditor.js');
+    var siteBuilder = require('./builder.js');
    
     var customAgileEvents={
 
@@ -71,8 +72,17 @@
             else
                 localStorage.removeItem("lp-instruct-popup",false);
         },
-        showchooseMediaModalPopup : function(el){
+        showchooseMediaModalPopup : function(el){            
             $('#chooseMediaModal').modal('show');
+            if($(styleEditor.styleeditor.activeElement.element).hasClass('frameCover'))
+                //console.log("video");
+                $('#choose-media-option').val('video');
+            else if(styleEditor.styleeditor.activeElement.element.tagName === "IMG")
+                //console.log("image");
+                $('#choose-media-option').val('image');
+            else if(styleEditor.styleeditor.activeElement.element.id === "agileform_div")
+                //console.log("form");
+                $('#choose-media-option').val('form');
         },
         applyMediaType : function(el){
             //console.log(styleEditor.activeElement);
@@ -87,18 +97,19 @@
                 var formel= $('<div class="choose-media-options" id="agileform_div"><img id= "agileform" src="https://agilecrm.s3.amazonaws.com/pagebuilder/static/images/lp-form-placeholder.png" class="img-responsive" /></div>  ');
                 $(styleEditor.styleeditor.activeElement.element).replaceWith(formel);
                 styleEditor.styleeditor.setupCanvasElements(styleEditor.styleeditor.activeElement.parentBlock);
+                siteBuilder.site.setPendingChanges(true);
             }
             else if (mediaSelected === "image"){
                 var imgel= $('<img src="https://s3.amazonaws.com/agilecrm/pagebuilder/static/elements/images/image1.png"  class="img-responsive choose-media-options" /> ');
                 $(styleEditor.styleeditor.activeElement.element).replaceWith(imgel);
                 styleEditor.styleeditor.setupCanvasElements(styleEditor.styleeditor.activeElement.parentBlock);
-           
+                siteBuilder.site.setPendingChanges(true);
             }
             else if (mediaSelected === "video"){
                 var videoel=$('<div class="videoWrapper"><img data-video="" src="https://agilecrm.s3.amazonaws.com/pagebuilder/static/images/lp-video-thumb.jpg"  title="Play Video" class="video_placeholder img-responsive" /><div class="frameCover choose-media-options" data-type="video"></div><button class="video__button"></button></div>');
                 $(styleEditor.styleeditor.activeElement.element).replaceWith(videoel);
                 styleEditor.styleeditor.setupCanvasElements(styleEditor.styleeditor.activeElement.parentBlock);
-               
+                siteBuilder.site.setPendingChanges(true);   
             }
 
         }
