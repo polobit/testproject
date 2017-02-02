@@ -3952,6 +3952,7 @@ margin-top:0px;
 #edocument-type-select-container #addDocumentTemplate .icon-plus-sign,#documents-top-view .documentsTemplate #addDocumentTemplate i
 {
   margin-top:-5px;
+  margin-right:0px;
 }
 aside
 {
@@ -3965,7 +3966,7 @@ aside
 {
   padding-bottom:25px!important;
 }
-#documents-top-view .wrapper-md #prefs-tabs-content .panel
+#documents-top-view .wrapper-md .documents-collection#prefs-tabs-content .panel
 {
   background-color:#F4F8F9;
 }
