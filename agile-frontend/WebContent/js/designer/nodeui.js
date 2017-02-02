@@ -520,7 +520,7 @@ function showNodeConnectPopup(nodeId){
 
 // Node Level validation, based on Nodename validation happens
 function nodeLevelValidation(nodeName, callbackFunction){
-	var validation_nodes = ['URL Visited?','Replied?','Clicked?'];
+	var validation_nodes = ['URL Visited?','Replied?','Clicked?','Opened?'];
 
 	if(!nodeName || validation_nodes.indexOf(nodeName) == -1)
 		return callbackFunction(true);
@@ -556,7 +556,18 @@ function nodeLevelValidation(nodeName, callbackFunction){
   	// Clicked Node alert message while saving
   	if(nodeName == 'Clicked?'){ 
   		window.parent.showModalConfirmation("Things to check",
-            "1. 'Wait' or 'Wait Till' node should not be above 'Clicked? node'.",
+            "1. 'Wait' or 'Wait Till' node should not be above 'Clicked?' node.<br/>2. Track Clicks Yes/Yes&Push should be enable.<br/>3. HTML should exists for tracking.",
+            null,null,null                      
+            ,"Close", ""); 
+
+		    callbackFunction(true);
+		    return;    
+  	}
+
+  	// Opened Node alert message while saving
+  	if(nodeName == 'Opened?'){ 
+  		window.parent.showModalConfirmation("Things to check",
+            "1. 'Wait' or 'Wait Till' node should not be above 'Opened?' node.<br/>2. Track Clicks Yes/Yes&Push should be enable.<br/>3. HTML should exists for tracking.",
             null,null,null                      
             ,"Close", ""); 
 
