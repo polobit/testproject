@@ -740,8 +740,8 @@ function show_bulk_owner_change_page()
               		    function(response){
               		     if(response.total != 50000 && response.remaining < selected_count)
               		    	{	 showModalConfirmation(
-		                                      "Alert!",
-		                                      "Your Email sending reputation is low! Sending limit has been reduced to "+ response.total +". " + response.remaining + "200 Emails remaining for the day! <br<br>Tip: Keeping your contacts list clean improves sending reputation!",
+		                                      "<span> <i class='fa fa-exclamation-triangle' aria-hidden='true'></i></span> Email Reputation Alert",
+		                                      "Your email reputation has gone low as people have tagged your emails as spam. <br><p style='margin-top:8px;text-align:justify;'>To avoid your business domain being completely blacklisted by mail servers, Agile has reduced the daily sending limit to " + response.total + ". This limit will automatically change in coming days based on the email activity.</p>",
 		                                       function()
 		                                      {
 		                                      		enable_save_button(saveButton);

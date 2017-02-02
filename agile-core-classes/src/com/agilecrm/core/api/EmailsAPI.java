@@ -744,12 +744,16 @@ public String getSendgridReputation(@QueryParam("selectedCount") int selectedCou
 		  String domain = NamespaceManager.get();
 		  System.out.println("Email sent task added for : " + selectedCount);
 		  
-		 //Fetch per day email sent count for current day
-		  int todayEmailSent = SendGridSubUser.getPerDayEmailSent(domain);
-		  
+		  //Fetch email limit of domain
 		  int emailSentLimit = SendGridUtil.getSubUserEmailLimit(domain);
 		  
-		  int remainingEmail = emailSentLimit - todayEmailSent;
+		  int remainingEmail = 0;
+		  
+		  if(emailSentLimit != 50000){
+			//Fetch per day email sent count for current day
+			  int todayEmailSent = SendGridSubUser.getPerDayEmailSent(domain);
+			  remainingEmail = emailSentLimit - todayEmailSent;
+		  }
 		  
 		  if(remainingEmail < 0)
 			  remainingEmail = 0;

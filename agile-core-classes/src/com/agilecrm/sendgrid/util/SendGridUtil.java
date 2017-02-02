@@ -925,7 +925,6 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			  int emailSent = 0;
 			  long thirtyDayTime = 90 * 24 * 60 * 60 * 1000l ;
 			  long currentTime = System.currentTimeMillis();
-			  long domainCreatedTimestamps = BillingRestrictionUtil.getBillingRestrictionFromDB().created_time;
 			 
 			  long statsStrartTime = currentTime - thirtyDayTime;
 			  
@@ -936,6 +935,8 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			  //This is for all user
 			  if(reputation <= 60)
 				  return 100;
+
+			  long domainCreatedTimestamps = BillingRestrictionUtil.getBillingRestrictionFromDB().created_time;
 			  
 			  //if domain is old then 
 			  if(domainCreatedTimestamps < SendGridSubUser.DOMAIN_CREATED_TIME)
