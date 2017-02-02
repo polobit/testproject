@@ -314,7 +314,7 @@
 	{{#if_won_milestone pipeline_id milestone}}
 		{{#if won_date}}
 			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
-      			<small>{{epochToHumanDateInFormat won_date}}</small>
+      			<small style="color:#777 !important;">{{epochToHumanDateInFormat won_date}}</small>
       		</div>
       		<div class="clearfix"></div>
       	{{else}}
