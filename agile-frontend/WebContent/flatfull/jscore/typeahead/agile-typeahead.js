@@ -475,6 +475,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
 	                     				sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
 										$('#sendEmailInviteBlock').html(sendInviteHtml);
+										if(_agile_get_prefs('send-invite-status')=="false")
+                                         $('#sendInviteEmail').prop('checked',false);
 									}
 
 									dealJSON.related_contact_ids = related_contact_ids;
@@ -512,7 +514,10 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								if(targetContainer && targetContainer.size() == 1){																		
                     				var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
                      				sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
-									$('#sendEmailInviteBlock').html(sendInviteHtml);									
+									$('#sendEmailInviteBlock').html(sendInviteHtml);
+									if(_agile_get_prefs('send-invite-status')=="false")
+                                         $('#sendInviteEmail').prop('checked',false);
+									
 								}
 											
 							}

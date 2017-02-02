@@ -13,6 +13,7 @@ $(function(){
 /**
 	 * shows description field in new event model
 	 */
+	 
 	$("#updateActivityModal").on('click', '#add_event_desctiption', function(e)
 	{
 		e.preventDefault();
