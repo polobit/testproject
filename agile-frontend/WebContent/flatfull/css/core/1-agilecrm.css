@@ -5821,7 +5821,17 @@ display: table-cell !important;
   height:25px !important;
   width:25px !important;
   margin:3px !important;
+  display :inline-block;
 }
 #deal-checkboxes-div > .bcp-select > .bcp-selected {
   margin:6px !important;
+}
+.bcp-selected {
+  background: url(//calendar.google.com/googlecalendar/images/combined_v46_vr.png);
+  background-position: -95px -50px;
+  height: 10px;
+  width: 10px;
+  margin: 3px;
+  position: relative;
+  vertical-align: top;
 }
