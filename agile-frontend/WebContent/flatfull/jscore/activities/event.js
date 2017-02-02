@@ -14,14 +14,15 @@ $(function(){
 	 * shows description field in new event model
 	 */
     $("#activityModal , #updateActivityModal").on('click', '.bcp-select', function(){
-         if($(this).children().hasClass('bcp-selected')){
-         	$(this).children().removeClass('bcp-selected');
+         var event = $(this);
+         if(event.children().hasClass('bcp-selected')){
+         	event.children().removeClass('bcp-selected');
          	$("#backgroundColor").val("");
          }
          else{
-         	var id = $(this).attr('id');
+         	var id = "#"+event.attr('id');
          	$(".bcp-select").children().removeClass('bcp-selected');
-         	$(this).children().addClass('bcp-selected');
+         	event.children().addClass('bcp-selected');
          	$("#backgroundColor").val(id);
          }
 
