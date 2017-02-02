@@ -6089,3 +6089,7 @@ smtp-bulk.note4,Maximum number of emails to be sent from Agile via your email pr
 smtp-bulk.note5,If set to true&#44; the campaign and bulk emails will be sent through email provider. If the per day max limit is reached&#44; then the emails will be sent from Agile’s default email gateway.,,,,
 smtp-bulk.note,Note,,,
 smtp-bulk.note6,Send personal and campaign emails from your email provider.,,,
+email-spam.alert1,Your email reputation has gone low as people have tagged your emails as spam.,,,,,
+email-spam.alert2,To avoid your business domain being completely blacklisted by mail servers&#44; Agile has reduced the daily sending limit to,,,,,
+email-spam.alert3,This limit will automatically change in coming days based on the email activity.,,,
+email-spam.reputation,Email Reputation Alert,,,

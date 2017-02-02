@@ -732,7 +732,7 @@ function show_bulk_owner_change_page()
 				// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
-				var MAX_LIMIT = 5;
+				var MAX_LIMIT = 500;
 
 			 if(emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
 				{
@@ -740,8 +740,8 @@ function show_bulk_owner_change_page()
               		    function(response){
               		     if(response.total != 50000 && response.remaining < selected_count)
               		    	{	 showModalConfirmation(
-		                                      "<span> <i class='fa fa-exclamation-triangle' aria-hidden='true'></i></span> Email Reputation Alert",
-		                                      "Your email reputation has gone low as people have tagged your emails as spam. <br><p style='margin-top:8px;text-align:justify;'>To avoid your business domain being completely blacklisted by mail servers, Agile has reduced the daily sending limit to " + response.total + ". This limit will automatically change in coming days based on the email activity.</p>",
+		                                      "<span> <i class='fa fa-exclamation-triangle' aria-hidden='true'></i></span> {{agile_lng_translate 'email-spam' 'reputation'}}",
+		                                      "{{agile_lng_translate 'email-spam' 'alert1'}} <br><p style='margin-top:8px;text-align:justify;'>{{agile_lng_translate 'email-spam' 'alert2'}} " + response.total + ". {{agile_lng_translate 'email-spam' 'alert3'}}</p>",
 		                                       function()
 		                                      {
 		                                      		enable_save_button(saveButton);
