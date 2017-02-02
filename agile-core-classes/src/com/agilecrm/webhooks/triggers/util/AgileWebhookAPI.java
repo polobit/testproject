@@ -1,7 +1,10 @@
 package com.agilecrm.webhooks.triggers.util;
 
+import java.io.BufferedReader;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,9 +13,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.json.JSONObject;
 
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
@@ -229,6 +236,76 @@ public class AgileWebhookAPI
 		    .build());
 	}
 
+    }
+    
+    /**
+     * For Zapier hook and other hook customer(future)
+     * @param webhook
+     * @return 
+     * 
+     * @return response ok
+     */
+    @POST
+    @Path("/subscribe/hook")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestHookZap subscribeHook(@Context HttpServletRequest request, @Context HttpServletResponse response)
+	    throws Exception
+    {
+	System.out.println("Register hook");
+	StringBuffer stringBuffer = new StringBuffer();
+	String line = null;
+	try
+	{
+	    BufferedReader reader = request.getReader();
+	    while ((line = reader.readLine()) != null)
+		stringBuffer.append(line);
+	}
+	catch (Exception e)
+	{
+	    response.setStatus(HttpServletResponse.SC_CONFLICT);
+	    e.printStackTrace();
+	}
+
+	System.out.println("StringBuffer..." + stringBuffer);
+
+	JSONObject hookJSON = new JSONObject(stringBuffer.toString());
+
+	if (!hookJSON.has("target_url") || !hookJSON.has("event"))
+	{
+	    response.setStatus(HttpServletResponse.SC_CONFLICT);
+
+	    throw new Exception("Target URL not found or Event name not found.");
+	}
+
+	String target_url = hookJSON.getString("target_url");
+	String event = hookJSON.getString("event");
+	System.out.println("target URL = " + target_url);
+	System.out.println("target event = " + event);
+	System.out.println("Posted data from Zapier..." + hookJSON);
+
+	return ZapierRestHook.subscribeHook(target_url, event);
+
+    }
+
+    @DELETE
+    @Path("/unsubscribe/hook")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String unSubscribeHook(@Context HttpServletRequest request, @Context HttpServletResponse response,
+	    @QueryParam("id") String id) throws Exception
+    {
+	System.out.println("Webhooks to delete..." + id);
+
+	JSONObject responseJSON = new JSONObject();
+	responseJSON.put("response", "Hook removed successfully!....");
+	response.setStatus(HttpServletResponse.SC_OK);
+
+	if (!ZapierRestHook.unsubscribeHook(id))
+	{
+	    response.setStatus(HttpServletResponse.SC_CONFLICT);
+	    responseJSON.put("response", "An error occured while removing hook.");
+	}
+
+	return responseJSON.toString();
     }
 
 }
