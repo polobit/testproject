@@ -520,7 +520,7 @@ function showNodeConnectPopup(nodeId){
 
 // Node Level validation, based on Nodename validation happens
 function nodeLevelValidation(nodeName, callbackFunction){
-	var validation_nodes = ['URL Visited?','Replied?'];
+	var validation_nodes = ['URL Visited?','Replied?','Clicked?'];
 
 	if(!nodeName || validation_nodes.indexOf(nodeName) == -1)
 		return callbackFunction(true);
@@ -551,6 +551,17 @@ function nodeLevelValidation(nodeName, callbackFunction){
 		    callbackFunction(true);
 		    return;
   		});	    
+  	}
+
+  	// Clicked Node alert message while saving
+  	if(nodeName == 'Clicked?'){ 
+  		window.parent.showModalConfirmation("Things to check",
+            "1. 'Wait' or 'Wait Till' node should not be above 'Clicked? node'.",
+            null,null,null                      
+            ,"Close", ""); 
+
+		    callbackFunction(true);
+		    return;    
   	}
 
 }	
