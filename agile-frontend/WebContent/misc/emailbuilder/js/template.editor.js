@@ -463,7 +463,7 @@ function handleObjects() {
 }
 
 function addhttp(linkUrl) {
-    if(linkUrl.length == 0) return;
+    if(linkUrl.length <= 1) return;
     return /^[A-Za-z][A-Za-z0-9+-.]*\:[\/\/]?/.test(linkUrl) ? linkUrl : 'http://' + linkUrl;
 }
 
@@ -981,12 +981,6 @@ $(document).ready(function () {
                                          'background-repeat': 'repeat'
                                      });
     });
-
-    $(document).on('change', 'input.social-input', function(e){
-        console.log("hai"+e);
-         $('input.social-input[name="'+e.target.name+'"]').val($(this).val().length >0 ? addhttp($(this).val()) : $(this).val());
-    });
-
     
     // paddings functions;
     $(document).on('change', '#ptop,#pbottom,#pleft,#pright', function (e) {
@@ -1227,7 +1221,11 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $(document).on('change', '.social-input', function (e) {
         e.preventDefault();
         var name = $(this).attr('name');
-        $('#' + $('#path').val()).find($('#selector').val() + ' a.' + name).attr('href', '' + $(this).val()).attr('target', '_blank');
+         $('input.social-input[name="'+name+'"]').val($(this).val().length > 0 ? addhttp($(this).val()) : $(this).val());
+        
+        $('#' + $('#path').val()).find($('#selector').val() + ' a.' + name)
+        .attr('href', '' + $(this).val().length == 0 ? '#' : $(this).val())
+        .attr('target', '_blank');
     });
 
     $(document).on('change', '.social-check', function (e) {
