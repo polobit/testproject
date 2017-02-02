@@ -110,10 +110,10 @@ var contact_details_documentandtasks_actions = {
         	var targetEl = $(e.currentTarget);
         	var e = $("#opportunityForm",$("#newDealModal"));
 
-    		if($('#color1', e).is(':hidden')){
+    		/*if($('#color1', e).is(':hidden')){
 		    	$('.colorPicker-picker', e).remove();
 		    	$('#color1', e).colorPicker();
-			}
+			}*/
 
 				var colorcode = "#FFFFFF";
 			    $('#color1' , e).attr('value', colorcode);

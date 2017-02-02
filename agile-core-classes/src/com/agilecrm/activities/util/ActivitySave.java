@@ -34,6 +34,7 @@ import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.AdminPanelAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.webhooks.triggers.util.ZapierRestHook;
 import com.amazonaws.services.route53domains.model.ContactType;
 import com.google.gson.Gson;
 import com.agilecrm.contact.DocumentNote;
@@ -142,15 +143,42 @@ public class ActivitySave
 	    		}
 	    	}
 	    	
-			if (milestone[0].toString().equalsIgnoreCase("Won"))
+			if (milestone[0].toString().equalsIgnoreCase("Won")){
+			    try {
+				    // call zapier if registerd to Agile CRM with data
+				    Long t1 = System.currentTimeMillis();
+				    ZapierRestHook.sendDealDataToRegisterdZapier(opportunity,jsn);
+				    System.out.println("Time taken to execute Zapier new tag to contact = " + (System.currentTimeMillis()-t1));
+				} catch (Exception e) {
+				   e.printStackTrace();
+				}
 			    ActivityUtil.createDealActivity(ActivityType.DEAL_CLOSE, opportunity, toMileStone,
 			    		fromMileStone, milestone[2].toString(), jsn);
-			else if (milestone[0].toString().equalsIgnoreCase("Lost"))
+			    }
+			else if (milestone[0].toString().equalsIgnoreCase("Lost")){
+			    try {
+				    // call zapier if registerd to Agile CRM with data
+				    Long t1 = System.currentTimeMillis();
+				    ZapierRestHook.sendDealDataToRegisterdZapier(opportunity,jsn);
+				    System.out.println("Time taken to execute Zapier new tag to contact = " + (System.currentTimeMillis()-t1));
+				} catch (Exception e) {
+				   e.printStackTrace();
+				}
 			    ActivityUtil.createDealActivity(ActivityType.DEAL_LOST, opportunity, toMileStone,
 			    		fromMileStone, milestone[2].toString(), jsn);
-			else
+			    }
+			else {
+			    try {
+				    // call zapier if registerd to Agile CRM with data
+				    Long t1 = System.currentTimeMillis();
+				    ZapierRestHook.sendDealDataToRegisterdZapier(opportunity,jsn);
+				    System.out.println("Time taken to execute Zapier new tag to contact = " + (System.currentTimeMillis()-t1));
+				} catch (Exception e) {
+				   e.printStackTrace();
+				}
 			    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
 			    		toMileStone, fromMileStone, milestone[2].toString(), jsn);
+			    }
 	    }
 
 	    if (name != null || expectedvalue != null || probablity != null || close_date != null || description != null)

@@ -31,6 +31,17 @@ var companies_view_loader = {
 		{
 			App_Companies.companiesListView = undefined;
 			COMPANIES_HARD_RELOAD = false;
+
+			//If static filter or dynamic filter selects, get filtered companies count and set to view
+			if(_agile_get_prefs("dynamic_company_filter") || _agile_get_prefs("company_filter"))
+			{
+				App_Companies.companiesListCountView = undefined;
+				companies_view_loader.getAndSetCompaniesCount(el, tag_id);
+			}
+		}
+		else if(_agile_get_prefs("dynamic_company_filter") || _agile_get_prefs("company_filter"))
+		{
+			companies_view_loader.getAndSetCompaniesCount(el, tag_id);
 		}
 
 		//To disable bulk action buttons and remove check for select all checkbox
@@ -57,8 +68,11 @@ var companies_view_loader = {
 
 					if(App_Companies.companiesListView.collection.models.length > 0 && !App_Companies.companiesListView.collection.models[0].get("count"))
 					{
-						// Call to get Count 
-						getAndUpdateCollectionCount("companies", el);					
+						// Call to get Count
+						if(!_agile_get_prefs("dynamic_company_filter") && !_agile_get_prefs("company_filter"))
+						{
+							getAndUpdateCollectionCount("companies", el);
+						}				
 					}
 					else
 					{
@@ -168,20 +182,32 @@ var companies_view_loader = {
 		return "";
 	},
 
-	setUpCompaniesCount : function(el)
+	setUpCompaniesCount : function(el, count)
 	{
-		if(App_Companies.companiesListView && App_Companies.companiesListView.collection) 
+		if(!_agile_get_prefs("dynamic_company_filter") && !_agile_get_prefs("company_filter") && App_Companies.companiesListView && App_Companies.companiesListView.collection) 
 		{
 			var count = 0;
 			if(App_Companies.companiesListView.collection.models.length > 0) {
 				count = App_Companies.companiesListView.collection.models[0].attributes.count || App_Companies.companiesListView.collection.models.length;
 			}
+			var count_message = "<small> (" + count + " Total) </small>";
+			if(window.location.hash == "#companies")
+			{
+				$('#contacts-count', el).html(count_message);
+			}
+		}
+		else if((_agile_get_prefs("dynamic_company_filter") || _agile_get_prefs("company_filter")) && count != undefined)
+		{
 			var count_message;
-			if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
+			if (count > 9999 && (_agile_get_prefs('company_filter') || _agile_get_prefs('dynamic_company_filter')))
 				count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 			else
 				count_message = "<small> (" + count + " Total) </small>";
 			$('#contacts-count', el).html(count_message);
+
+			// Show bulk action checkbox
+			$(".thead_check", el).closest("label").css("visibility", "visible");
+			$("table", el).removeClass("hide-head-checkbox");
 		}
 	},
 
@@ -192,6 +218,48 @@ var companies_view_loader = {
 		$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
 		$("#bulk-action-btns button").addClass("disabled");
 		$("#companiesTabelView").removeClass("disabled");
+	},
+
+	getAndSetCompaniesCount : function(el, tag_id)
+	{
+		abortCountQueryCall();
+		
+		// Hide bulk action checkbox
+    	$(".thead_check", el).closest("label").css("visibility", "hidden");
+    	$("table", el).addClass("hide-head-checkbox");
+
+		var that = this;
+		var url = this.getCompaniesUrl(tag_id);
+		var slateKey = getCompanyPadcontentKey(url);
+		var templateKey = this.getCompaniesTemplateKey();
+		var individual_tag_name = this.getCompaniesIndividualTagName();
+		var postData = {'filterJson': this.getPostData()};
+		var sortKey = this.getCompaniesSortKey();
+
+		if(!App_Companies.companiesListCountView)
+		{
+			App_Companies.companiesListCountView = new  Base_Collection_View({ url : url+'/filter-count', sort_collection : false, templateKey : templateKey, individual_tag_name : individual_tag_name,
+				post_data: postData, cursor : true, page_size : getMaximumPageSize(), global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
+				{
+
+				}
+			});
+
+			App_Companies.companiesListCountView.collection.fetch({
+				success : function(data)
+				{
+					if(data && data.models[0] && data.models[0].get("count") != undefined)
+					{
+						companies_view_loader.setUpCompaniesCount(el, data.models[0].get("count"));
+					}
+				}
+			});
+		}
+		else
+		{
+			companies_view_loader.setUpCompaniesCount(el, App_Companies.companiesListCountView.collection.models[0].get("count"));
+		}
+		
 	},
 
 	buildCompaniesView : function(el, tag_id)

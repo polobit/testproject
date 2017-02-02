@@ -10,6 +10,7 @@ import com.agilecrm.customthemes.CustomTheme;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.user.push.AgileUserPushNotificationId;
+import com.agilecrm.webhooks.triggers.util.RestHookZap;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.InvitedUser;
@@ -54,5 +55,8 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(DocumentNote.class);
 		ObjectifyService.register(InvitedUser.class);
 		ObjectifyService.register(AddOn.class);
+		
+		//Zapier Hook Register
+		ObjectifyService.register(RestHookZap.class);
 	}
 }

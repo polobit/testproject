@@ -2884,6 +2884,8 @@ div#need_help_header a:hover {
   font-size: 22px;
   margin-top: -2px;
   margin-bottom: 14px;
+  text-align:center;
+  display:table;
 }
 
 .agile-theme-15 #TrackingTab.nav>li>a {
@@ -3947,3 +3949,28 @@ margin-top:0px;
 #landingPageSettingForm #cnameSettingsFields .form-group label.input-group-addon {
     padding: 14px 10px;
 }
+#edocument-type-select-container #addDocumentTemplate .icon-plus-sign,#documents-top-view .documentsTemplate #addDocumentTemplate i
+{
+  margin-top:-5px;
+}
+aside
+{
+  margin:0px!important;
+}
+.add-btn-mobile.add-doc-template-btns #addDocumentTemplate
+{
+  margin-right:0px;
+}
+#documents-top-view .wrapper-md.agile-page-header.documentsTemplate
+{
+  padding-bottom:25px!important;
+}
+#documents-top-view .wrapper-md #prefs-tabs-content .panel
+{
+  background-color:#F4F8F9;
+}
+#documents-top-view .documentsTemplate #addDocumentTemplate i 
+{
+  margin-right:0px;
+}
+

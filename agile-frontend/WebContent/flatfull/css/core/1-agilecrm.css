@@ -962,17 +962,28 @@ li.deal-color:after {
     width: 2px;
 }
 li.deal-color{position:relative;}
-/*li.deal-color.YELLOW:after { background: yellow;}
-li.deal-color.RED:after { background: red;}
-li.deal-color.VIOLET:after { background: violet;}
-li.deal-color.INDIGO:after { background: indigo;}
-li.deal-color.BLUE:after { background: blue;}
-li.deal-color.GREEN:after { background: green;}
-li.deal-color.ORANGE:after { background: orange;}
-li.deal-color.BLACK:after { background: black;}
-li.deal-color.WHITE:after { background: white;}
-li.deal-color.GREY:after { background: grey;}
-*/
+ul.milestones > li.deal-color.YELLOW { background: #FFF9C4 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.RED { background: #FFCDD2 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.VIOLET { background: #E1BEE7 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.INDIGO { background: #C5CAE9 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.BLUE { background: #BBDEFB !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.GREEN { background: #C8E6C9 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.ORANGE { background: #FFE0B2 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.BLACK { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.WHITE { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.GREY { background: #BDBDBD !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.BROWN { background: #D7CCC8 !important;border: 2px solid #dee5e7 !important;}
+#deals-model-list > li.deal-color.YELLOW:after { background: #FFF9C4 !important}
+#deals-model-list > li.deal-color.RED:after { background: #FFCDD2 !important;}
+#deals-model-list > li.deal-color.VIOLET:after { background: #E1BEE7 !important;}
+#deals-model-list > li.deal-color.INDIGO:after {background: #C5CAE9 !important;}
+#deals-model-list > li.deal-color.BLUE:after { background: #BBDEFB !important;}
+#deals-model-list > li.deal-color.GREEN:after { background: #C8E6C9 !important;}
+#deals-model-list > li.deal-color.ORANGE:after {  background: #FFE0B2 !important;}
+#deals-model-list > li.deal-color.BLACK:after { background: #FFFFFF !important;}
+#deals-model-list > li.deal-color.WHITE:after { background: #FFFFFF !important;}
+#deals-model-list > li.deal-color.GREY:after {  background: #BDBDBD !important;}
+#deals-model-list > li.deal-color.BROWN:after {  background: #D7CCC8 !important;}
 /*Styling for deal color ends*/
 
 .milestone-main {
@@ -5604,6 +5615,8 @@ div#need_help_header a:hover {
   -ms-flex-align: center;
   align-items: center;
   padding: 0;
+    text-align:center;
+  display:table;
 }
 .dashboard-select .grid-dropdown-menu.dropdown-menu li a span.grid-span-two {
     display: inline-block !important;
@@ -5805,4 +5818,22 @@ display: table-cell !important;
 .dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
     color: #337ab7;
     /*font-weight: 600;*/
+}
+#deal-checkboxes-div > .bcp-select{
+  height:25px !important;
+  width:25px !important;
+  margin:3px !important;
+  display :inline-block;
+}
+#deal-checkboxes-div > .bcp-select > .bcp-selected {
+  margin:6px !important;
+}
+.bcp-selected {
+  background: url(//calendar.google.com/googlecalendar/images/combined_v46_vr.png);
+  background-position: -95px -50px;
+  height: 10px;
+  width: 10px;
+  margin: 3px;
+  position: relative;
+  vertical-align: top;
 }

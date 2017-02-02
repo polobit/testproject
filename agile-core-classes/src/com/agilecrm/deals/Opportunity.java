@@ -89,7 +89,7 @@ public class Opportunity extends Cursor implements Serializable
     /* enum for color for the deal */
     public enum Color
     {
-	VIOLET, INDIGO, BLUE, GREEN, YELLOW, ORANGE, RED, WHITE, BLACK, GREY;
+	VIOLET, INDIGO, BLUE, GREEN, YELLOW, ORANGE, RED, WHITE, BLACK, GREY,BROWN;
     }
 
     public Color colorName;

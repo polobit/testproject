@@ -67,19 +67,19 @@
 <div class="custom-animated custom-fadeInUp">
 <div id="documents-top-view">
   <div>
-     <div class="wrapper-md lter bg-light b-b agile-page-header">
+     <div class="wrapper-md lter bg-light b-b agile-page-header documentsTemplate">
        <div class="btn-group dropdown m-l-none documentsheading" style="float: none">
          <h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'document' 'document-list-templates'}} <small></small></h3>
        <div>
      </div>
    </div>
    <div class="pull-right add-btn-mobile add-doc-template-btns">
-        <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp" id="addDocumentTemplate"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
+        <a href="#document-template-add" class="btn btn-sm btn-default btn-lg-imp btn-primary-imp" id="addDocumentTemplate"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
     </div>
 </div>	
 
 <div class="wrapper-md agile-p-t-xs">
-<div class="row">
+<div class="{{#isNewTheme}}{{else}}row{{/isNewTheme}}">
 <div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
 			<div class="tabs" id="prefs-tabs-content"></div>
     </div>
@@ -100,7 +100,7 @@
 </div>	
 
 <div class="wrapper-md agile-p-t-xs">
-<div class="row">
+<div class="">
 <div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
 			<div class="tabs" id="prefs-tabs-content"></div>
     </div>

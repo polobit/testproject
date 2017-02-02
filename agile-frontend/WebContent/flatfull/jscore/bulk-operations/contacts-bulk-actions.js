@@ -734,52 +734,93 @@ function show_bulk_owner_change_page()
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 				var MAX_LIMIT = 500;
 
-			 if(selected_count > MAX_LIMIT && emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
+			 if(emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
 				{
-				  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id, MAX_LIMIT))
-				  	{
-				  		return;
-				  	}
-					  accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
-              		    function(response){ // success
-
-	                      if(!response)
-	                      {
-	                            
-		                      showModalConfirmation(
-		                                      "Add to Campaign",
-		                                      "Please configure DKIM and SPF settings to send campaign emails to more than "+ MAX_LIMIT +" contacts.",
+				  accessUrlUsingAjax('core/api/emails/sendgrid/emailsent/limit?selectedCount=' + selected_count, 
+              		    function(response){
+              		     if(response.total != 50000 && response.remaining < selected_count)
+              		    	{	 showModalConfirmation(
+		                                      "<span> <i class='fa fa-exclamation-triangle' aria-hidden='true'></i></span> {{agile_lng_translate 'email-spam' 'reputation'}}",
+		                                      "{{agile_lng_translate 'email-spam' 'alert1'}} <br><p style='margin-top:8px;text-align:justify;'>{{agile_lng_translate 'email-spam' 'alert2'}} " + response.total + ". {{agile_lng_translate 'email-spam' 'alert3'}}</p>",
 		                                       function()
 		                                      {
-		                                      		  enable_save_button(saveButton);
-		                                              Backbone.history.navigate("api-analytics", { trigger : true });
+		                                      		enable_save_button(saveButton);
+		                                            Backbone.history.navigate("contacts", { trigger : true });
 
 		                                      },  function()
 		                                      {
 		                                      		enable_save_button(saveButton);
-
-		                                            Backbone.history.navigate("contacts", { trigger : true });
 		                                           
 		                                      }, function()
 		                                      {
 		                                      	enable_save_button(saveButton);
-		                                      },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
-		                      				
-		                      	return;
-	                  		}
+		                                      },"Go To Contacts", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+              		            return;
+		                     }
 
-	                  		var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+		                   if(selected_count <= MAX_LIMIT)
+		                   {
+			                     var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
 
-							var json = {};
-							json.contact_ids = id_array;
-							postBulkOperationData(url, json, $form, undefined, function(data)
+								var json = {};
+								json.contact_ids = id_array;
+								postBulkOperationData(url, json, $form, undefined, function(data)
+								{
+									enable_save_button(saveButton);
+								}, "{{agile_lng_translate 'campaigns' 'assigned'}}");  
+								return; 
+							}           		   
+						   else
 							{
-								enable_save_button(saveButton);
-							}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
-		              	}, 
-		              	function(){
+							  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id, MAX_LIMIT))
+							  	{
+							  		return;
+							  	}
+							  accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
+		              		    function(response){ // success
 
-		              	//error
+			                      if(!response)
+			                      {
+			                            
+				                      showModalConfirmation(
+				                                      "Add to Campaign",
+				                                      "Please configure DKIM and SPF settings to send campaign emails to more than "+ MAX_LIMIT +" contacts.",
+				                                       function()
+				                                      {
+				                                      		  enable_save_button(saveButton);
+				                                              Backbone.history.navigate("api-analytics", { trigger : true });
+
+				                                      },  function()
+				                                      {
+				                                      		enable_save_button(saveButton);
+
+				                                            Backbone.history.navigate("contacts", { trigger : true });
+				                                           
+				                                      }, function()
+				                                      {
+				                                      	enable_save_button(saveButton);
+				                                      },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+				                      				
+				                      	return;
+			                  		}
+
+			                  		var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+
+									var json = {};
+									json.contact_ids = id_array;
+									postBulkOperationData(url, json, $form, undefined, function(data)
+									{
+										enable_save_button(saveButton);
+									}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+				              	}, 
+				              	function(){
+				              	//error
+								});// end of validating whitelabel accessurlajax call
+							}//end of else
+					 }, 
+		              function(error){
+
+		              	console.log("Error" + error);
 
 						});
 				}
@@ -1338,13 +1379,23 @@ function getAvailableContacts()
 			current_view_contacts_count = App_Companies.contacts_Company_List.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
+		else if ((_agile_get_prefs("company_filter") || _agile_get_prefs("dynamic_company_filter")) && company_util.isCompany() && App_Companies.companiesListCountView && App_Companies.companiesListCountView.collection.toJSON()[0] && App_Companies.companiesListCountView.collection.toJSON()[0].count)
+		{
+			current_view_contacts_count = App_Companies.companiesListCountView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
+		else if ((_agile_get_prefs("contact_filter") || _agile_get_prefs("dynamic_contact_filter")) && Current_Route == "contacts" && App_Contacts.contactsListCountView && App_Contacts.contactsListCountView.collection && App_Contacts.contactsListCountView.collection.toJSON()[0] && App_Contacts.contactsListCountView.collection.toJSON()[0].count)
+		{
+			current_view_contacts_count = App_Contacts.contactsListCountView.collection.toJSON()[0].count;
+			return current_view_contacts_count;
+		}
 		else if (company_util.isCompany() && App_Companies.companiesListView && App_Companies.companiesListView.collection.toJSON()[0] && App_Companies.companiesListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
-		 else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;

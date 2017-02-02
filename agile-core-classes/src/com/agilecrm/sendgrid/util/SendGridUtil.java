@@ -24,6 +24,7 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.backend.ModuleUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
@@ -74,6 +75,11 @@ public class SendGridUtil
 	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
 	
 	public static final String IP_POOL = "ip_pool";
+	
+	/**
+	 * Sendgrid user unlimited email sent
+	 */
+	public static final int SENDGRID_EMAIL_SENT_MAX_LIMIT = 50000;
 	
 	/**
 	 * Sendgrid whitelabled sub domain key
@@ -874,9 +880,8 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		
 		String whoisData=HTTPUtil.accessURL(WHO_IS_API_URL + emailDomain);
 		
-		long sixtyDaysBackTime = System.currentTimeMillis()/1000;
-		sixtyDaysBackTime = sixtyDaysBackTime -5092000;
-		
+		long thirtyDaysBackTime = (System.currentTimeMillis()/1000) - (30 * 24 * 60 * 60);
+				
 		String format = "yyyy-MM-dd";
 		
 		System.out.println(whoisData);
@@ -901,17 +906,86 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			
 			long createdTimeMillisecond = date.getTime()/1000;
 			
-			if(createdTimeMillisecond <= sixtyDaysBackTime)
-				return true;
+			if(createdTimeMillisecond >= thirtyDaysBackTime)
+				return false;
 		}
 		
 		System.out.println("Email Domain name and created date" + creationDate + "   "+emailDomain);
 	}
 	catch(Exception e){
 		System.out.println("Exception occured while validatin email domain on whois server : " +e.getMessage());
-		return false;
 	    }
-	return false;
+	return true;
+	}
+	
+	/**
+	 * 
+	 * @param domain
+	 * @return
+	 */
+	public static int getSubUserEmailLimit(String domain)
+	{
+	  try
+		{
+			  int emailSent = 0;
+			  long thirtyDayTime = 90 * 24 * 60 * 60 * 1000l ;
+			  long currentTime = System.currentTimeMillis();
+			 
+			  long statsStrartTime = currentTime - thirtyDayTime;
+			  
+			  //Fetch domain reputation from sendgrid
+			  JSONArray reputationOBJ=new JSONArray(SendGridSubUser.getSendGridUserReputation(domain, null));	
+			  int reputation = reputationOBJ.getJSONObject(0).getInt(SendGridSubUser.REPUTATION);
+			  
+			  //This is for all user
+			  if(reputation <= 60)
+				  return 100;
+
+			  long domainCreatedTimestamps = BillingRestrictionUtil.getBillingRestrictionFromDB().created_time;
+			  
+			  //if domain is old then 
+			  if(domainCreatedTimestamps < SendGridSubUser.DOMAIN_CREATED_TIME)
+			     {
+					  return SENDGRID_EMAIL_SENT_MAX_LIMIT;
+			     }
+			  else
+			    {
+				  //IF domain created date is more than 3 Month then took last three month email stats
+				  if(statsStrartTime < SendGridSubUser.DOMAIN_CREATED_TIME * 1000L)
+					  statsStrartTime = SendGridSubUser.DOMAIN_CREATED_TIME * 1000L;
+				   
+				  //Fetch email sent from sendgrid
+				  emailSent = SendGridSubUser.getSendgridEmailSent(domain, statsStrartTime);
+				  
+				  System.out.println("Email sent " + emailSent + " Reputation " + reputation + " Domain " + domain);
+				  
+				  if(emailSent <= 5000)
+				  {
+					  if(reputation > 80)
+						  return 500;
+					  
+					  if(reputation > 60)
+						  return 200;
+				  }
+				  else
+				  {
+					  if(reputation > 90)
+						  return 10000;
+					  
+					  if(reputation > 80)
+						  return 2000;
+					  
+					  if(reputation > 60)
+						  return 500;
+				  }
+			  }	  
+		}
+		catch (Exception e)
+		{
+		    System.err.println("Exception occured while fetching sendgrid per day limit.." + e.getMessage());
+		    e.printStackTrace();
+		}
+	  return 500;
 	}
 	
 }

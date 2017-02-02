@@ -39,12 +39,12 @@
 
 {{else}}
 
-<td data="{{id}}" class="data">
+<td data="{{id}}" class="data deal_name">
   <div class="text-ellipsis" style="width:10em"> 
     <a class="text-cap">{{name}}</a>
   </div>
 </td>
-<td value="{{expected_value}}"><div class="text-ellipsis" style="width:7em">
+<td value="{{expected_value}}" class="deal_value"><div class="text-ellipsis" style="width:7em">
     {{#if_equals currency_conversion_value "0"}}
       <span>{{currencyType currency_type}}{{currency_conversion_value}}</span>
     {{else}}
@@ -59,8 +59,8 @@
          {{/if}}
       {{/if}}
     {{/if_equals}}</div></td>
-<td><div class="text-ellipsis" style="width:10em">{{milestone}} ({{probability}}%) </div></td>
-<td>
+<td class="deal_milestone"><div class="text-ellipsis" style="width:10em">{{milestone}} ({{probability}}%) </div></td>
+<td class="deal_related_to">
 <div  style="width:10em">
   <div class="inline-block no-wrap overflow-hidden" style="width:9em;">
   {{#each contacts}}
@@ -77,8 +77,8 @@
   {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </div>
 </td>
-<td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
-<td>
+<td class="text-muted deal_close_date"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
+<td class="deal_owner">
 <div class="text-ellipsis" style="width:5em">
     <div class="thumb-sm avatar">
        {{#if owner}}
@@ -89,6 +89,7 @@
     </div>
 </div>
 </td>
+<td class="text-muted deal_created_date"><div class="text-ellipsis" style="width:10em">{{#if created_time}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDateInFormat  created_time}}</time>{{/if}}</div></td>
 {{/is_mobile}}
 </script>
 
@@ -156,12 +157,13 @@
 
                       <thead>
                         <tr>
-                            <th>{{agile_lng_translate 'deal-view' 'name'}}</th>
-                            <th>{{agile_lng_translate 'deal-view' 'value'}}</th>
-                            <th>{{agile_lng_translate 'deal-view' 'milestone'}}</th>
-                            <th>{{agile_lng_translate 'deal-view' 'related-to'}}</th>
-                            <th>{{agile_lng_translate 'deal-view' 'close-date'}}</th>
-                            <th>{{agile_lng_translate 'deal-view' 'owner'}}</th>
+                            <th class="deal_name">{{agile_lng_translate 'deal-view' 'name'}}</th>
+                            <th class="deal_value">{{agile_lng_translate 'deal-view' 'value'}}</th>
+                            <th class="deal_milestone">{{agile_lng_translate 'deal-view' 'milestone'}}</th>
+                            <th class="deal_related_to">{{agile_lng_translate 'deal-view' 'related-to'}}</th>
+                            <th class="deal_close_date">{{agile_lng_translate 'deal-view' 'close-date'}}</th>
+                            <th class="deal_owner">{{agile_lng_translate 'deal-view' 'owner'}}</th>
+                            <th class="deal_created_date">{{agile_lng_translate 'Tickets' 'Created-Date'}}</th>
                         </tr>
                     </thead>
                     <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
@@ -181,3 +183,51 @@
 </div>
 </script>
 
+<script id="deal-custom-fields-template" type="text/html">
+  <li>
+    <a href="javascript:void(0);" class="p-b-none">
+      <label class="i-checks i-checks-sm contactcoloumn "><input name="name" value = "name" type="checkbox" class="choose-column-chbx"><i></i>
+      </label>{{agile_lng_translate 'deal-view' 'name'}}
+    </a>
+  </li>
+  <li>
+    <a href="javascript:void(0);" class="p-b-none">
+      <label class="i-checks i-checks-sm contactcoloumn "><input name="value" value="value" type="checkbox" class="choose-column-chbx"><i></i>
+      </label>{{agile_lng_translate 'deal-view' 'value'}}
+    </a>
+  </li>
+  <li>
+    <a href="javascript:void(0);" class="p-b-none">
+      <label class="i-checks i-checks-sm contactcoloumn "><input name="milestone" value="milestone" type="checkbox" class="choose-column-chbx"><i></i>
+      </label>{{agile_lng_translate 'deal-view' 'milestone'}}
+    </a>
+  </li>
+  <li>
+    <a href="javascript:void(0);" class="p-b-none">
+      <label class="i-checks i-checks-sm contactcoloumn "><input name="related_to" value="related_to" type="checkbox" class="choose-column-chbx"><i></i>
+      </label>{{agile_lng_translate 'deal-view' 'related-to'}}
+    </a>
+  </li>
+  <li>
+    <a href="javascript:void(0);" class="p-b-none">
+      <label class="i-checks i-checks-sm contactcoloumn "><input name="close_date" value="close_date" type="checkbox" class="choose-column-chbx"><i></i>
+      </label>{{agile_lng_translate 'deal-view' 'close-date'}}
+    </a>
+  </li>
+  <li>
+    <a href="javascript:void(0);" class="p-b-none">
+      <label class="i-checks i-checks-sm contactcoloumn "><input name="owner" value="owner" type="checkbox" class="choose-column-chbx"><i></i>
+      </label>{{agile_lng_translate 'deal-view' 'owner'}}
+    </a>
+  </li>
+  <div id="custom-fields-group"class="" ></div>                      
+</script>
+
+<script id="deal-custom-fields-append-template" type="text/html">
+  <li>
+    <a href="javascript:void(0);" class="p-b-none">
+      <label class="i-checks i-checks-sm contactcoloumn"><input name="{{dealColumLabel field_label}}" value="{{dealColumLabel field_label}}"type="checkbox" class="choose-column-chbx"><i></i>
+      </label>{{field_label}}
+    </a>
+  </li>
+</script>

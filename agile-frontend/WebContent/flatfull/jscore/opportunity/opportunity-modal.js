@@ -442,22 +442,23 @@ function updateDeal(ele, editFromMilestoneView)
 
 	deserializeForm(value, $("#opportunityUpdateForm"));
 
-   if($('#color1' , dealForm).is(':hidden')){
-   	$('.colorPicker-picker', dealForm).remove();
-    $('#color1' , dealForm).colorPicker();
-	} 
+  /* if($('#color1' , dealForm).is(':hidden')){
+   		$('.colorPicker-picker', dealForm).remove();
+    	$('#color1' , dealForm).colorPicker();
+	}*/ 
     // Disable color input field
     $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
 
 
- var color = {"VIOLET":"#ee82ee","INDIGO":"#4b0082","BLUE":"#0000ff","GREEN":"#00ff00","YELLOW":"#ffff00"
-		               ,"ORANGE":"#ff6600","RED":"#ff0000","BLACK":"#000000","WHITE":"#ffffff","GREY":"#808080"};
+ var color = {"VIOLET":"#E1BEE7","INDIGO":"#C5CAE9","BLUE":"#BBDEFB","GREEN":"#C8E6C9","YELLOW":"#FFF9C4"
+		               ,"ORANGE":"#FFE0B2","RED":"#FFCDD2","BLACK":"#000000","WHITE":"#FFFFFF","GREY":"#BDBDBD","BROWN":"#D7CCC8"};
 
     var colorcode = color[value.colorName];
     if(!colorcode)
-      	  colorcode = "#808080";
+      	  colorcode = "#FFFFFF";
     $('#color1' , dealForm).attr('value', colorcode);
-    $('.colorPicker-picker', dealForm).css("background-color", colorcode);
+    $(".bcp-select" , dealForm).children().removeClass('bcp-selected');
+    $(colorcode, dealForm).children().addClass('bcp-selected');
     $('#tags-new-person', dealForm).val('');
      if (value.tagsWithTime && value.tagsWithTime.length)
 		{
@@ -624,11 +625,11 @@ function show_deal()
 {
 	$("#newDealModal").html(getTemplate("new-deal-model")).modal('show');
 	var e = $("#opportunityForm",$("#newDealModal"));							
-	if($('#color1', e).is(':hidden'))
+	/*if($('#color1', e).is(':hidden'))
 	{
 		$('.colorPicker-picker', e).remove();
 		$('#color1', e).colorPicker();
-	}
+	}*/
 	
 	// Disable color input field
     $('.colorPicker-palette').find('input').attr('disabled', 'disabled');

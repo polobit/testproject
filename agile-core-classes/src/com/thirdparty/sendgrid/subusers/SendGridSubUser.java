@@ -19,6 +19,7 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AgileGlobalPropertiesUtil;
 import com.agilecrm.util.Base64Encoder;
@@ -552,7 +553,7 @@ public class SendGridSubUser extends SendGridLib
 	public static void main(String adf[]){
 		try
 		{
-			System.out.println(getPerDayEmailSent("prashannjeet"));
+			System.out.println(SendGridUtil.getSubUserEmailLimit("prashannjeet"));
 		}
 		catch (Exception e)
 		{
@@ -620,7 +621,7 @@ public class SendGridSubUser extends SendGridLib
 	 */
 	public static int getPerDayEmailSent(String domain)
 	{
-		int emailSent = 0;
+	  int emailSent = 0;
 	  try
 		{
 		  SendGridStats stats=new SendGridStats();
@@ -639,6 +640,40 @@ public class SendGridSubUser extends SendGridLib
 			return emailSent;
 		}
 	  return emailSent;
+	}
+	
+	/**
+	 * This method will fetch sendgrid email sent count 
+	 * 
+	 * @param domain
+	 * @param startTime
+	 * 				- millisecond
+	 * @return
+	 *   int
+	 */
+	public static int getSendgridEmailSent(String domain, long startTime){
+		 int emailSent = 0;
+		  try
+			{
+			  SendGridStats stats=new SendGridStats();
+			  stats.setDuration("month");
+			  
+			  stats.setStartTime(startTime);
+			  
+			  JSONArray responseJSON = new JSONArray(getSubUserStatistics(domain, null, stats));
+			  
+			  for(int index =0; index < responseJSON.length(); index ++)
+			      emailSent += responseJSON.getJSONObject(index).getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT);
+			  
+			  System.out.println("Last three month Email sent Count for domain : " + + emailSent);
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception occured while fetching total email count"  + e.getMessage());
+				e.printStackTrace();
+				return emailSent;
+			}
+		  return emailSent;
 	}
 }
 	
