@@ -148,8 +148,8 @@
                                     </div>
                                     </div>
                                     <div class="btn-group  pull-right add-doc-btn-center">
-                                        <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
-                                        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+                                        <a href="#documents/attachment" class="btn btn-default btn-primary-imp btn-lg-imp btn-sm documents-add m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+                                        <a class="btn btn-default btn-sm btn-primary-imp btn-lg-imp dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
                                         <ul class="dropdown-menu pull-right" style="margin-top:3px;">
                                             <li style="padding:0px 0px;border:0px;"><a href="#documents/edoc" class="edocuments-add">{{agile_lng_translate 'deal-view' 'add-edocument'}}</a></li>
@@ -187,8 +187,8 @@
                     <div class="text">
                         {{agile_lng_translate 'documents' 'you-can-add-document-by-clicking'}}
                     </div>
-                   <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
-                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-edocument'}}</a> 
+                   <a href="#documents/attachment" class="documents-add  btn-lg-imp btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+                    <a href="#documents/edoc" class="edocuments-add btn-lg-imp btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-edocument'}}</a> 
                 </div>
                 <div class="clearfix">
                 </div>
@@ -344,13 +344,13 @@
 <script id="document-etype-select-collection-template" type="text/html">
                
 <div class="wrapper-md lter bg-light b-b agile-page-header">
-       <div class="btn-group dropdown m-l-none documentsheading" style="float: none">
-         <h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'documents' 'document-select-doc-template'}}<small></small></h3>
+       <div class="btn-group dropdown  {{#isNewTheme}}m-l-md{{else}}m-l-none{{/isNewTheme}} documentsheading" style="float: none">
+         <h3 class="m-n font-thin h3 prefs-title ">{{agile_lng_translate 'documents' 'document-select-doc-template'}}<small></small></h3>
        <div>
      </div>
    </div>
-   <div class="pull-right add-btn-mobile add-doc-template-btns">
-        <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp" id="addDocumentTemplate"><span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
+   <div class="pull-right add-btn-mobile add-doc-template-btns {{#isNewTheme}}m-r-md{{/isNewTheme}}">
+        <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp btn-lg-imp" id="addDocumentTemplate"><span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
     </div>
 </div>
 
