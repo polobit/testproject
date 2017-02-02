@@ -222,6 +222,35 @@ public class ContactFilter extends SearchFilter implements Serializable, Compara
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResultsForFilter(this, count, cursor,
 		orderBy);
     }
+    
+    /**
+     * Queries contacts based on {@link List} of {@link SearchRule} specified,
+     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+     * and returns search results using {@link AppengineSearch}.
+     * 
+     * @return {@link Collection}
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection queryContacts(Integer count, String cursor, String orderBy, boolean isNumberFoundAccuracyRequired)
+    {
+
+	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResultsForFilter(this, count, cursor,
+		orderBy, isNumberFoundAccuracyRequired);
+    }
+    
+    /**
+     * Queries contacts based on {@link List} of {@link SearchRule} specified,
+     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+     * and returns search results using {@link AppengineSearch}.
+     * 
+     * @return {@link Collection}
+     */
+    @SuppressWarnings("rawtypes")
+    public int filteredQueryContactsCount()
+    {
+
+	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResultsCountForFilter(this);
+    }
 
     /**
      * Queries contacts based on {@link List} of {@link SearchRule} specified,

@@ -32,7 +32,8 @@ import com.googlecode.objectify.Query;
 public class ContactFilterUtil
 {
 
-    public static List<Contact> getContacts(String id, Integer count, String cursor, String orderBy)
+    public static List<Contact> getContacts(String id, Integer count, String cursor, String orderBy,
+    		boolean isNumberFoundAccuracyRequired)
     {
 	try
 	{
@@ -83,7 +84,7 @@ public class ContactFilterUtil
 	     */
 
 	    // Queries based on list of search rules in the filter object
-	    return new ArrayList<Contact>(filter.queryContacts(count, cursor, orderBy));
+	    return new ArrayList<Contact>(filter.queryContacts(count, cursor, orderBy, isNumberFoundAccuracyRequired));
 	}
 	catch (Exception e)
 	{
@@ -358,6 +359,44 @@ public class ContactFilterUtil
 	catch (SearchException e)
 	{
 	    return new ArrayList<Contact>();
+	}
+    }
+    
+    public static int getContactsCount(String id)
+    {
+	try
+	{
+	    // Checks if Filter id contacts "system", which indicates the
+	    // request is to load results based on the default filters provided
+	    if (id.contains("system-"))
+	    {
+		return 0;
+	    }
+
+	    // If Request is not on default filters, then fetch Filter based on
+	    // id
+	    ContactFilter filter = ContactFilter.getContactFilter(Long.parseLong(id));
+
+	    System.out.println(filter);
+	    System.out.println(filter.rules);
+
+	    SearchRule rule = new SearchRule();
+	    rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = filter.contact_type.toString();
+	    filter.rules.add(rule);
+
+	    // Sets ACL condition
+	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		    UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules, null);
+	    
+	    // Queries based on list of search rules in the filter object
+	    return filter.filteredQueryContactsCount();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return 0;
 	}
     }
 }

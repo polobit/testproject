@@ -31,7 +31,20 @@ var contacts_view_loader = {
 		{
 			App_Contacts.contactsListView = undefined;
 			CONTACTS_HARD_RELOAD = false;
+
+			//If static filter or dynamic filter selects, get filtered contacts count and set to view
+			if(_agile_get_prefs("dynamic_contact_filter") || _agile_get_prefs("contact_filter"))
+			{
+				App_Contacts.contactsListCountView = undefined;
+				contacts_view_loader.getAndSetContactsCount(el, tag_id);
+			}
 		}
+		else if(_agile_get_prefs("dynamic_contact_filter") || _agile_get_prefs("contact_filter"))
+		{
+			contacts_view_loader.getAndSetContactsCount(el, tag_id);
+		}
+
+		
 
 		//To disable bulk action buttons and remove check for select all checkbox
 		this.disableBulkActionBtns();
@@ -64,7 +77,10 @@ var contacts_view_loader = {
 					if(App_Contacts.contactsListView.collection.models.length > 0 && !App_Contacts.contactsListView.collection.models[0].get("count"))
 					{
 						// Call to get Count 
-						getAndUpdateCollectionCount("contacts", el);					
+						if(!_agile_get_prefs("dynamic_contact_filter") && !_agile_get_prefs("contact_filter"))
+						{
+							getAndUpdateCollectionCount("contacts", el);
+						}		
 					}
 					else
 					{
@@ -215,20 +231,32 @@ var contacts_view_loader = {
 		return;
 	},
 
-	setUpContactsCount : function(el)
+	setUpContactsCount : function(el, count)
 	{
-		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
+		if(!_agile_get_prefs("dynamic_contact_filter") && !_agile_get_prefs("contact_filter") && App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
 		{
 			var count = 0;
 			if(App_Contacts.contactsListView.collection.models.length > 0) {
 				count = App_Contacts.contactsListView.collection.models[0].attributes.count || App_Contacts.contactsListView.collection.models.length;
 			}
+			var count_message = "<small> (" + count + " Total) </small>";
+			if(window.location.hash == "#contacts")
+			{
+				$('#contacts-count', el).html(count_message);
+			}
+		}
+		else if((_agile_get_prefs("dynamic_contact_filter") || _agile_get_prefs("contact_filter")) && count != undefined)
+		{
 			var count_message;
 			if (count > 9999 && (_agile_get_prefs('contact_filter') || _agile_get_prefs('dynamic_contact_filter')))
 				count_message = "<small> (" + 10000 + "+ Total) </small>" + '<span style="vertical-align: text-top; margin-left: 0px">' + '<img border="0" src="' + updateImageS3Path("/img/help.png") + '"' + 'style="height: 10px; vertical-align: middle" rel="popover"' + 'data-placement="bottom" data-title="Lead Score"' + 'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' + 'id="element" data-trigger="hover">' + '</span>';
 			else
 				count_message = "<small> (" + count + " Total) </small>";
 			$('#contacts-count', el).html(count_message);
+
+			// Show bulk action checkbox
+			$(".thead_check", el).closest("label").css("visibility", "visible");
+			$("table", el).removeClass("hide-head-checkbox");
 		}
 	},
 
@@ -239,6 +267,48 @@ var contacts_view_loader = {
 		$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
 		$("#bulk-action-btns button").addClass("disabled");
 		$("#contactTabelView").removeClass("disabled");
+	},
+
+	getAndSetContactsCount : function(el, tag_id)
+	{
+		abortCountQueryCall();
+		
+		// Hide bulk action checkbox
+    	$(".thead_check", el).closest("label").css("visibility", "hidden");
+    	$("table", el).addClass("hide-head-checkbox");
+
+		var that = this;
+		var url = this.getContactsUrl(tag_id);
+		var slateKey = getContactPadcontentKey(url);
+		var templateKey = this.getContactsTemplateKey();
+		var individual_tag_name = this.getContactsIndividualTagName();
+		var postData = {'filterJson': this.getPostData()};
+		var sortKey = this.getContactsSortKey();
+
+		if(!App_Contacts.contactsListCountView)
+		{
+			App_Contacts.contactsListCountView = new  Base_Collection_View({ url : url+'/filter-count', sort_collection : false, templateKey : templateKey, individual_tag_name : individual_tag_name,
+				post_data: postData, cursor : true, page_size : getMaximumPageSize(), global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
+				{
+
+				}
+			});
+
+			App_Contacts.contactsListCountView.collection.fetch({
+				success : function(data)
+				{
+					if(data && data.models[0] && data.models[0].get("count") != undefined)
+					{
+						contacts_view_loader.setUpContactsCount(el, data.models[0].get("count"));
+					}
+				}
+			});
+		}
+		else
+		{
+			contacts_view_loader.setUpContactsCount(el, App_Contacts.contactsListCountView.collection.models[0].get("count"));
+		}
+		
 	},
 
 	buildContactsView : function(el, tag_id)

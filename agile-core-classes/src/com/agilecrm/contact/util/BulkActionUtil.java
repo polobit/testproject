@@ -354,7 +354,7 @@ public class BulkActionUtil
 	if (criteria.equals("#contacts"))
 	    return ContactUtil.getAllContacts(ENTITIES_FETCH_LIMIT, cursor);
 
-	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null, true));
     }
 
     /**
@@ -374,7 +374,7 @@ public class BulkActionUtil
 	if (criteria.equalsIgnoreCase("Companies"))
 	    return ContactUtil.getAllCompanies(ENTITIES_FETCH_LIMIT, cursor);
 
-	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null, true));
     }
 
     /**
@@ -485,7 +485,7 @@ public class BulkActionUtil
 	if (criteria.equalsIgnoreCase("Leads"))
 	    return ContactUtil.getAllCompanies(ENTITIES_FETCH_LIMIT, cursor);
 
-	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null, true));
     }
     
     /**

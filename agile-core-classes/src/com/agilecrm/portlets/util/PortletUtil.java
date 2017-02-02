@@ -335,13 +335,13 @@ public class PortletUtil {
 			else if(json.get("filter").toString().equalsIgnoreCase("companies"))
 				contactsList=ContactUtil.getAllCompaniesByOrder(50, null,sortKey);
 			else if(json.get("filter").toString().equalsIgnoreCase("recent"))
-				contactsList=ContactFilterUtil.getContacts("system-RECENT", 50, null,sortKey);
+				contactsList=ContactFilterUtil.getContacts("system-RECENT", 50, null,sortKey, true);
 			else if(json.get("filter").toString().equalsIgnoreCase("myContacts"))
-				contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 50, null,sortKey);
+				contactsList=ContactFilterUtil.getContacts("system-CONTACTS", 50, null,sortKey, true);
 			else if(json.get("filter").toString().equalsIgnoreCase("leads"))
-				contactsList=ContactFilterUtil.getContacts("system-LEADS", 50, null,sortKey);
+				contactsList=ContactFilterUtil.getContacts("system-LEADS", 50, null,sortKey, true);
 			else
-				contactsList=ContactFilterUtil.getContacts(json.get("filter").toString(), 50, null,sortKey);
+				contactsList=ContactFilterUtil.getContacts(json.get("filter").toString(), 50, null,sortKey, true);
 		}
 		return contactsList;
 	}
