@@ -77,6 +77,11 @@ public class SendGridUtil
 	public static final String IP_POOL = "ip_pool";
 	
 	/**
+	 * Sendgrid user unlimited email sent
+	 */
+	public static final int SENDGRID_EMAIL_SENT_MAX_LIMIT = 50000;
+	
+	/**
 	 * Sendgrid whitelabled sub domain key
 	 */
 	private static final String SENDGRID_WHITELABEL_SUBDOMAIN = "agle";
@@ -941,7 +946,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			  //if domain is old then 
 			  if(domainCreatedTimestamps < SendGridSubUser.DOMAIN_CREATED_TIME)
 			     {
-					  return 50000;
+					  return SENDGRID_EMAIL_SENT_MAX_LIMIT;
 			     }
 			  else
 			    {

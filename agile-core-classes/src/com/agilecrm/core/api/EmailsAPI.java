@@ -749,7 +749,7 @@ public String getSendgridReputation(@QueryParam("selectedCount") int selectedCou
 		  
 		  int remainingEmail = 0;
 		  
-		  if(emailSentLimit != 50000){
+		  if(emailSentLimit != SendGridUtil.SENDGRID_EMAIL_SENT_MAX_LIMIT){
 			//Fetch per day email sent count for current day
 			  int todayEmailSent = SendGridSubUser.getPerDayEmailSent(domain);
 			  remainingEmail = emailSentLimit - todayEmailSent;
