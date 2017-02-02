@@ -1415,6 +1415,13 @@ var SettingsRouter = Backbone.Router
 										  return;
 									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
+
+									// Hide top/left menu items for new theme 
+									if(CURRENT_USER_PREFS.theme == "15") {
+  										$("#menuPosition option[value='top']").hide();
+ 										$("#menuPosition option[value='left']").hide();
+ 									}
+
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
 									$("#layout").val(CURRENT_USER_PREFS.layout);

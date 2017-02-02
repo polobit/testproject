@@ -943,3 +943,11 @@ function isSubscriptionStatusDeleted(){
 		return true;
 	return false;
 }
+
+// String prototype includes function
+if (!String.prototype.includes) {
+     String.prototype.includes = function() {
+         'use strict';
+         return String.prototype.indexOf.apply(this, arguments) !== -1;
+     };
+ }
