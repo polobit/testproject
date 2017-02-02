@@ -114,10 +114,7 @@ var SettingsRouter = Backbone.Router
 							
 							var prefsData = new BaseModel(data);
 							that.userPrefsProfile(prefsData);
-							if(data.adminApplySign==true){
-                                $('#loading-editor').parent().css("pointer-events","none");
-                                $('#adminsign_msg').show();
-                            }
+							
 							$('#prefs-tabs-content a[href="#settings-user-prefs"]').on('click', function(e) {
 								e.preventDefault();
 								that.userPrefsProfile(prefsData);
@@ -558,7 +555,7 @@ var SettingsRouter = Backbone.Router
 							$("#server_host").val(smtp_model.server_url);
 
 							if(el.find("div [id = server_host]").val() == "smtp.live.com" 
-									|| el.find("div [id = server_host]").val() == "smtp.office365.com") {
+									|| el.find("div [id = server_host]").val() == "smtp.office365.com"){
 								el.find("div [id = useSSLCheckboxHolder]").hide();
 							} else {
 								el.find("div [id = useSSLCheckboxHolder]").show();
@@ -882,7 +879,6 @@ var SettingsRouter = Backbone.Router
 						appendItemCallback : function(el)
 				        {
 					      $("time.campaign-created-time", el).timeago();
-
 				        }
 					});
 
@@ -920,9 +916,6 @@ var SettingsRouter = Backbone.Router
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
-					$("#prefs-tabs-content").addClass("col-md-9");
-					var discript = $("#prefs-tabs-content").find(".col-md-3");
-					$("#prefs-tabs-content").after(discript);
 
 					// set up TinyMCE Editor
 					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
@@ -982,9 +975,6 @@ var SettingsRouter = Backbone.Router
 						} });
 
 					$('#prefs-tabs-content').html(view.render().el);
-					$("#prefs-tabs-content").addClass("col-md-9");
-					var discript = $("#prefs-tabs-content").find(".col-md-3");
-					$("#prefs-tabs-content").after(discript);
 
 					/** TinyMCE * */
 
@@ -1342,7 +1332,7 @@ var SettingsRouter = Backbone.Router
 									weekdays : $.fn.datepicker.dates['en'].daysShortExactFromMon,
 									postInit : function()
 									{
-										$('.operationTimeFrom, .operationTimeTill').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
+										$('.operationTimeFrom, .operationTimeTill').timepicker({ 'timeFormat' : 'H:i', 'step' : 30 });
 									}, });
 
 									$(".mini-time").keydown(false).addClass("form-control");
@@ -1415,13 +1405,20 @@ var SettingsRouter = Backbone.Router
 										  return;
 									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
+
+									
+ 									if(CURRENT_USER_PREFS.theme == "15") {
+ 										$("#menuPosition option[value='top']").hide();
+ 										$("#menuPosition option[value='left']").hide();
+ 									}
+
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
 									$("#layout").val(CURRENT_USER_PREFS.layout);
 									if (CURRENT_USER_PREFS.animations == true)
 										$("#animations").attr('checked', true);
 									$('.magicMenu  input:radio[name="theme"]').filter('[value=' + CURRENT_USER_PREFS.theme + ']').attr('checked', true);
-									if (data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
+									if (data.page_size != CURRENT_USER_PREFS.page_size || data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
 										$(".theme-save-status").css("display", "inline");
 									hideTransitionBar();
 									$('#PrefsTab .select').removeClass('select');
@@ -1489,6 +1486,7 @@ var SettingsRouter = Backbone.Router
 			{
 				var prefs_advanced_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-advanced', change : false, reload : true, 
 					postRenderCallback : function(el, data){
+						$('[data-toggle="tooltip"]',el).tooltip();
 					},saveCallback : function(response){
 						console.log(response);
 						// Save language cookie
