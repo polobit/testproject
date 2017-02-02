@@ -5641,7 +5641,7 @@ documents.document-sendemail,Send Email,Send Email,Invia Email ,Отправит
 documents.document-sendcomments,Send Comments,Send Comments,Invia Commenti ,Отправить комментарии,Envoyer des Commentaires
 documents.document-typeoftemplate,Type of Template,Type of Template,Tipo di Modello ,Вид шаблона,Type de Modèle
 documents.document-document-content,Document content,Document content,Contenuto del Documento ,Содержание документа,Contenu du Document
-documents.document-what-are-docs-title,What are documents?,What are documents?,Cosa sono i documenti? ,Что такое документы?,Qu&#39;est-ce que les Documents?
+documents.document-what-are-docs-title,What are Documents?,What are documents?,Cosa sono i documenti? ,Что такое документы?,Qu&#39;est-ce que les Documents?
 documents.document-what-are-docs-para1,1. Documents helps you to build and deliver sales quotes and proposals as well as track presentations and close deals faster with legally binding eSignatures.,1. Documents helps you to build and deliver sales quotes and proposals as well as track presentations and close deals faster with legally binding eSignatures.,1. I Documenti ti aiutano a formulare e consegnare preventivi e proposte di vendita così come le presentazioni dei tracciati  e a chiudere gli affari più velocemente con firme digitali giuridicamente vincolanti. ,1. Документы помогают Вам создавать и доставлять коммерческие предложения&#44; а также отслеживать презентации и закрывать Сделки быстрее с юридически обязательными электронными подписями,1. Les Documents vous aident à développer et à distribuer des devis de vente et des offres ainsi que des présentations du tracé et à fermer plus rapidement vos affaires avec des Signatures numériques juridiquement contraignantes. 
 documents.document-what-are-docs-para2,Generation,Generation,La creazione,Генерация,La Création
 documents.document-what-are-docs-para3,of eDocument is based on Template Selected.Template content is merged with Contact and Deal Selected and rendered.,of eDocument is based on Template Selected.Template content is merged with Contact and Deal Selected and rendered.,di Documenti Elettronici si basa sul Modello Selezionato. Il contenuto del Modello viene unito con il Contatto e lAffare Selezionato e fornito. ,электронного документа основана на выбранном шаблоне. Содержание шаблона объединено с выбранными Контактом и Сделкой.,d&#39;un document électronique est fondée sur le Modèle Sélectionné. Le contenu du modèle est fusionné avec le Contact et l&#39;Affaire Sélectionnés et rendu.
@@ -6967,3 +6967,73 @@ contacts-view.import-upto-10.,000 сделок из CSV-файла,000 сдел�
 prefs-online-calendar.In Person.,Телефон,Телефон,Телефон,Телефон,
 prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short,,,,Faisons ça court
 prefs-online-calendar.let&#39;s chat,let&#39;s chat,,,,Chattons
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+document.edocument,eDocument
+document.created,Created
+document.document-list-templates,Templates
+document.local-drive,Local Drive
+documents.newedocument,New eDocument
+documents.preview-edocument,Preview eDocument 
+Plan-and-upgrade.contacts-or-companies,Contacts/Companies
+campaign.reputation-alert,Due to low on Email reputation&#44; You can not send more than 1000 emails per day from Agile CRM. Please clean up your contact list.
+landingpage-builder.feature,Feature
+landingpage-builder.basic-block,Basic Block
+landingpage-builder.call-to-action,Call to Action
+landingpage-builder.testimonial,Testimonial
+landingpage-builder.faqs,FAQs
+Plan-and-upgrade.contacts-or-companies-limit-msg,Contacts/Companies with your current plan and are trying to subscribe with
+smtp-bulk.per-day-limit,Per day limit
+smtp-bulk.campaign-email,Send campaign emails from
+smtp-bulk.note1,Send personal and campaign emails from your Gmail account.
+smtp-bulk.note2,The value for maximum number of emails to be sent from Agile via your Gmail account. If the per day max limit is reached&#44; then the emails will be sent from Agile’s default email gateway. Moreover the value should be less than or equal to with your Gmail sending limits. For more info on Gmail limits please check
+smtp-bulk.note3,If set to true&#44; the campaign and bulk emails will be sent through this Gmail account.
+smtp-bulk.bounces,Bounces and Spam Complaints will not be shown on Agile Reports.
+smtp-bulk.note4,Maximum number of emails to be sent from Agile via your email provider. Check with your email provider on sending limits for your account. Some email providers may only allow you to send a limited number of emails per day or per hour.
+smtp-bulk.note5,If set to true&#44; the campaign and bulk emails will be sent through email provider. If the per day max limit is reached&#44; then the emails will be sent from Agile’s default email gateway.
+smtp-bulk.note,Note
+smtp-bulk.note6,Send personal and campaign emails from your email provider.
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+email-spam.alert1,Your email reputation has gone low as people have tagged your emails as spam.
+email-spam.alert2,To avoid your business domain being completely blacklisted by mail servers&#44; Agile has reduced the daily sending limit to
+email-spam.alert3,This limit will automatically change in coming days based on the email activity.
+email-spam.reputation,Email Reputation Alert
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
+
+prefs-online-calendar.let&#39;s keep it short,let&#39;s keep it short
+prefs-online-calendar.let&#39;s chat,let&#39;s chat
