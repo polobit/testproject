@@ -962,17 +962,17 @@ li.deal-color:after {
     width: 2px;
 }
 li.deal-color{position:relative;}
-#deals-by-paging-relax-model-list > li.deal-color.YELLOW { background: #FFF9C4 !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.RED { background: #FFCDD2 !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.VIOLET { background: #E1BEE7 !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.INDIGO { background: #C5CAE9 !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.BLUE { background: #BBDEFB !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.GREEN { background: #C8E6C9 !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.ORANGE { background: #FFE0B2 !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.BLACK { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.WHITE { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.GREY { background: #BDBDBD !important;border: 2px solid #dee5e7 !important;}
-#deals-by-paging-relax-model-list > li.deal-color.BROWN { background: #D7CCC8 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.YELLOW { background: #FFF9C4 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.RED { background: #FFCDD2 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.VIOLET { background: #E1BEE7 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.INDIGO { background: #C5CAE9 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.BLUE { background: #BBDEFB !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.GREEN { background: #C8E6C9 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.ORANGE { background: #FFE0B2 !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.BLACK { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.WHITE { background: #FFFFFF !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.GREY { background: #BDBDBD !important;border: 2px solid #dee5e7 !important;}
+ul.milestones > li.deal-color.BROWN { background: #D7CCC8 !important;border: 2px solid #dee5e7 !important;}
 #deals-model-list > li.deal-color.YELLOW:after { background: #FFF9C4 !important}
 #deals-model-list > li.deal-color.RED:after { background: #FFCDD2 !important;}
 #deals-model-list > li.deal-color.VIOLET:after { background: #E1BEE7 !important;}
