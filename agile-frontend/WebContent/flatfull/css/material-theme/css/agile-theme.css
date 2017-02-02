@@ -2884,6 +2884,8 @@ div#need_help_header a:hover {
   font-size: 22px;
   margin-top: -2px;
   margin-bottom: 14px;
+  text-align:center;
+  display:table;
 }
 
 .agile-theme-15 #TrackingTab.nav>li>a {
@@ -3946,4 +3948,8 @@ margin-top:0px;
 }
 #landingPageSettingForm #cnameSettingsFields .form-group label.input-group-addon {
     padding: 14px 10px;
+}
+#edocument-type-select-container #addDocumentTemplate .icon-plus-sign
+{
+  margin-top:-5px;
 }

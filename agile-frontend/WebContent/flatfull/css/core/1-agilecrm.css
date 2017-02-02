@@ -5604,6 +5604,8 @@ div#need_help_header a:hover {
   -ms-flex-align: center;
   align-items: center;
   padding: 0;
+    text-align:center;
+  display:table;
 }
 .dashboard-select .grid-dropdown-menu.dropdown-menu li a span.grid-span-two {
     display: inline-block !important;
