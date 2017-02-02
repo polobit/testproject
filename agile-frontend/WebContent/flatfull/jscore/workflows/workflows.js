@@ -187,6 +187,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // Disables save button to prevent multiple save on click event issues
         disable_save_button($(targetEl));
 
+        // Disable Campaign(unsave) exit popup if Campaign is save 
+        IS_CAMPAIGN_EXIT_POPUP = false;
+
         track_with_save_success_model($(targetEl));
 
         // New Workflow or Copy Workflow
@@ -831,7 +834,6 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
     function popupCampaignContact ()
     {
             $("#workflow-save-popup").modal("hide");
-            IS_CAMPAIGN_SAVE = true;
            
           // window.location.hash="#contacts";
            Backbone.history.navigate("#contacts" , {
@@ -843,7 +845,6 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
      function popupCampaignTrigger ()
      {  
             $("#workflow-save-popup").modal("hide");
-            IS_CAMPAIGN_SAVE = true;
              
              Backbone.history.navigate("#trigger-add" , {
                 trigger: true

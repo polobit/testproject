@@ -225,7 +225,7 @@ $(document).ready(function(){
 SUBSCRIBERS_SELECT_ALL = false;
 
 
-var IS_CAMPAIGN_SAVE = false;
+var IS_CAMPAIGN_EXIT_POPUP = false;
 var SHOW_EXIT_CAMPAIGN_POPUP = false;
 // Observed route triggerring for Some unsafe changes like Campaign.
 Backbone.History.prototype.loadUrl = function (fragment, options) {
@@ -239,17 +239,18 @@ Backbone.History.prototype.loadUrl = function (fragment, options) {
     try{
     	// Validation for unsave Campaign, If we are in middle of designing a Campaign and trigger another route then show confirmation popup
 	    //if (is_campaign_unsave && fragment === void (0) && options === void (0) && this.confirmationDisplay !== void(0))
-	    if (is_campaign_unsave && SHOW_EXIT_CAMPAIGN_POPUP == false && $('#disable-switch').attr('data') == 'false' && IS_CAMPAIGN_SAVE == false)
-	    {   	    	
-	    	$("#agile-menu-navigation-container").html(getTemplate("marketing-menu-items", {due_tasks_count : due_tasks_count}));
-	    	if(nextRoute == 'navigate-dashboard')
+	    if (is_campaign_unsave && SHOW_EXIT_CAMPAIGN_POPUP == false && IS_CAMPAIGN_EXIT_POPUP == true)
+	    {	    	
+	    	if(nextRoute == 'navigate-dashboard'){
+	    		$("#agile-menu-navigation-container").html(getTemplate("marketing-menu-items", {due_tasks_count : due_tasks_count}));
 	    		$('[id="rolecontainer"]').text('MARKETING');
+	    	}
 	    	SHOW_EXIT_CAMPAIGN_POPUP = true;	
 			var response = false;
 			// Showing modal for unsave Campaign
 	    	showModalConfirmation(
-					"Campaign Alert",
-					"There are unsave changes, Do you want to continue?",
+					"{{agile_lng_translate 'landingpage-builder' 'are-you-sure'}} ?",
+					"{{agile_lng_translate 'landingpage-builder' 'back-modal-info'}}",
 					function()
 					{
 						// Yes callback
@@ -273,13 +274,13 @@ Backbone.History.prototype.loadUrl = function (fragment, options) {
 
 						SHOW_EXIT_CAMPAIGN_POPUP = false;
 						return;			   
-					}, "Yes", "No");
+					}, "{{agile_lng_translate 'landingpage-builder' 'leave-the-page'}}", "{{agile_lng_translate 'landingpage-builder' 'stay-on-the-page'}}");
 	    	// Stay on same page while Exit Campaign popup response
 	    	Backbone.history.navigate(currentRoute); 
 		    return this;
 	    }
 	    else{ 
-	    	IS_CAMPAIGN_SAVE = false;
+	    	IS_CAMPAIGN_EXIT_POPUP = false;
 		    //this.confirmationDisplay = true;
 		    return _.any(Backbone.history.handlers, function (handler) {
 		        if (handler.route.test(nextRoute)) {
@@ -315,6 +316,9 @@ function getCampaignAction(previous_route){
 			if(route[0] && route[0] == 'workflow'){
 				if(route[1] && typeof(parseInt(route[1])) == 'number')
 					is_campaign_unsave = true;
+			}
+			if(route[0] && route[0] == 'workflow-add'){
+				is_campaign_unsave = true;
 			}
 		}
 		return is_campaign_unsave;
