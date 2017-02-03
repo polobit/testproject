@@ -912,6 +912,10 @@ $('#' + id).on('click', '#import-leads', function(e)
 			{
 				scope = "COMPANY";
 			}
+			else if($("#import-deals").length > 0)
+			{
+				scope = "DEAL";
+			}
 			showCustomFieldModel({"scope" : scope, "field_label" : field_label, "Current_Route" : Current_Route});
 			App_Contacts.SELECTED_OPTION_ROW = $(e.currentTarget).parents("tr").index();
 			$("#selected-row", $("#custom-field-add-modal")).val(App_Contacts.SELECTED_OPTION_ROW);

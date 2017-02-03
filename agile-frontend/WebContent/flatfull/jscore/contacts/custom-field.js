@@ -227,6 +227,16 @@ function showCustomFieldModel(data)
 							$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+value.field_label);
 						}
 					}
+					else if(Current_Route && Current_Route == "import-deals")
+					{
+						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(value);
+						if(value.scope == "DEAL" && $("#import-deals").length > 0)
+						{
+							var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+							$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(value));
+							$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+value.field_label);
+						}
+					}
 					else
 					{
 						var custom_field_model_json;
@@ -284,6 +294,16 @@ function showCustomFieldModel(data)
 				{
 					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(cuModel);
 					if((cuModel.scope == "CONTACT" && $("#import-contacts").length > 0) || (cuModel.scope == "COMPANY" && $("#import-comp").length > 0))
+					{
+						var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+						$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(cuModel));
+						$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+cuModel.field_label);
+					}
+				}
+				else if(Current_Route && Current_Route == "import-deals" && cuModel)
+				{
+					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(cuModel);
+					if(cuModel.scope == "DEAL" && $("#import-deals").length > 0)
 					{
 						var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
 						$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(cuModel));
