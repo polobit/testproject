@@ -919,7 +919,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 	}
 	
 	/**
-	 * 
+	 * This method is used for fetching per day limit of email sent
 	 * @param domain
 	 * @return
 	 */
@@ -986,6 +986,41 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		    e.printStackTrace();
 		}
 	  return 500;
+	}
+	
+	/**
+	 * This method will return per day remaining email count
+	 * in json format
+	 * 
+	 * @param domain
+	 * 
+	 * @return boolean
+	 */
+	public static boolean checkEmailRemainingLimit(String domain){
+		
+		try
+		{
+			  //Fetch email limit of domain
+			  int emailSentLimit = SendGridUtil.getSubUserEmailLimit(domain);
+			  
+			  int remainingEmail = 0;
+			  
+			  if(emailSentLimit != SendGridUtil.SENDGRID_EMAIL_SENT_MAX_LIMIT){
+				//Fetch per day email sent count for current day
+				  int todayEmailSent = SendGridSubUser.getPerDayEmailSent(domain);
+				  remainingEmail = emailSentLimit - todayEmailSent;
+			  }
+			  
+			  if(remainingEmail <= 0)
+				  return false;
+			  		  
+		}
+		catch (Exception e)
+		{
+		    System.err.println("Exception occured while checking sendgrid per day limit and remaining email count.." + e.getMessage());
+		    e.printStackTrace();
+		}
+		return true;
 	}
 	
 }
