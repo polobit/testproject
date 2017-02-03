@@ -218,7 +218,7 @@ var contacts_view_loader = {
 
 	setUpContactsCount : function(el)
 	{
-		if(!_agile_get_prefs("dynamic_contact_filter") && !_agile_get_prefs("contact_filter") && App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
+		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
 		{
 			var count = 0;
 			if(App_Contacts.contactsListView.collection.models.length > 0) {
