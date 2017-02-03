@@ -1305,7 +1305,14 @@ var SettingsRouter = Backbone.Router
 									        [ 'insert', [ 'link' ] ] ],*/
 									        height:'100',
 									         onImageUpload: function(files, editor, welEditable) {
+									         if(files[0].name.match(/\.(jpg|jpeg|png|gif)$/))
                                               sendFile(files[0],editor,welEditable);
+                                          else{
+                                          	$("#image_format_error").text("{{agile_lng_translate 'prefs-online-calendar' 'image_format_error_message'}}");
+                                          	setTimeout(function(){
+                                          		$("#image_format_error").text("");
+                                          	},2000);
+                                          }
                                              }
 									     });
 										 
