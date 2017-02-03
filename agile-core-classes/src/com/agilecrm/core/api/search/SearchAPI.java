@@ -127,7 +127,7 @@ public class SearchAPI
 	}
 
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
-		cursor, type, false);
+		cursor, type, true);
     }
 
     /**

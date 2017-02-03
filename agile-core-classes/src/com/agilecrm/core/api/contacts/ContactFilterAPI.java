@@ -129,9 +129,9 @@ public class ContactFilterAPI
     {
 	System.out.println("cursor : " + cursor);
 	if (!StringUtils.isEmpty(count))
-	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey, false);
+	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey, true);
 
-	return ContactFilterUtil.getContacts(id, null, null, sortKey, false);
+	return ContactFilterUtil.getContacts(id, null, null, sortKey, true);
     }
     
     /**
@@ -225,7 +225,7 @@ public class ContactFilterAPI
 	// Sets ACL condition
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
 		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
-	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey, false));
+	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey, true));
     }
     
     @POST

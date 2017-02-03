@@ -1141,7 +1141,7 @@ public class QueryDocument<T> implements QueryInterface
     public Collection<T> processQuery(String query, Integer page, String cursor, String orderBy, 
     		boolean isNumberFoundAccuracyRequired)
     {
-    	return processTextsearchQuery(query, page, cursor, orderBy, isNumberFoundAccuracyRequired, true);
+    	return processTextsearchQuery(query, page, cursor, orderBy, isNumberFoundAccuracyRequired, false);
     }
     
     public Collection<T> processTextsearchQuery(String query, Integer page, String cursor, String orderBy, 
