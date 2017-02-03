@@ -11,10 +11,22 @@ $(function()
 	
 
 
-	$('#content').on('click', '.Asterisk_call', function(e)
-	{
+	$('#content').on('click', '.Asterisk_call', function(e){
 	  	e.preventDefault();
 	  	e.stopPropagation(); 
+
+	  	/*var evt = document.createEvent('Event');
+		evt.initEvent('myCustomEvent', true, false);
+		document.dispatchEvent(evt);
+
+	  	var xhr = new XMLHttpRequest();
+		xhr.open("GET", "http://192.99.242.90:7280?action=login&username=agile&secret=gaWQTha72JJA", true);
+		xhr.onreadystatechange = function() {
+		  if (xhr.readyState == 4) {
+		    var resp = eval("(" + xhr.responseText + ")");
+		  }
+		}
+		xhr.send();*/
 
 		if(checkForActiveCall()){
 			$('#callInfoModal').html(getTemplate("callStatusModal"));
@@ -96,6 +108,20 @@ $(function()
 		setTimerToCheckDialing("Asterisk");
 		globalCall.callDirection = "Outgoing";
 		sendActionToClient(action,manager_details,asterisk_details,asterisk_details_long);
+		var asterisk_data = {};
+		asterisk_data.manager_id = prefs.manager_id;
+		asterisk_data.password = prefs.password;
+		asterisk_data.asterisk_hostname = prefs.asterisk_hostname;
+		asterisk_data.asterisk_call_channel = prefs.asterisk_call_channel;
+		asterisk_data.asterisk_call_context = prefs.asterisk_call_context;
+		asterisk_data.asterisk_call_extension = prefs.asterisk_call_extension;
+		asterisk_data.asterisk_call_callerId = prefs.asterisk_call_callerId;
+		asterisk_data.asterisk_call_timeout = prefs.asterisk_call_timeout;
+		asterisk_data.asterisk_call_priority = prefs.asterisk_call_priority;
+		asterisk_data.asterisk_call_variables = prefs.asterisk_call_variables;
+		asterisk_data.num = num;
+		
+		window.postMessage(asterisk_data,"*");
 
 	});
 
