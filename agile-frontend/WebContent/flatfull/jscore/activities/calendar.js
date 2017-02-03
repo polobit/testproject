@@ -566,8 +566,8 @@ function showCalendar(users)
 							// Deserialize
 							deserializeForm(event, $("#updateActivityForm"));
 
-							var color_box_id = $("#updateActivityForm #backgroundColor").val();
-							$(color_box_id).children().addClass('bcp-selected');
+							var color_box_id = $("#updateActivityForm #backgroundColor").val().replace("#","");
+							$("#updateActivityForm").find('div[id='+color_box_id+']').children().addClass('bcp-selected');
 
 							// Set time for update Event
 							$('#update-event-time-1')
