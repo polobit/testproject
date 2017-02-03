@@ -46,7 +46,7 @@ var contact_details_documentandtasks_actions = {
 			var value = eventsView.collection.get(id).toJSON();
 			deserializeForm(value, $("#updateActivityForm"));
 			var color_box_id = $("#updateActivityForm #backgroundColor").val();
-			$("#updateActivityForm"+" "+color_box_id).children().addClass('bcp-selected');
+			$(color_box_id).children().addClass('bcp-selected');
 			$('.update-start-timepicker').val(fillTimePicker(value.start));
 			$('.update-end-timepicker').val(fillTimePicker(value.end));
 
