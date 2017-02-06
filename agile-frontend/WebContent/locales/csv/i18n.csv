@@ -6089,3 +6089,6 @@ smtp-bulk.note4,Maximum number of emails to be sent from Agile via your email pr
 smtp-bulk.note5,If set to true&#44; the campaign and bulk emails will be sent through email provider. If the per day max limit is reached&#44; then the emails will be sent from Agile’s default email gateway.,,,,
 smtp-bulk.note,Note,,,
 smtp-bulk.note6,Send personal and campaign emails from your email provider.,,,
+landingpage-builder.select-one-media-type,Please select the media type,
+landingpage-builder.media-type,Media Type,
+landingpage-builder.select-media-type,Select media type,

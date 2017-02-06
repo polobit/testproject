@@ -328,7 +328,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <!-- /tabs -->
                 <div class="tab-pane imageFileTab" id="image_Tab">
                     <div style="float: right;margin-top: -15px;" id="choose-media-div">
-                        <a style="font-size: 12px; cursor: pointer;" class="choose-media-mode"> change media</a>
+                        <a style="font-size: 14px!important; cursor: pointer;" class="choose-media-mode"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-media-type")%></a>
                     </div>
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image-url")%>:</label>
                     
@@ -351,7 +351,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
                     <div style="float: right;margin-top: -15px;" id="choose-media-div">
-                        <a style="font-size: 12px; cursor: pointer;" class="choose-media-mode"> change media</a>
+                        <a style="font-size: 14px!important; cursor: pointer;" class="choose-media-mode"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-media-type")%></a>
                     </div>
                     <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block ">
                         <option value="default"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-form")%></option>
@@ -1994,7 +1994,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <div class="tab-pane videoTab" id="video_Tab">
                     
                     <div style="float: right;margin-top: -15px;" id="choose-media-div">
-                        <a style="font-size: 12px; cursor: pointer;" class="choose-media-mode"> change media</a>
+                        <a style="font-size: 14px!important; cursor: pointer;" class="choose-media-mode"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-media-type")%></a>
                     </div>
 
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-url")%>:</label>
@@ -2455,14 +2455,14 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                    <h5 class="modal-title" id="myModalLabel">Choose Media</h5>
+                    <h5 class="modal-title" id="myModalLabel"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "media-type")%></h5>
                 </div>
                 <div class="modal-body" style="padding: 25px;">
-                    <div class="col-md-6">Please choose one media type </div>
+                    <div class="col-md-6"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-one-media-type")%></div>
                     <select name="choose-media" id="choose-media-option" class="form-control" style="width: 50%;margin-top: -7px;">
-                        <option value="form">Form</option>
-                        <option value="image">Image</option>
-                        <option value="video">Video</option>
+                        <option value="form"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "form")%></option>
+                        <option value="image"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Image")%></option>
+                        <option value="video"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "video")%></option>
                     </select>                    
                 </div>
                 <div class="modal-footer" style="padding: 15px;">
