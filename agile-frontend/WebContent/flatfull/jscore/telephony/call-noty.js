@@ -367,7 +367,7 @@ function showSkypeCallNoty(message){
 
 		if(message.state == "ringing"){
 			if(checkForActiveCall()){
-				sendCommandToClient("busy","Skype");
+				//sendCommandToClient("busy","Skype");
 				return;
 			}
 		}else if(!globalCall.contactedContact){
@@ -408,10 +408,10 @@ function showAsteriskCallNoty(message){
 		globalCall.lastReceived =  message.state;
 
 		if(message.state == "ringing"){
-				if(checkForActiveCall()){
-					sendCommandToClient("busy","Bria");
-					return;
-				}
+			if(checkForActiveCall()){
+				sendCommandToClient("busy","Bria");
+				return;
+			}
 		}else if(!globalCall.contactedContact){
 			 accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
 	    		if(!responseJson){
