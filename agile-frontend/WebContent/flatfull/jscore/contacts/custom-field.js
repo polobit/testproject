@@ -219,7 +219,8 @@ function showCustomFieldModel(data)
 					
 					if(Current_Route && Current_Route == "import")
 					{
-						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(value);
+						var mod = new BaseModel(value);
+						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 						if((value.scope == "CONTACT" && $("#import-contacts").length > 0) || (value.scope == "COMPANY" && $("#import-comp").length > 0))
 						{
 							var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
@@ -229,7 +230,8 @@ function showCustomFieldModel(data)
 					}
 					else if(Current_Route && Current_Route == "import-deals")
 					{
-						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(value);
+						var mod = new BaseModel(value);
+						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 						if(value.scope == "DEAL" && $("#import-deals").length > 0)
 						{
 							var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
@@ -292,7 +294,8 @@ function showCustomFieldModel(data)
 
 				if(Current_Route && Current_Route == "import" && cuModel)
 				{
-					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(cuModel);
+					var mod = new BaseModel(cuModel);
+					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 					if((cuModel.scope == "CONTACT" && $("#import-contacts").length > 0) || (cuModel.scope == "COMPANY" && $("#import-comp").length > 0))
 					{
 						var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
@@ -302,7 +305,8 @@ function showCustomFieldModel(data)
 				}
 				else if(Current_Route && Current_Route == "import-deals" && cuModel)
 				{
-					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(cuModel);
+					var mod = new BaseModel(cuModel);
+					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 					if(cuModel.scope == "DEAL" && $("#import-deals").length > 0)
 					{
 						var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
@@ -498,7 +502,7 @@ function bindCustomFiledChangeEvent(el){
 	});
 
 	$("#custom-field-add-modal", el).on("click", ".close", function(e){
-		if(Current_Route && Current_Route == "import")
+		if(Current_Route && (Current_Route == "import" || Current_Route == "import-deals"))
 		{
 			e.preventDefault();
 			$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties__ignore_");
