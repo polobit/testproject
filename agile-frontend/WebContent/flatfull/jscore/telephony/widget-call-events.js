@@ -114,6 +114,7 @@ $(function(){
 			asterisk_data.asterisk_call_priority = prefs.asterisk_call_priority;
 			asterisk_data.asterisk_call_variables = prefs.asterisk_call_variables;
 			asterisk_data.num = num;
+			asterisk_data.data_from = "asteriskwidget";
 
 			window.postMessage(asterisk_data,"*");
 			var domain = CURRENT_DOMAIN_USER['domain'];
