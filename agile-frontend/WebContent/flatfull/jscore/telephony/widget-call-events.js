@@ -104,7 +104,7 @@ $(function(){
 		}else{
 			var asterisk_data = {};
 			asterisk_data.manager_id = prefs.manager_id;
-			asterisk_data.password = prefs.password;
+			asterisk_data.manager_password = prefs.manager_password;
 			asterisk_data.asterisk_hostname = prefs.asterisk_hostname;
 			asterisk_data.asterisk_call_channel = prefs.asterisk_call_channel;
 			asterisk_data.asterisk_call_context = prefs.asterisk_call_context;
