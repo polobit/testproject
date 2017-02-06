@@ -17,7 +17,12 @@ $(function(){
     		var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
     		var client = globalCall.calledFrom;
 			showDraggableNoty(client, globalCall.contactedContact , "connected", globalCall.callNumber, btns);
-    	}else{
+    	}else if(evt.detail == "authentication failed"){
+    		var msgType = "error";
+			var msg = "Asterisk manager authentication failed";
+			showNotyPopUp(msgType , msg, "bottomRight");
+    	}
+    	else{
     		var msgType = "error";
 			var msg = "Error while connecting the call. Extension does not exist.";
 			showNotyPopUp(msgType , msg, "bottomRight");
