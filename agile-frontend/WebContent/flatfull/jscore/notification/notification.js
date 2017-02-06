@@ -124,7 +124,7 @@ function subscribeToPubNub(domain)
 							if(message.state != "ringing"){
 					    		globalCall.callStatus = "Connected";
 					    	}
-					    	handleCallRequest(message);
+					    	showAsteriskCallNoty(message);
 					    }						
 					}
 					return;

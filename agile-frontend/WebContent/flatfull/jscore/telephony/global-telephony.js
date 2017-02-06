@@ -505,8 +505,7 @@ function handleCallRequest(message)
 			// start from here
 			 if(message.state.indexOf("ack-")!=-1){
             	globalCall.lastSent =  message.state.substring(4);
-         	}
-			else if (message.state == "lastCallDetail"){
+         	}else if (message.state == "lastCallDetail"){
 
 				if(globalCall.lastReceived == "lastCallDetail") {
 					return;

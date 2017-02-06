@@ -637,8 +637,8 @@ function saveCallNoteTelephony(call){
 					autosaveNoteTelephony(note,call);
 				}
 		}else{
-				resetCallLogVariables();
-				if(callStatus == "Answered") {
+			resetCallLogVariables();
+			if(callStatus == "Answered") {
     			var data = {};
     			data.url = "/core/api/call/widgets/";
     			data.subject = noteSub;
@@ -650,17 +650,17 @@ function saveCallNoteTelephony(call){
     			data.contact_name = "";
     			data.widget = client;
     			CallLogVariables.dynamicData = data;
-    		}
-    			CallLogVariables.subject = noteSub;
-	    		CallLogVariables.callWidget = client;
-	    		CallLogVariables.callType = "outbound-dial";
-	    		CallLogVariables.phone = number;
-	    		CallLogVariables.duration = duration;
-	    		CallLogVariables.status = callStatus;
-    			var jsonObj = {};
-				jsonObj['phoneNumber'] = number;
-				return showContactMergeOption(jsonObj);
-	}
+			}
+			CallLogVariables.subject = noteSub;
+    		CallLogVariables.callWidget = client;
+    		CallLogVariables.callType = "outbound-dial";
+    		CallLogVariables.phone = number;
+    		CallLogVariables.duration = duration;
+    		CallLogVariables.status = callStatus;
+			var jsonObj = {};
+			jsonObj['phoneNumber'] = number;
+			return showContactMergeOption(jsonObj);
+		}
 	}
 }
 

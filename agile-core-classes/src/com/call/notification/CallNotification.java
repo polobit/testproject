@@ -102,11 +102,11 @@ public class CallNotification extends HttpServlet {
 				obj.put("type", "CALL");				
 				obj.put("callType", "Asterisk");
 				
+				if (eventType == null) {
+					eventType = EVENTTYPE_RINGING;
+				}
+				
 				if (StringUtil.equals(EVENT_INBOUND, event)) {
-					if (eventType == null) {
-						eventType = EVENTTYPE_RINGING;
-					}
-
 					if (StringUtil.equals(EVENTTYPE_RINGING, eventType)) {
 						obj.put("direction", "Inbound");
 						obj.put("state", "ringing");
