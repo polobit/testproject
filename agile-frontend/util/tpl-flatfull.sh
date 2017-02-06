@@ -30,32 +30,6 @@ cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
 cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
 
 cat flatfull/tpl/voice-mail/*.html > tpl/min/flatfull/voice-mail.js
-cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
-cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
-cat flatfull/tpl/widget/clickdesk/*.html > tpl/min/flatfull/clickdesk.js
-cat flatfull/tpl/widget/fullcontact/*.html > tpl/min/flatfull/fullcontact.js
-cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
-cat flatfull/tpl/widget/linkedin/*.html > tpl/min/flatfull/linkedin.js
-cat flatfull/tpl/widget/quickbooks/*.html > tpl/min/flatfull/quickbooks.js
-cat flatfull/tpl/widget/shopify/*.html > tpl/min/flatfull/shopify.js
-cat flatfull/tpl/widget/freshbooks/*.html > tpl/min/flatfull/freshbooks.js
-cat flatfull/tpl/widget/klout/*.html > tpl/min/flatfull/klout.js
-cat flatfull/tpl/widget/knowlarity/*.html > tpl/min/flatfull/knowlarity.js
-cat flatfull/tpl/widget/rapleaf/*.html > tpl/min/flatfull/rapleaf.js
-cat flatfull/tpl/widget/sip/*.html > tpl/min/flatfull/sip.js
-cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js
-cat flatfull/tpl/widget/twilio/*.html > tpl/min/flatfull/twilio.js
-cat flatfull/tpl/widget/twilioio/*.html > tpl/min/flatfull/twilioio.js
-cat flatfull/tpl/widget/ozonetel/*.html > tpl/min/flatfull/ozonetel.js
-cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
-cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
-cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
-cat flatfull/tpl/widget/callscript/*.html > tpl/min/flatfull/callscript.js
-cat flatfull/tpl/widget/googleplus/*.html > tpl/min/flatfull/googleplus.js
-cat flatfull/tpl/widget/paypal/*.html > tpl/min/flatfull/paypal.js
-cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
-cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
-cat flatfull/tpl/widget/android/*.html > tpl/min/flatfull/android.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js
@@ -65,32 +39,45 @@ cat flatfull/tpl/leads-form/*.html  > tpl/min/flatfull/leads-form.js
 cat flatfull/tpl/leads-detail/*.html  > tpl/min/flatfull/leads-detail.js
 
 ## Widgets
-cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
+## Social
+cat flatfull/tpl/widget/fullcontact/*.html > tpl/min/flatfull/fullcontact.js
+cat flatfull/tpl/widget/klout/*.html > tpl/min/flatfull/klout.js
+cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
+cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
+cat flatfull/tpl/widget/googleplus/*.html > tpl/min/flatfull/googleplus.js
+cat flatfull/tpl/widget/rapleaf/*.html > tpl/min/flatfull/rapleaf.js
+cat flatfull/tpl/widget/linkedin/*.html > tpl/min/flatfull/linkedin.js
+
+## Telephony
+cat flatfull/tpl/widget/knowlarity/*.html > tpl/min/flatfull/knowlarity.js
+cat flatfull/tpl/widget/android/*.html > tpl/min/flatfull/android.js
 cat flatfull/tpl/widget/bria/*.html > tpl/min/flatfull/bria.js
 cat flatfull/tpl/widget/callscript/*.html > tpl/min/flatfull/callscript.js
-cat flatfull/tpl/widget/chargify/*.html > tpl/min/flatfull/chargify.js
-cat flatfull/tpl/widget/clickdesk/*.html > tpl/min/flatfull/clickdesk.js
-cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
-cat flatfull/tpl/widget/freshbooks/*.html > tpl/min/flatfull/freshbooks.js
-cat flatfull/tpl/widget/googleplus/*.html > tpl/min/flatfull/googleplus.js
-cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
-cat flatfull/tpl/widget/linkedin/*.html > tpl/min/flatfull/linkedin.js
-cat flatfull/tpl/widget/paypal/*.html > tpl/min/flatfull/paypal.js
-cat flatfull/tpl/widget/quickbooks/*.html > tpl/min/flatfull/quickbooks.js
-cat flatfull/tpl/widget/rapleaf/*.html > tpl/min/flatfull/rapleaf.js
-cat flatfull/tpl/widget/shopify/*.html > tpl/min/flatfull/shopify.js
 cat flatfull/tpl/widget/sip/*.html > tpl/min/flatfull/sip.js
 cat flatfull/tpl/widget/skype/*.html > tpl/min/flatfull/skype.js
-cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js
 cat flatfull/tpl/widget/twilio/*.html > tpl/min/flatfull/twilio.js
 cat flatfull/tpl/widget/twilioio/*.html > tpl/min/flatfull/twilioio.js
 cat flatfull/tpl/widget/ozonetel/*.html > tpl/min/flatfull/ozonetel.js
-cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
-cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
-cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
+cat flatfull/tpl/widget/asterisk/*.html > tpl/min/flatfull/asterisk.js
+
+## Support
+cat flatfull/tpl/widget/clickdesk/*.html > tpl/min/flatfull/clickdesk.js
+cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
-cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
-cat flatfull/tpl/emailbuilder/*.html > tpl/min/flatfull/emailbuilder.js
+cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
+
+## Billing
+cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
+cat flatfull/tpl/widget/freshbooks/*.html > tpl/min/flatfull/freshbooks.js
+cat flatfull/tpl/widget/paypal/*.html > tpl/min/flatfull/paypal.js
+cat flatfull/tpl/widget/quickbooks/*.html > tpl/min/flatfull/quickbooks.js
+cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js
+cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
+
+## Ecommerce
+cat flatfull/tpl/widget/shopify/*.html > tpl/min/flatfull/shopify.js
+
+cat flatfull/tpl/widget/chargify/*.html > tpl/min/flatfull/chargify.js
 ## End of widgets
 
 cd ../util

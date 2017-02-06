@@ -77,6 +77,8 @@ public class Widget {
 	public String listOfUsers = null;
 
 	public String display_name = null;
+
+	public String uniqueId = null;
 	
 	@NotSaved
 	public boolean isForAll = false;
@@ -279,6 +281,7 @@ public class Widget {
 							widget.mini_logo_url = this.mini_logo_url;
 							widget.description = this.description;
 							widget.display_name = this.display_name;
+							widget.uniqueId = this.uniqueId;
 							widget.name = this.name;
 							widget.fav_ico_url = this.fav_ico_url;
 							widget.integration_type = this.integration_type;

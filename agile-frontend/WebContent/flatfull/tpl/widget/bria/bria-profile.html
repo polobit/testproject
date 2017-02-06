@@ -1,67 +1,80 @@
 <script id="bria-logs-template" type="text/html">
 {{#if_equals num.length "0"}}
-		<div class="wrapper-sm">
-
-			<div class="word-break p-n text-base" id="bria_no_phone">
-				{{agile_lng_translate 'widgets' 'no-phone-number-associated'}}
-			</div>
-
+	<div class="wrapper-sm">
+		<div class="word-break p-n text-base" id="bria_no_phone">
+			{{agile_lng_translate 'widgets' 'no-phone-number-associated'}}
 		</div>
-{{else}}
-  <div>
-			{{#if_equals num.length "1"}}<div id="bria_contact_number"></div>
-			{{else}}
-		<div class="wrapper-sm">
-			<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>-->
-			<div class="pull-left" style="width:100%;">
-				<select name="bria_number" id="bria_contact_number" class="required form-control" style="height:27px;padding-top:2px;width:100%;">
-					{{#each num}}
-						<option value="{{value}}">{{value}} 
-							{{#if subtype}}({{subtype}}){{/if}}
-						</option>
-					{{/each}}
-				</select>
-			</div>
-			<div class="clearfix"></div>
-			{{/if_equals}}
 	</div>
-
-
+{{else}}
+    <div>
+		{{#if_equals num.length "1"}}
+			<div id="bria_contact_number"></div>
+		{{else}}
+			<div class="wrapper-sm">
+				<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>-->
+				<div class="pull-left" style="width:100%;">
+					<select name="bria_number" id="bria_contact_number" class="required form-control" style="height:27px;padding-top:2px;width:100%;">
+						{{#each num}}
+							<option value="{{value}}">
+								{{value}} 
+								{{#if subtype}}({{subtype}}){{/if}}
+							</option>
+						{{/each}}
+					</select>
+				</div>
+				<div class="clearfix"></div>
+		{{/if_equals}}
+	</div>
 	<div>
-	<ul id="bria-logs-panel" class="list-group m-b-none text-xs">
-		<li class="list-group-item b-n" id="bria_logs_load">
-			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
-		</li>
-	</ul>
-
+		<ul id="bria-logs-panel" class="list-group m-b-none text-xs">
+			<li class="list-group-item b-n" id="bria_logs_load">
+				<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+			</li>
+		</ul>
 	</div>
 {{/if_equals}}
 </script>
 
 <script id="bria-logs-fetch-template" type="text/html">
-		<li class="list-group-item b-n " style="display:none;" id="bria_logs_load">
-			<center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
-		</li>
-
-{{#if this}}
-
+	<li class="list-group-item b-n " style="display:none;" id="bria_logs_load">
+		<center>
+			<img src="img/ajax-loader-cursor.gif" class="m-t"></img>
+		</center>
+	</li>
+	{{#if this}}
 		{{#each this}}          
 			<li class="list-group-item r-none b-l-none b-r-none">
+				{{#if_equals duration "0"}}
+					<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+				{{else}}
+					<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+				{{/if_equals}}				
+				<div class="pull-left text-sm">
 					{{#if_equals duration "0"}}
-						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+						{{#if_equals direction "Missed"}}
+							{{agile_lng_translate 'widgets' 'call-missed'}}
+						{{else}}
+							{{agile_lng_translate 'widgets' 'call-unanswered'}}
+						{{/if_equals}}
 					{{else}}
-						<i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+						{{agile_lng_translate 'widgets' 'call-connected'}}
 					{{/if_equals}}
-				
-<div class="pull-left text-sm">{{#if_equals duration "0"}}{{#if_equals direction "Missed"}}{{agile_lng_translate 'widgets' 'call-missed'}} {{else}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{/if_equals}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}
-</div>
-				
-<div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
-				
-<div class="clearfix"></div>
-<small class="text-muted block pos-rlt"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
-				
-<div class="clearfix"></div>
+				</div>				
+				<div class="pull-right">
+					{{#is_string duration}}
+						{{toProperFormat duration}}
+					{{else}}
+						0s
+					{{/is_string}}
+				</div>
+				<div class="clearfix"></div>
+				<small class="text-muted block pos-rlt">
+					<i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i>
+					<time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">
+						{{toLocalTimezone startTime}}
+					</time>
+				</small>
+				<div class="clearfix"></div>
 			</li>
 		{{/each}}
 	{{else}}
@@ -69,52 +82,45 @@
 	    	{{agile_lng_translate 'widgets' 'sorry-we-could-not-find-any-call-data'}}
 		</li>
 	{{/if}}
-
-
-
 </script>
-
 
 <script id="bria-login-template" type="text/html">
 <div>
 	<form class="p-xs" id="bria_login_form" name="bria_login_form" method="post">
     	<fieldset>
-				<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
-                    {{agile_lng_translate 'widgets' 'Bria-content'}}
-			  </p>	
-
-			  
+			<p class="m-t-sm" style=" margin: 0px;margin-bottom: 20px;">
+                {{agile_lng_translate 'widgets' 'Bria-content'}}
+			</p>	
 			<p style="font-size: 13px;margin-bottom: 15px">
 				{{agile_lng_translate 'widgets' 'please-follow-these-steps'}}
 			</p>
-
-				<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
-				<p>{{agile_lng_translate 'widgets' 'bria-download-desc'}} <a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;"> {{agile_lng_translate 'widgets' 'here'}}</a> 
-				<span>*&nbsp;</span><span style="font-size: 9px;color:grey;">{{agile_lng_translate 'widgets' 'support-for-windows-only'}}</span>
+			<div class="m-t-sm m-b-none text-sm" style="font-size: 12px;">
+				<p>
+					{{agile_lng_translate 'widgets' 'bria-download-desc'}} 
+					<a href="#" class="text-info" target="_blank" id="downloadCallJar" style="color:red;">
+						{{agile_lng_translate 'widgets' 'here'}}
+					</a> 
+					<span>*&nbsp;</span>
+					<span style="font-size: 9px;color:grey;">
+						{{agile_lng_translate 'widgets' 'support-for-windows-only'}}
+					</span>
 				</p>
   				<p>{{agile_lng_translate 'widgets' 'bria-desc-2'}} </p>
 				<p>{{agile_lng_translate 'widgets' 'bria-desc-3'}}</p>
-				</div>
-
-
-
-              	<div style="margin-top: 18px">
-			<p style="font-size: 13px; margin-top:5px;">
-				{{agile_lng_translate 'widgets' 'bria-desc-4'}}	
-			</p>
+			</div>
+			<div style="margin-top: 18px">
+				<p style="font-size: 13px; margin-top:5px;">
+					{{agile_lng_translate 'widgets' 'bria-desc-4'}}	
+				</p>
 				<div class="text-center">
-				<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
-				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
+					<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
+					<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
 				</div>
-              </div>
-
-		 </fieldset>
+            </div>
+		</fieldset>
     </form>
 </div>
 </script>
-
-
-
 
 <script id="bria-widgetdialpad-template" type="text/html">
 <div>
