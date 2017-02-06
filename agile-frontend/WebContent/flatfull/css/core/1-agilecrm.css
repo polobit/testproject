@@ -5229,3 +5229,6 @@ span.rolecontainer::first-letter {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
 }
+.note-editable p img {
+  max-width: 100%;
+}
