@@ -1948,7 +1948,7 @@ function menuServicerole(dashboard){
 		}
 }
  // Send a prsonal sms  
-function sendPersonalSMS(el, id){
+function sendPersonalSMS(el, id, widgetName){
 
         var fromNumber = $("#from-number").val();
         var message = $("#sms-noty-notes").val();
@@ -1978,7 +1978,13 @@ function sendPersonalSMS(el, id){
        {
           $('#sms-noty-notes').css('border-color', '');
          }
-						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						//var url= "/core/api/widgets/nexmo/send-nexmo-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						//var url= "/core/api/widgets/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						if(widgetName == "Nexmo"){
+							var url= "/core/api/widgets/nexmo/send-nexmo-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						}else{
+                           var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						}
 						if ($(el).attr("disabled"))
 							return;
 

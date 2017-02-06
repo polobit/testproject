@@ -281,6 +281,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("deal-detail.js");
 	}
+	if(templateName.indexOf("nexmo") == 0)
+	{
+     template_relative_urls.push("nexmo.js");
+	}
 	return template_relative_urls;
 }
 

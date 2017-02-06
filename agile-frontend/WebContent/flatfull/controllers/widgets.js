@@ -51,6 +51,8 @@ var WidgetsRouter = Backbone.Router
                 "Knowlarity/:id" : "Knowlarity",
                 "VMdrops" : "VMdrops",
                 "VMdrops/:id" : "VMdrops",
+                "Nexmo"  :"Nexmo",
+                "Nexmo/:id" :"Nexmo",
 
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
@@ -196,6 +198,13 @@ var WidgetsRouter = Backbone.Router
 			 Asterisk : function(id) {
 				 	addConfigurableWidget(id, "Asterisk", 'asterisk-login');
 			},
+            
+            /**
+             * Manages Nexmo widget
+             */
+             Nexmo : function(id) {
+                addConfigurableWidget(id, "Nexmo", 'nexmo-login');
+            },
 				 
 			 
             /**

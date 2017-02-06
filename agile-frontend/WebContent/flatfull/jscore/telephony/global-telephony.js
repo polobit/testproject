@@ -43,7 +43,7 @@ $(function(){
 	callOptionDiv = "" ;
 	globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 	globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity", "Asterisk" : "Asterisk"};
+	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity", "Asterisk" : "Asterisk","Nexmo" : "Nexmo"};
 	dialled = {"using" : "default"};
 	CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 	callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
@@ -170,7 +170,7 @@ function globalCallWidgetSet()
 												var temp = { "name" : widget.name, "logo" : widget.mini_logo_url };
 												addtoCallOption(temp);
 												var name = widget.name;
-												if(name != "CallScript" ){
+												if(name != "CallScript" && name != "Nexmo"){
 													callOptionDiv = callOptionDiv
 													.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
 												}
@@ -180,10 +180,15 @@ function globalCallWidgetSet()
 
 												if(name == "TwilioIO" && sms_status){
 													callOptionDiv = callOptionDiv
-													.concat("<img class ='" + "SMS-Gateway_sms" + " c-p active' src='/widgets/sms-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" +"SMS"+ "'>");
+													.concat("<img class ='" + "SMS-Gateway_sms" + " c-p active' src='/widgets/sms-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" +"Twilio_SMS"+ "'>");
 												}
 												if(name == "Asterisk"){
 													asterisk_widget = widget;
+												}
+												if(name == "Nexmo"){
+													callOptionDiv = callOptionDiv
+													.concat("<img class ='" + "SMS-nexmo_sms" + " c-p active' src='"+ widget.mini_logo_url +"' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" +"Nexmo_SMS"+ "'>");
+												
 												}
 											}
 										});
@@ -214,7 +219,7 @@ function globalCallWidgetSet()
 							if(!alreadySetPrefs){
 								if(widgetCallName[obj.name] == "Twilio"){
 									nameToStore = "Twilio";
-								}else if(nameToStore != "Twilio" && obj.name != "CallScript" && obj.name != "Asterisk"){
+								}else if(nameToStore != "Twilio" && obj.name != "CallScript" && obj.name != "Asterisk" && obj.name != "Nexmo"){
 									nameToStore = widgetCallName[obj.name];
 								}
 							}

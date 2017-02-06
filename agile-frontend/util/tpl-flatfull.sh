@@ -29,6 +29,7 @@ cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
 cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
 
+
 cat flatfull/tpl/voice-mail/*.html > tpl/min/flatfull/voice-mail.js
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
 cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
@@ -56,6 +57,7 @@ cat flatfull/tpl/widget/paypal/*.html > tpl/min/flatfull/paypal.js
 cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
 cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
 cat flatfull/tpl/widget/android/*.html > tpl/min/flatfull/android.js
+cat flatfull/tpl/widget/nexmo/*.html > tpl/min/flatfull/nexmo.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js
