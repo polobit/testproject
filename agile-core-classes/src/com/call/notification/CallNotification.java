@@ -122,9 +122,10 @@ public class CallNotification extends HttpServlet {
 					} else {				
 						obj.put("direction", "Outbound");
 						obj.put("duration", duration);
-						obj.put("state", "lastCallDetail");										
+						obj.put("state", "lastCallDetail");									
 					}
 				}
+				System.out.println("Call notification data "+obj.toString());
 				PubNub.pubNubPush(namespace, obj);
 			} catch (Exception e) {
 				e.printStackTrace();
