@@ -123,6 +123,12 @@ function subscribeToPubNub(domain)
 						if(AsteriskWidgetPrefs.asterisk_call_channel.indexOf(message.extension) != -1){
 							if(message.state != "ringing"){
 					    		globalCall.callStatus = "Connected";
+
+					    		if(message.direction == "Outbound"){
+					    			globalCallForActivity.callDirection = message.duration;
+					    			globalCallForActivity.callStatus = globalCall.callStatus;
+					    			globalCallForActivity.callNumber = message.state;
+					    		}
 					    	}
 					    	//showAsteriskCallNoty(message);
 					    	handleCallRequest(message);

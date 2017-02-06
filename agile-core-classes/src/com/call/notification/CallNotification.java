@@ -125,7 +125,7 @@ public class CallNotification extends HttpServlet {
 				} else {
 					if (StringUtil.equals(EVENTTYPE_RINGING, eventType)) {
 						obj.put("direction", "Outbound");
-						obj.put("state", "ringing");						
+						obj.put("state", "connecting");						
 					} else {		
 						obj.put("direction", "Outbound");
 						obj.put("duration", duration);
