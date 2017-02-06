@@ -71,10 +71,6 @@ public class NexmoSMS {
 
 	public static final String SMS_SENDING_FAILED = "SMS Failed";
 
-	public static void main(String asd[]) throws Exception {
-		System.out.println(checkNexmoAuthentication("fjhhg", "dfhjdghghfh"));
-
-	}
 
 	/**
 	 * 
