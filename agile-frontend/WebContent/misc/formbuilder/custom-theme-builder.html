@@ -277,7 +277,7 @@
                         $(inputTheme).insertBefore("#addNewTheme");
                          if(formClasses!=null){
                           var formClassesList=formClasses.split(" ");
-                              if(formClassesList.indexOf("form"+custId)>-1){
+                              if(formClassesList.indexOf("form"+custId) > -1){
                                     $("#form"+custId).attr("selected","true");
                             }
                          }
@@ -442,7 +442,7 @@
                                     });
 
                                     $.each( customthemes, function( index, value ) {
-                                       if(deleteThemeId.includes(this.id)){
+                                       if(deleteThemeId.indexOf(this.id)>-1){
                                             customthemes.splice(index,1);
                                             if($(document.getElementById("target")).hasClass(deleteThemeId)){
                                             $(document.getElementById("target")).removeClass(deleteThemeId);
