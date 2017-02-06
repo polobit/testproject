@@ -7,7 +7,6 @@ if(!messageEvent){
 	eventer = window[eventMethod];
 	messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
 }
-console.log(eventer+"eventer=====");
 // Listen to message from child window
 eventer(messageEvent,function(e) {
 	e.preventDefault();
