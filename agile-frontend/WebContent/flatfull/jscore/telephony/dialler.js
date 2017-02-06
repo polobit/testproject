@@ -367,6 +367,13 @@ $(function()
 	$('body').on('click', '.noty_ozonetel_cancel', function(e){		
 		closeCallNoty(true);
 	});
+
+	$('body').off('click', '.noty_asterisk_cancel');
+ 	$('body').on('click', '.noty_asterisk_cancel', function(e){	
+ 		resetglobalCallVariables();
+ 		resetglobalCallForActivityVariables();
+ 		closeCallNoty(true);
+ 	});
 });
 
 

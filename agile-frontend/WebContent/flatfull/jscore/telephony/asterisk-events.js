@@ -37,7 +37,12 @@ $(function()
 		$('#callInfoModal').modal('hide');
 	});
 	
-	
+	$('body').off('click', '.noty_asterisk_cancel');
+ 	$('body').on('click', '.noty_asterisk_cancel', function(e){	
+ 		resetglobalCallVariables();
+ 		resetglobalCallForActivityVariables();
+ 		closeCallNoty(true);
+ 	});
 
 	
 });

@@ -113,7 +113,7 @@ public class CallNotification extends HttpServlet {
 					} else {
 						obj.put("direction", "Inbound");
 						obj.put("duration", duration);
-						obj.put("state", "ended");
+						obj.put("state", "lastCallDetail");
 					}
 				} else {
 					if (StringUtil.equals(EVENTTYPE_RINGING, eventType)) {
@@ -122,7 +122,7 @@ public class CallNotification extends HttpServlet {
 					} else {				
 						obj.put("direction", "Outbound");
 						obj.put("duration", duration);
-						obj.put("state", "ended");											
+						obj.put("state", "lastCallDetail");										
 					}
 				}
 				PubNub.pubNubPush(namespace, obj);
