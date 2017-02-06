@@ -126,8 +126,12 @@ function subscribeToPubNub(domain)
 
 					    		if(message.direction == "Outbound"){
 					    			globalCallForActivity.callDirection = message.duration;
+					    			globalCallForActivity.callStatus = globalCall.callStatus;					    			
+									globalCallForActivity.contactedId = globalCall.contactedId;
+					    			globalCallForActivity.callId = globalCall.callId;					    			
 					    			globalCallForActivity.callStatus = globalCall.callStatus;
-					    			globalCallForActivity.callNumber = message.state;
+					    			globalCallForActivity.callNumber = globalCall.callNumber;
+					    			globalCallForActivity.calledFrom = globalCall.calledFrom;
 					    		}
 					    	}
 					    	//showAsteriskCallNoty(message);
