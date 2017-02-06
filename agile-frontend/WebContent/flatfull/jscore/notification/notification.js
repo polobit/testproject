@@ -132,10 +132,7 @@ function subscribeToPubNub(domain)
 					    				globalCall.callStatus = "Answered";
 
 					    				replicateglobalCallVariable();
-										resetglobalCallVariables();
-
-					    				//message.state = globalCall.callStatus;					    				
-										handleCallRequest(message);					    			
+										resetglobalCallVariables();				    			
 					    			}else{					    				
 										globalCall.lastReceived = "Ringing";
 										globalCall.callDirection = message.direction;
@@ -143,14 +140,11 @@ function subscribeToPubNub(domain)
 					    				globalCall.callStatus = "Missed";
 
 					    				replicateglobalCallVariable();
-										resetglobalCallVariables();
-
-					    				//message.state = globalCall.callStatus;
-					    				handleCallRequest(message);							
+										resetglobalCallVariables()				
 					    			}					    			
 					    		}
 					    	}
-					    	
+					    	handleCallRequest(message);
 					    }						
 					}
 					return;
