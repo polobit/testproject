@@ -122,7 +122,7 @@ function subscribeToPubNub(domain)
 					if(message.extension && AsteriskWidgetPrefs.asterisk_call_channel){
 						if(AsteriskWidgetPrefs.asterisk_call_channel.indexOf(message.extension) != -1){
 							if(message.state != "ringing"){
-					    		globalCall.callStatus = "connected";
+					    		globalCall.callStatus = "Connected";
 								if(message.direction == "Outbound"){
 					    			if(message.duration > 0){
 					    					
