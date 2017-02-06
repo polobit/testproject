@@ -506,7 +506,10 @@ function renderWidgetView(templateName, url, model, renderEle){
             $("#twilioio_login_form .question-tag" ).popover({
               template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
             });
-            $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
+            $("#nexmo_login_form .question-tag" ).popover({
+            template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+           });
+          $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
         }
     });
     var output = widgetModel.render().el;
@@ -533,6 +536,9 @@ function renderWidgetView(templateName, url, model, renderEle){
         $('#widget-settings-tab-pane .panel').css({"padding-left":"0px","padding-right":"0px"});
     }
     $("#twilioio_login_form .question-tag" ).popover({
+      template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+    });
+    $("#nexmo_login_form .question-tag" ).popover({
       template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
     });
     $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
