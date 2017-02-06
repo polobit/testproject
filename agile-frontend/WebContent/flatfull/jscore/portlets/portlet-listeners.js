@@ -849,7 +849,8 @@ $('.portlet_body')
 							// Deserialize
 							deserializeForm(model.toJSON(),
 									$("#updateActivityForm"));
-
+                           var color_box_id = $("#updateActivityForm #backgroundColor").val().replace("#","");
+						   $("#updateActivityForm").find('div[id='+color_box_id+']').children().addClass('bcp-selected');
 							var startDate = new Date(model.get('start') * 1000);
 							var endDate = new Date(model.get('end') * 1000)
 							// Set time for update Event
