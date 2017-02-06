@@ -750,7 +750,6 @@
 <option value="properties_description">{{agile_lng_translate 'deal-view' 'descriptions'}}</option> 
 <option value="properties_dealSource">{{agile_lng_translate 'deal-view' 'deal-source'}}</option> 
 <option value="properties_lossReason">{{agile_lng_translate 'deal-view' 'loss-reason'}}</option> 
-{{#if custom_fields}}
 <optgroup label="Custom field" id = "custom_fields">
    
 		{{#each custom_fields}}
@@ -758,7 +757,6 @@
 		{{/each}}
 		<option value="properties__ignore_" class="text-info add-custom-field-from-import">-{{agile_lng_translate 'admin-settings-custom-fields' 'add-custom-field'}}-</option>
 </optgroup>
-{{/if}}
 </select>
 
 
