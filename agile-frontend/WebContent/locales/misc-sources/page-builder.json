@@ -120,4 +120,5 @@
     "select-one-media-type" : "{{agile_lng_translate 'landingpage-builder' 'select-one-media-type'}}",
     "media-type" : "{{agile_lng_translate 'landingpage-builder' 'media-type'}}",
     "select-media-type" : "{{agile_lng_translate 'landingpage-builder' 'select-media-type'}}",
+    "form" : "{{agile_lng_translate 'landingpage-builder' 'form'}}",
 }
