@@ -4,6 +4,7 @@
 package com.call.notification;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,14 +35,14 @@ public class CallNotification extends HttpServlet {
 
 	protected void service(HttpServletRequest req, HttpServletResponse res)
 			throws IOException, ServletException {
-		// PrintWriter pw = res.getWriter();
+		 PrintWriter pw = res.getWriter();
 		// Gets the Api key to validate the agile user.
 		String apiKey = req.getParameter("api-key");
 		// Gets the service like asterisk.
 		String serviceType = req.getParameter("s");
 
-		// pw.println("apikey : "+apiKey);
-		// pw.println("serviceType : "+serviceType);
+		pw.println("apikey : "+apiKey);
+		pw.println("serviceType : "+serviceType);
 		String namespace = AliasDomainUtil
 				.getCachedAliasDomainName(NamespaceManager.get());
 
@@ -60,7 +61,7 @@ public class CallNotification extends HttpServlet {
 		}
 
 		if (serviceType != null && serviceType.equals("asterisk")) {
-			// pw.println("In asterisk block");
+			pw.println("In asterisk block");
 
 			// Gets the event like inbound or outbound.
 			String event = req.getParameter("e");
@@ -105,6 +106,7 @@ public class CallNotification extends HttpServlet {
 				if (eventType == null) {
 					eventType = EVENTTYPE_RINGING;
 				}
+				pw.print(event+" : "+eventType+" : "+duration);
 				
 				if (StringUtil.equals(EVENT_INBOUND, event)) {
 					if (StringUtil.equals(EVENTTYPE_RINGING, eventType)) {
@@ -119,7 +121,7 @@ public class CallNotification extends HttpServlet {
 					if (StringUtil.equals(EVENTTYPE_RINGING, eventType)) {
 						obj.put("direction", "Outbound");
 						obj.put("state", "ringing");						
-					} else {				
+					} else {		
 						obj.put("direction", "Outbound");
 						obj.put("duration", duration);
 						obj.put("state", "lastCallDetail");									
