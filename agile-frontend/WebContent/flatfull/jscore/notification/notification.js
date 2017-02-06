@@ -131,13 +131,13 @@ function subscribeToPubNub(domain)
 					    			if(message.duration > 0){
 					    				globalCall.callStatus = "answered";
 					    				globalCallForActivity.callStatus = globalCall.callStatus;
-					    				message = globalCall.callStatus;
+					    				message.state = globalCall.callStatus;
 					    				_getMessageAsterisk(message);
 										ShowWidgetCallNoty(message);					    			
 					    			}else{
 					    				globalCall.callStatus = "failed";
 					    				globalCallForActivity.callStatus = globalCall.callStatus;
-					    				message = globalCall.callStatus;
+					    				message.state = globalCall.callStatus;
 					    				_getMessageAsterisk(message);							
 					    			}					    			
 					    		}
