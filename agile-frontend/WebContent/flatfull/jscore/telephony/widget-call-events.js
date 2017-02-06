@@ -5,29 +5,32 @@
  */
  //callDirection : Incoming, Outgoing
  //callStatus :Ideal, Incoming,Missed,  Connecting,Connected,  Ended,Failed
+var chromeExtensionInstalled = false;
+$(function(){
+	var evt = document.createEvent('Event');
+	evt.initEvent('asteriskplugincheck', true, false);
+	document.dispatchEvent(evt);
+	console.log("============="+chromeExtensionInstalled);
 
-$(function()
-{
-	
-
+	window.addEventListener("asteriskplugindata", function(evt) {
+    	if(evt.detail == "success"){
+    		var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+    		var client = globalCall.calledFrom;
+			showDraggableNoty(client, globalCall.contactedContact , "connected", globalCall.callNumber, btns);
+    	}else{
+    		var msgType = "error";
+			var msg = "Error while connecting the call. Extension does not exist.";
+			showNotyPopUp(msgType , msg, "bottomRight");
+    	}
+	}, false);
 
 	$('#content').on('click', '.Asterisk_call', function(e){
 	  	e.preventDefault();
 	  	e.stopPropagation(); 
-
-	  	/*var evt = document.createEvent('Event');
-		evt.initEvent('myCustomEvent', true, false);
-		document.dispatchEvent(evt);
-
-	  	var xhr = new XMLHttpRequest();
-		xhr.open("GET", "http://192.99.242.90:7280?action=login&username=agile&secret=gaWQTha72JJA", true);
-		xhr.onreadystatechange = function() {
-		  if (xhr.readyState == 4) {
-		    var resp = eval("(" + xhr.responseText + ")");
-		  }
-		}
-		xhr.send();*/
-
+	  	if($('.plugin-installed').css('display') == 'none'){
+	  		chromeExtensionInstalled = true;
+	  	}
+	  	console.log("============="+chromeExtensionInstalled);
 		if(checkForActiveCall()){
 			$('#callInfoModal').html(getTemplate("callStatusModal"));
 			$('#callInfoModal').modal('show');
@@ -35,21 +38,10 @@ $(function()
 			
 			return;
 		}
-
 		var contactDetailsObj = agile_crm_get_contact();
 		var cnt = get_contact_json_for_merge_fields(contactDetailsObj);
 		var num = $(this).closest(".contact-make-call").attr("phone");
 		cnt['phone'] = num;
-		
-		
-/*		$.each(contactDetailsObj.properties,function(ind,obj){
-			if(obj.name == "phone"){
-				obj.value = num;
-				return false;	
-			}
-		});*/
-		
-
 		try{
 				var prefs = {};
 				resetglobalCallVariables();
@@ -107,22 +99,38 @@ $(function()
 		}
 		setTimerToCheckDialing("Asterisk");
 		globalCall.callDirection = "Outgoing";
-		sendActionToClient(action,manager_details,asterisk_details,asterisk_details_long);
-		var asterisk_data = {};
-		asterisk_data.manager_id = prefs.manager_id;
-		asterisk_data.password = prefs.password;
-		asterisk_data.asterisk_hostname = prefs.asterisk_hostname;
-		asterisk_data.asterisk_call_channel = prefs.asterisk_call_channel;
-		asterisk_data.asterisk_call_context = prefs.asterisk_call_context;
-		asterisk_data.asterisk_call_extension = prefs.asterisk_call_extension;
-		asterisk_data.asterisk_call_callerId = prefs.asterisk_call_callerId;
-		asterisk_data.asterisk_call_timeout = prefs.asterisk_call_timeout;
-		asterisk_data.asterisk_call_priority = prefs.asterisk_call_priority;
-		asterisk_data.asterisk_call_variables = prefs.asterisk_call_variables;
-		asterisk_data.num = num;
-		
-		window.postMessage(asterisk_data,"*");
+		if(!chromeExtensionInstalled){
+			sendActionToClient(action,manager_details,asterisk_details,asterisk_details_long);
+		}else{
+			var asterisk_data = {};
+			asterisk_data.manager_id = prefs.manager_id;
+			asterisk_data.password = prefs.password;
+			asterisk_data.asterisk_hostname = prefs.asterisk_hostname;
+			asterisk_data.asterisk_call_channel = prefs.asterisk_call_channel;
+			asterisk_data.asterisk_call_context = prefs.asterisk_call_context;
+			asterisk_data.asterisk_call_extension = prefs.asterisk_call_extension;
+			asterisk_data.asterisk_call_callerId = prefs.asterisk_call_callerId;
+			asterisk_data.asterisk_call_timeout = prefs.asterisk_call_timeout;
+			asterisk_data.asterisk_call_priority = prefs.asterisk_call_priority;
+			asterisk_data.asterisk_call_variables = prefs.asterisk_call_variables;
+			asterisk_data.num = num;
 
+			window.postMessage(asterisk_data,"*");
+			var domain = CURRENT_DOMAIN_USER['domain'];
+			var id = CURRENT_DOMAIN_USER['id'];
+			var command = action.command;
+			var number = action.number;
+			var callid = action.callId;
+			var client = globalCall.calledFrom;
+			
+			if(command == "startCall"){
+				var btns = [];
+				showDraggableNoty(client, globalCall.contactedContact , "dialing", globalCall.callNumber, btns);
+				globalCall.callDirection = "Outgoing";
+				globalCall.callStatus = "dialing";
+				globalCall.callNumber = number;
+			}
+		}
 	});
 
 	$('body').on('click', '.contact-make-bria-call, .Bria_call', function(e)
