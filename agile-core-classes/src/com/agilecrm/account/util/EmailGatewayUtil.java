@@ -723,8 +723,8 @@ public class EmailGatewayUtil
 		    	if(preferredGateway == SEND_GRID){
 		    		
 		    		//Check if email gateway is null and per day email sent limit is 0 then dont send any email and add skipped log
-		    		if(emailGateway == null && SendGridUtil.checkEmailRemainingLimit(domain)){
-		    			addEmailExceededLog(tasks, "Daily emails limit exceeded. Agile has redued the daily sending limit due to low email sending reputation.", LogType.EMAIL_SENDING_SKIPPED);
+		    		if(emailGateway == null && !SendGridUtil.checkEmailRemainingLimit(domain)){
+		    			addEmailExceededLog(tasks, CampaignLogsSQLUtil.SENDGRID_REPUTATION_LOW_MESSAGE_ID, LogType.EMAIL_SENDING_SKIPPED);
 		    			return;
 		    		}
 		    		

@@ -31,7 +31,15 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class CampaignLogsSQLUtil
 {
-    
+	/**
+	 * Sendgrid reputation check campaign message log
+	 */
+	public static final String SENDGRID_REPUTATION_LOW_MESSAGE_LOG = "Daily emails sending limit exceeded. Due to low email reputation, Agile has reduced the daily sending limit. This limit will change dynamically in coming days based on the email activity.";
+	
+	/**
+	 * Sendgrid reputation check campaign log message id
+	 */
+	public static final String SENDGRID_REPUTATION_LOW_MESSAGE_ID = "_SENDGRID_REPUTATION_";
     /**
      * Inserts obtained fields into campaign logs table.
      * 
