@@ -106,6 +106,11 @@ public class CallNotification extends HttpServlet {
 				if (eventType == null) {
 					eventType = EVENTTYPE_RINGING;
 				}
+				
+				if(event == null){
+					event = EVENT_INBOUND;
+				}
+				
 				pw.print(event+" : "+eventType+" : "+duration);
 				
 				if (StringUtil.equals(EVENT_INBOUND, event)) {
