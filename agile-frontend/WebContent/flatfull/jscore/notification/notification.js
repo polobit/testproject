@@ -123,26 +123,34 @@ function subscribeToPubNub(domain)
 						if(AsteriskWidgetPrefs.asterisk_call_channel.indexOf(message.extension) != -1){
 							if(message.state != "ringing"){
 					    		globalCall.callStatus = "connected";
-
-					    		globalCallForActivity.callDirection = message.direction;
-					    		globalCallForActivity.callNumber = message.number;					    		
-
-					    		if(message.direction == "Outbound"){
+								if(message.direction == "Outbound"){
 					    			if(message.duration > 0){
-					    				globalCall.callStatus = "answered";
-					    				globalCallForActivity.callStatus = globalCall.callStatus;
-					    				message.state = globalCall.callStatus;
-					    				_getMessageAsterisk(message);
-										ShowWidgetCallNoty(message);					    			
-					    			}else{
-					    				globalCall.callStatus = "failed";
-					    				globalCallForActivity.callStatus = globalCall.callStatus;
-					    				message.state = globalCall.callStatus;
-					    				_getMessageAsterisk(message);							
+					    					
+										globalCall.lastReceived = "Connected";
+										globalCall.callDirection = message.direction;
+					    				globalCall.callNumber = message.number;
+					    				globalCall.callStatus = "Answered";
+
+					    				replicateglobalCallVariable();
+										resetglobalCallVariables();
+
+					    				//message.state = globalCall.callStatus;					    				
+										handleCallRequest(message);					    			
+					    			}else{					    				
+										globalCall.lastReceived = "Ringing";
+										globalCall.callDirection = message.direction;
+					    				globalCall.callNumber = message.number;
+					    				globalCall.callStatus = "Missed";
+
+					    				replicateglobalCallVariable();
+										resetglobalCallVariables();
+
+					    				//message.state = globalCall.callStatus;
+					    				handleCallRequest(message);							
 					    			}					    			
 					    		}
 					    	}
-					    	//handleCallRequest(message);
+					    	
 					    }						
 					}
 					return;
