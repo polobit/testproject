@@ -4,7 +4,6 @@
 package com.call.notification;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,14 +25,23 @@ import com.thirdparty.PubNub;
 
 @SuppressWarnings("serial")
 public class CallNotification extends HttpServlet {
+
+	public static String EVENT_INBOUND = "inbound";
+	public static String EVENT_OUTBOUND = "outbound";
+
+	public static String EVENTTYPE_RINGING = "ringing";
+	public static String EVENTTYPE_HANGUP = "hangup";
+
 	protected void service(HttpServletRequest req, HttpServletResponse res)
 			throws IOException, ServletException {
-		//PrintWriter pw = res.getWriter();
+		// PrintWriter pw = res.getWriter();
+		// Gets the Api key to validate the agile user.
 		String apiKey = req.getParameter("api-key");
+		// Gets the service like asterisk.
 		String serviceType = req.getParameter("s");
-		
-		//pw.println("apikey : "+apiKey);
-		//pw.println("serviceType : "+serviceType);
+
+		// pw.println("apikey : "+apiKey);
+		// pw.println("serviceType : "+serviceType);
 		String namespace = AliasDomainUtil
 				.getCachedAliasDomainName(NamespaceManager.get());
 
@@ -42,32 +50,33 @@ public class CallNotification extends HttpServlet {
 					"Bad Request: API Key is missing");
 			return;
 		}
-		
-		//pw.println("API KEY STATUS : "+APIKeyUtil.isPresent(apiKey));
-		
+
+		// pw.println("API KEY STATUS : "+APIKeyUtil.isPresent(apiKey));
+
 		if (!APIKeyUtil.isPresent(apiKey)) {
 			res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 					"Unauthorized: Invalid API Key");
 			return;
 		}
-		
+
 		if (serviceType != null && serviceType.equals("asterisk")) {
-			//pw.println("In asterisk block");
-			String event = req.getParameter("t");
+			// pw.println("In asterisk block");
+
+			// Gets the event like inbound or outbound.
+			String event = req.getParameter("e");
+			// Get the event type like ringing, hangup.
+			String eventType = req.getParameter("t");
+			// Gets the call duration for both inbound or outbound.
 			String durationStr = req.getParameter("d");
 			int duration = 0;
-			if(durationStr != null){
-				try{
+			if (durationStr != null) {
+				try {
 					duration = Integer.parseInt(durationStr);
-				}catch(Exception e){
+				} catch (Exception e) {
 					res.sendError(HttpServletResponse.SC_BAD_REQUEST,
 							"Bad Request: Duration(d) should be numeric");
 					return;
 				}
-			}
-		
-			if(event == null){
-				event = "inbound";
 			}
 			String extensionNumber = req.getParameter("exten");
 			// String callType = req.getParameter("call_type");
@@ -87,23 +96,34 @@ public class CallNotification extends HttpServlet {
 
 			try {
 				JSONObject obj = new JSONObject();
-				if (StringUtil.equals("inbound", event)) {
-					obj.put("check", true);
-					obj.put("extension", extensionNumber);
-					obj.put("number", fromNumber);
-					obj.put("direction", "Inbound");
-					obj.put("callType", "Asterisk");
-					obj.put("state", "ringing");
-					obj.put("type", "CALL");
+				obj.put("check", true);
+				obj.put("extension", extensionNumber);
+				obj.put("number", fromNumber);
+				obj.put("type", "CALL");				
+				obj.put("callType", "Asterisk");
+				
+				if (StringUtil.equals(EVENT_INBOUND, event)) {
+					if (eventType == null) {
+						eventType = EVENTTYPE_RINGING;
+					}
+
+					if (StringUtil.equals(EVENTTYPE_RINGING, eventType)) {
+						obj.put("direction", "Inbound");
+						obj.put("state", "ringing");
+					} else {
+						obj.put("direction", "Inbound");
+						obj.put("duration", duration);
+						obj.put("state", "lastCallDetail");
+					}
 				} else {
-					obj.put("check", true);
-					obj.put("extension", extensionNumber);
-					obj.put("number", fromNumber);
-					obj.put("direction", "Inbound");
-					obj.put("callType", "Asterisk");
-					obj.put("state", "lastCallDetail");
-					obj.put("type", "CALL");
-					obj.put("duration", duration);
+					if (StringUtil.equals(EVENTTYPE_RINGING, eventType)) {
+						obj.put("direction", "Outbound");
+						obj.put("state", "ringing");						
+					} else {				
+						obj.put("direction", "Outbound");
+						obj.put("duration", duration);
+						obj.put("state", "lastCallDetail");											
+					}
 				}
 				PubNub.pubNubPush(namespace, obj);
 			} catch (Exception e) {

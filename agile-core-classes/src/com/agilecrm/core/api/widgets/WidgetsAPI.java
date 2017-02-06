@@ -124,7 +124,6 @@ public class WidgetsAPI {
 				return widget;
 			}
 		}
-
 		return null;
 	}
 
