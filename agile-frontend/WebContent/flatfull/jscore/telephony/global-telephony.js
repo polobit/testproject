@@ -524,8 +524,7 @@ function handleCallRequest(message)
 						}
 
 						replicateglobalCallVariable();
-						resetglobalCallVariables();						
-						resetglobalCallForActivityVariables();
+						resetglobalCallVariables();												
 						globalCall.lastReceived = "lastCallDetail";
 					}
 				}
