@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.campaignio.logger.util.CampaignLogsSQLUtil;
 
 public class CampaignLogWrapper extends Cursor
 
@@ -86,6 +87,9 @@ public class CampaignLogWrapper extends Cursor
 
 		message = StringEscapeUtils.unescapeJava(message).replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
 			        "<script>-->");
+		//check if message having message id then convert in original message
+		if(StringUtils.equals(CampaignLogsSQLUtil.SENDGRID_REPUTATION_LOW_MESSAGE_ID, message))
+			message = CampaignLogsSQLUtil.SENDGRID_REPUTATION_LOW_MESSAGE_LOG;
 		
 		this.sent_via = SMTPBulkEmailUtil.getEmailSentVia(message); 
 		

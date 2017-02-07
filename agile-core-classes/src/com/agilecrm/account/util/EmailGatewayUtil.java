@@ -629,8 +629,10 @@ public class EmailGatewayUtil
      * 
      * @param tasks
      *            - Leased tasks
+     * @param emailSendingSkipped 
+     * @param mesage 
      */
-    public static void addEmailExceededLog(List<MailDeferredTask> tasks)
+    public static void addEmailExceededLog(List<MailDeferredTask> tasks, String message, LogType logType)
     {
 	try
 	{
@@ -658,7 +660,7 @@ public class EmailGatewayUtil
 		    }
 
 		    Object[] newLog = new Object[] { mailDeferredTask.domain,mailDeferredTask.campaignId, campaignName,mailDeferredTask.subscriberId,
-		    		GoogleSQL.getCurrentDate(), "Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED.toString(),
+		    		GoogleSQL.getCurrentDate(), message, logType.toString(),
 		    		 };
 
 		    queryList.add(newLog);
@@ -718,9 +720,18 @@ public class EmailGatewayUtil
 	    	
 	    	if(tasks.size() > 0)
 	    	{
-		    	if(preferredGateway == SEND_GRID)
+		    	if(preferredGateway == SEND_GRID){
+		    		
+		    		//Check if email gateway is null and per day email sent limit is 0 then dont send any email and add skipped log
+		    		if(emailGateway == null && !SendGridUtil.checkEmailRemainingLimit(domain)){
+		    			addEmailExceededLog(tasks, CampaignLogsSQLUtil.SENDGRID_REPUTATION_LOW_MESSAGE_ID, LogType.EMAIL_SENDING_SKIPPED);
+		    			return;
+		    		}
+		    		
 				    SendGridUtil.sendSendGridMails(tasks, emailSender);
-	
+				    
+		    	}
+				    
 		    	else if(preferredGateway == MANDRILL)
 		    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
 			
@@ -741,7 +752,7 @@ public class EmailGatewayUtil
 	    else
 	    {
 		// Add email exceeded log to each subscriber
-		addEmailExceededLog(tasks);
+		addEmailExceededLog(tasks, "Emails limit exceeded. Please increase your quota.", LogType.EMAIL_SENDING_FAILED);
 	    }
 
 	}
