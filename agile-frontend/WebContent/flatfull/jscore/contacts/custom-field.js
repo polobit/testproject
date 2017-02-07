@@ -107,8 +107,8 @@ function showCustomFieldModel(data)
 		            var typ = $(element).find('input').attr('id') ;
 		            scopeExtension.push(typ);
 		            var position = 0 ;
-		            if(Current_Route && Current_Route == "import" && App_Contacts.CUSTOM_FIELDS_FOR_IMPORT && 
-		            	(typ == "contacts" || typ == "companies"))
+		            if(Current_Route && (Current_Route == "import" || Current_Route == "import-deals") && App_Contacts.CUSTOM_FIELDS_FOR_IMPORT && 
+		            	(typ == "contacts" || typ == "companies" || typ == "deals"))
 	            	{
 	            		$.each(App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models, function(index, customFieldModel){
 							if(customFieldModel.get("position") > position)
@@ -119,7 +119,7 @@ function showCustomFieldModel(data)
 						positionList.push(typ+'-'+ position);
 	            	}
 
-		            if(typ == 'contacts' && Current_Route != "import"){
+		            if(typ == 'contacts' && Current_Route != "import" && Current_Route != "import-deals"){
 		            	if(App_Admin_Settings.contactCustomFieldsListView && App_Admin_Settings.contactCustomFieldsListView.collection)
 		                { 
 		                   	$.each(App_Admin_Settings.contactCustomFieldsListView.collection.models , function(i,m)
@@ -130,7 +130,7 @@ function showCustomFieldModel(data)
 		                    positionList.push(typ+'-'+ position);
 		                }
 		            }
-		            else if(typ == 'companies' && Current_Route != "import"){
+		            else if(typ == 'companies' && Current_Route != "import"  && Current_Route != "import-deals"){
 		                if(App_Admin_Settings.companyCustomFieldsListView && App_Admin_Settings.companyCustomFieldsListView.collection)
 		                { 
 		                   	$.each(App_Admin_Settings.companyCustomFieldsListView.collection.models , function(i,m)
@@ -141,7 +141,7 @@ function showCustomFieldModel(data)
 		                    positionList.push(typ+'-'+ position);
 		             	}
 		            }
-		            else if(typ == 'deals'){
+		            else if(typ == 'deals'  && Current_Route != "import"  && Current_Route != "import-deals"){
 		            	if(App_Admin_Settings.dealCustomFieldsListView && App_Admin_Settings.dealCustomFieldsListView.collection)
 		                {
 		                   	$.each(App_Admin_Settings.dealCustomFieldsListView.collection.models , function(i,m)
@@ -223,7 +223,7 @@ function showCustomFieldModel(data)
 						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 						if((value.scope == "CONTACT" && $("#import-contacts").length > 0) || (value.scope == "COMPANY" && $("#import-comp").length > 0))
 						{
-							var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+							var html_ele = "<option class='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
 							$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(value));
 							$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+value.field_label);
 						}
@@ -234,7 +234,7 @@ function showCustomFieldModel(data)
 						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 						if(value.scope == "DEAL" && $("#import-deals").length > 0)
 						{
-							var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+							var html_ele = "<option class='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
 							$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(value));
 							$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+value.field_label);
 						}
@@ -298,7 +298,7 @@ function showCustomFieldModel(data)
 					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 					if((cuModel.scope == "CONTACT" && $("#import-contacts").length > 0) || (cuModel.scope == "COMPANY" && $("#import-comp").length > 0))
 					{
-						var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+						var html_ele = "<option class='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
 						$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(cuModel));
 						$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+cuModel.field_label);
 					}
@@ -309,7 +309,7 @@ function showCustomFieldModel(data)
 					App_Contacts.CUSTOM_FIELDS_FOR_IMPORT.models.push(mod);
 					if(cuModel.scope == "DEAL" && $("#import-deals").length > 0)
 					{
-						var html_ele = "<option clss='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
+						var html_ele = "<option class='CUSTOM' value='properties_{{field_label}}'>{{field_label}}</option>";
 						$(".import-select").find("optgroup#custom_fields").find("option[value='properties__ignore_']").before(Handlebars.compile(html_ele)(cuModel));
 						$(".import-select").eq(App_Contacts.SELECTED_OPTION_ROW).val("properties_"+cuModel.field_label);
 					}
