@@ -36,3 +36,6 @@
 {
 	display:none!important;
 }
+
+.emailCreditInfo{display: inline-block !important;}
+.emailCreditInfo .emailCreditCol{width: 50%; position: relative !important;}

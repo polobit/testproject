@@ -87,12 +87,12 @@ function getValidateAndVerfiedNexmo(api_key, secret_key, callback)
 			});
 		}
 		else
-			setToValidateNexmo(result, true);
-		//setToValidateNexmo(result);
+			setToValidateNexmo(result, false);
+	
 	}).error(function(data)
 	{
 		console.log("Nexmo validate account error");
-		setToValidate(data, true);
+		setToValidate(data, false);
 	});
 }
 
@@ -147,12 +147,15 @@ function setToValidateNexmo(data,showAlert)
 	console.log("Nexmo error ");
 	console.log(data);
 
-	if (data){
+	if (showAlert){
 		//showAlertModal("valid_details");
 		showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'saved-nexmo-success'}}", "bottomRight");
 		window.location.href = "#add-widget";
 		return;
-	}else{
+	}else if(data == "no number"){
+		showNotyPopUp("error" , "Number not exist in nexmo", "bottomRight");
+	}
+	else{
 		showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widget-nexmo-error'}}", "bottomRight");
 	}
 
@@ -175,7 +178,7 @@ function getNexmoNumbers(api_key, secret_key, callback)
 	}).error(function(data)
 	{
 		console.log("error in getNexmoNumbers");
-		setToValidateNexmo(data, true);
+		setToValidateNexmo(data, false);
 		// setTValidateNexmo(data);
 	});
 }

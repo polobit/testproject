@@ -17,7 +17,7 @@
                 {{#if id}}
                     {{else}}
                         {{#isAccessToLeads}}
-                            <div class="control-group form-group  " style=" margin-left: 50px;"> 
+                            <div class="control-group form-group {{#if_equals_or 'import' Current_Route 'import-deals' Current_Route}}hide{{/if_equals_or}}" style=" margin-left: 50px;"> 
                                 <div class="CustomFieldScope col-sm-3 p-l-none m-r-n">   
                                     <label class="i-checks i-checks-sm" style="padding-top: 7px;">
                                         <input name="leads" type="checkbox" id="leads">
@@ -48,7 +48,7 @@
                                 </div>      
                             </div>
                         {{else}}
-                            <div class="control-group form-group  " style=" margin-left: 50px;"> 
+                            <div class="control-group form-group {{#if_equals_or 'import' Current_Route 'import-deals' Current_Route}}hide{{/if_equals_or}}" style=" margin-left: 50px;"> 
                                 <div class="CustomFieldScope col-sm-3" style="margin-left : 75px;padding-left:25px;">   
                                     <label class="i-checks i-checks-sm" style="padding-top: 7px;">
                                         <input name="contacts" type="checkbox" id="contacts">
