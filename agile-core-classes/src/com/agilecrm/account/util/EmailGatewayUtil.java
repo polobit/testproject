@@ -434,17 +434,17 @@ public class EmailGatewayUtil
 		    /* If no gateway setup or Amazon SES gateway having attachments or documents, 
 			sends email through Agile's default (Sendgrid) */
 			if(SEND_GRID.equals(emailAPI) ) {
-	
+	             System.out.println("sending mail using send grid to: "+to);
 				SendGrid.sendMail(apiUser, apiKey, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
 		    			html, text, null, documentIds, mailAttach, attachments);
 		    }
 		    else if(MANDRILL.equals(emailAPI)) {
-		    	
+	             System.out.println("sending mail using mandrill to: "+to);
 		    	Mandrill.sendMail(apiKey, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
 		    			html, text, mandrillMetadata, documentIds, mailAttach, attachments);
 		    }
 		    else if(SES.equals(emailAPI)) {
-
+	             System.out.println("sending mail using ses to: "+to);
 				if ((documentIds != null && documentIds.size() != 0) 
 	    				|| (mailAttach != null && mailAttach.length > 0 && StringUtils.isNotBlank(mailAttach[0])) 
 	    				|| (attachments != null && attachments.length != 0)) {
@@ -461,7 +461,7 @@ public class EmailGatewayUtil
 		    	PullQueueUtil.addToPullQueue(AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
 		    }
 		    else if(MAILGUN.equals(emailAPI)) {
-		    	
+	             System.out.println("sending mail using mail gun to: "+to);
 		    	MailgunNew.sendMail(apiKey, apiUser, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
 		    			html, text, mandrillMetadata, documentIds, mailAttach, attachments);
 		    }

@@ -826,8 +826,8 @@ public class EventUtil
    	    		if(event.description != null && event.description.length() > 0){
    	    			domainMailTempalte.append("<span>Description: "+ event.description + "</span><br/>");
    	    		}
+   	    		System.out.println("sending domain mail template to: "+eventOwnerEmail);
    	    		domainMailTempalte.append("<p><a href=https://" + eventOwner.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>");
-   	    		
    				EmailGatewayUtil.sendEmail(null, currentUserEmail, eventOwner.name, eventOwnerEmail, null, null, "Appointment Scheduled",
    						null, domainMailTempalte.toString(), null, null, null, null, null);		
    	    	} 
