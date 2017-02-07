@@ -127,7 +127,7 @@ public class NexmoUtil {
 							+ e.getMessage());
 
 		}
-		return null;
+		return "";
 	}
 
 	/***
