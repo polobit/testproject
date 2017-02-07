@@ -1,1 +1,198 @@
-$(function(){LINKEDIN_PLUGIN_NAME="Linkedin";LINKEDIN_UPDATE_LOAD_IMAGE='<div id="status_load"><center><img  src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';Linkedin_current_profile_user_name="";Stream_Data=[];Experience_data="";Shared_Connections=[];past_search_input=undefined;past_search_data=undefined;Search_details={};linkedin_web_url="";var b=agile_crm_get_widget(LINKEDIN_PLUGIN_NAME);console.log("In LinkedIn");console.log(b);LinkedIn_Plugin_Id=b.id;if(b.prefs==undefined){setupLinkedinOAuth();return}Linkedin_id="";linkedin_web_url=agile_crm_get_contact_property_by_subtype("website","LINKEDIN");console.log(linkedin_web_url);if(linkedin_web_url){getLinkedinIdByUrl(linkedin_web_url,function(a){Linkedin_id=a;showLinkedinProfile(Linkedin_id)})}else{getLinkedinMatchingProfiles()}$("#Linkedin_plugin_delete").die().live("click",function(a){a.preventDefault();agile_crm_delete_contact_property_by_subtype("website","LINKEDIN",linkedin_web_url,function(d){console.log("In linkedin delete callback");getLinkedinMatchingProfiles()})});$("#linkedin_message").die().live("click",function(a){a.preventDefault();sendLinkedInMessage(Linkedin_id)});$("#linkedin_connect").die().live("click",function(a){a.preventDefault();sendLinkedInAddRequest(Linkedin_id)});$(".linkedin_share").die().live("click",function(d){d.preventDefault();var a=$(this).attr("id");reSharePost(a,"optional",this)});$("#linkedin_experience").die().live("click",function(a){a.preventDefault();if(Experience_data||Experience_data!=""){return}getExperienceOfPerson(Linkedin_id)});$("#linkedin_shared_connections").die().live("click",function(a){a.preventDefault();if(Shared_Connections.length!=0){return}getLinkedInSharedConnections(Linkedin_id)});$("#linkedin_update_tab").die().live("click",function(a){a.preventDefault();if(Stream_Data.length!=0){return}getFirstFiveLinkedInNetworkUpdates(Linkedin_id)});$(".linkedin_modify_search").die().live("click",function(a){a.preventDefault();Search_details.plugin_id=LinkedIn_Plugin_Id;$("#Linkedin").html(getTemplate("linkedin-modified-search",Search_details))});$("#linkedin_search_btn").die().live("click",function(a){a.preventDefault();getModifiedLinkedinMatchingProfiles()});$("#linkedin_search_close").die().live("click",function(a){a.preventDefault();if(past_search_data){showLinkedinMatchingProfiles(past_search_data)}else{getLinkedinMatchingProfiles()}});$(".experience_li").live("mouseenter",function(a){$(this).find(".show-summary").show()});$(".experience_li").live("mouseleave",function(a){$(this).find(".show-summary").hide()});$(".show-summary").die().live("click",function(f){f.preventDefault();var a=$(this).attr("href");var e=$(this).attr("id");$("#"+e).text("Less");$(".summary-expand-"+e).hide();$(a).collapse("toggle");$(a).on("hidden",function(){$(".summary-expand-"+e).show();$("#"+e).text("More")})})});function setupLinkedinOAuth(){$("#Linkedin").html(LINKEDIN_UPDATE_LOAD_IMAGE);var d=window.location.href;var c="/scribe?service=linkedin&return_url="+encodeURIComponent(d)+"&plugin_id="+encodeURIComponent(LinkedIn_Plugin_Id);$("#Linkedin").html("<div class='widget_content' style='border-bottom:none;line-height: 160%;' >Build professional relationships with contacts and keep a tab on their business interests.<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\""+c+"\" style='text-decoration: none;'>Link Your LinkedIn</a></p></div>")}function showLinkedinMatchingProfiles(f){var d=agile_crm_get_contact_property("image");if(past_search_input){Search_details.keywords=past_search_input}else{var e="";if(agile_crm_get_contact_property("first_name")){e=e+agile_crm_get_contact_property("first_name")}if(agile_crm_get_contact_property("last_name")){e=e+" "+agile_crm_get_contact_property("last_name")}Search_details.keywords=e.trim()}if(f.length==0){if(Search_details.keywords&&Search_details.keywords!=""){linkedinMainError(LINKEDIN_PLUGIN_NAME,"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#search' class='linkedin_modify_search'>"+Search_details.keywords+"</a></p>",true)}else{linkedinMainError(LINKEDIN_PLUGIN_NAME,"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#search' class='linkedin_modify_search'>Modify search</a></p>",true)}return}Search_details.search_results=f;$("#Linkedin").html(getTemplate("linkedin-search-result",Search_details));$(".linkedinImage").die().live("mouseover",function(){Linkedin_id=$(this).attr("id");$(this).popover({placement:"left"});$(this).popover("show");$("#"+Linkedin_id).die().live("click",function(a){a.preventDefault();$(this).popover("hide");console.log("on click in search");var c=$(this).attr("url");linkedin_web_url=c;console.log("LinkedIn URL: "+c);var b=[{name:"website",value:c,subtype:"LINKEDIN"}];if(!d){if($(this).attr("is_gravatar_pic")=="false"){var j=$(this).attr("src");b.push({name:"image",value:j})}}if(!agile_crm_get_contact_property("title")){var k=$(this).attr("summary");b.push({name:"title",value:k})}agile_crm_update_contact_properties(b);showLinkedinProfile(Linkedin_id)})})}function getLinkedinMatchingProfiles(){$("#Linkedin").html(LINKEDIN_UPDATE_LOAD_IMAGE);var c=agile_crm_get_contact()["id"];var d=localStorage.getItem("Agile_linkedin_matches_"+c);if(!d){queueGetRequest("widget_queue","/core/api/widgets/social/match/"+LinkedIn_Plugin_Id+"/"+c,"json",function(a){if(islocalStorageHasSpace()){localStorage.setItem("Agile_linkedin_matches_"+c,JSON.stringify(a))}showLinkedinMatchingProfiles(a)},function(a){$("#status_load").remove();linkedinMainError(LINKEDIN_PLUGIN_NAME,a.responseText)})}else{showLinkedinMatchingProfiles(JSON.parse(d))}}function getModifiedLinkedinMatchingProfiles(){if(!isValidForm($("#linkedin-search_form"))){return}$("#spinner-linked-search").show();past_search_input=$("#linkedin_keywords").val();$.post("/core/api/widgets/social/modified/match/linkedin/"+LinkedIn_Plugin_Id,$("#linkedin-search_form").serialize(),function(b){$("#spinner-linked-search").hide();past_search_data=b;showLinkedinMatchingProfiles(b)},"json").error(function(b){$("#spinner-linked-search").remove();linkedinMainError(LINKEDIN_PLUGIN_NAME,b.responseText)})}function showLinkedinProfile(d){$("#Linkedin").html(LINKEDIN_UPDATE_LOAD_IMAGE);var c;$.get("/core/api/widgets/social/profile/"+LinkedIn_Plugin_Id+"/"+d,function(a){if(!a){return}Linkedin_current_profile_user_name=a.name;c=a.is_connected;if(a.picture==null){a.picture="https://contactuswidget.appspot.com/images/pic.png"}$("#Linkedin").html(getTemplate("linkedin-profile",a));if(a.searchResult){showExperienceInLinkedIn(a.searchResult)}},"json").error(function(a){$("#status_load").remove();if(a.responseText=="Invalid member id {private}"){linkedinMainError(LINKEDIN_PLUGIN_NAME,"Member doesn't share his information for third party applications");return}linkedinMainError(LINKEDIN_PLUGIN_NAME,a.responseText)});registerEventsInLinkedIn(d,c,Stream_Data)}function showExperienceInLinkedIn(d){var c="";if((!d.three_current_positions||d.three_current_positions.length==0)&&(!d.three_past_positions||d.three_past_positions.length==0)){$("#linkedin_experience_panel").html('<div class="widget_content">Work status unavailable</div>');return}Experience_data=d;if(d.three_current_positions){c=c.concat(getTemplate("linkedin-experience",d.three_current_positions))}if(d.three_past_positions){c=c.concat(getTemplate("linkedin-experience",d.three_past_positions))}$("#linkedin_experience_panel").html(c)}function registerEventsInLinkedIn(e,d,f){$(".linkedin_stream").die().live("click",function(a){a.preventDefault();var c=$("ul#linkedin_social_stream").find("li#linkedin_status:last").attr("update_time");if(!c){if(d){linkedinError("status-error-panel","This person does not share his/her updates");return}linkedinError("status-error-panel","Member does not share his/her updates. Get connected");return}$("#spinner-status").show();var b=this;$(this).removeClass("twitter_stream");getAnyFiveNetworkUpdatesInLinkedIn(e,c,f,b)});$("#linkedin_less").die().live("click",function(a){a.preventDefault();if($(this).attr("less")=="true"){$(this).attr("less","false");$(this).text("See Less..");$("#linkedin_current_activity").hide();$("#linkedin_refresh_stream").show();return}$(this).attr("less","true");$(this).text("See More..");$("#linkedin_current_activity").show();$("#linkedin_refresh_stream").hide()});$("#linkedin_refresh_stream").die().live("click",function(a){a.preventDefault();$("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);getAllRecentNetworkUpdatesInLinkedIn(e,f)})}function getFirstFiveLinkedInNetworkUpdates(b){$(".linkedin_current_activity",$("#Linkedin")).hide();$("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);$.getJSON("/core/api/widgets/social/updates/index/"+LinkedIn_Plugin_Id+"/"+b+"/0/5",function(a){$("#status_load").remove();if(a&&a.length!=0){$("#linkedin_social_stream").html(getTemplate("linkedin-update-stream",a));$("#linkedin_refresh_stream").show();Stream_Data=a;head.js(LIB_PATH+"lib/jquery.timeago.js",function(){$(".time-ago",$("#linkedin_social_stream")).timeago()});return}$(".linkedin_current_activity",$("#Linkedin")).show()}).error(function(a){$("#status_load").remove();linkedinMainError("linkedin_social_stream",a.responseText)})}function getAllRecentNetworkUpdatesInLinkedIn(d,c){$.getJSON("/core/api/widgets/social/updates/"+LinkedIn_Plugin_Id+"/"+d,function(a){$("#status_load").remove();$("#linkedin_social_stream").html(getTemplate("linkedin-update-stream",a));head.js(LIB_PATH+"lib/jquery.timeago.js",function(){$(".time-ago",$("#linkedin_social_stream")).timeago()});if(a.length==0){$("#linkedin_stream").hide();$("#linkedin_less").show();return}$("#linkedin_stream").show();$("#linkedin_less").hide()}).error(function(a){$("#status_load").remove();if(c){$("#linkedin_social_stream").html(getTemplate("linkedin-update-stream",c))}linkedinError("status-error-panel",a.responseText)})}function getAnyFiveNetworkUpdatesInLinkedIn(f,h,g,e){$.getJSON("/core/api/widgets/social/updates/more/"+LinkedIn_Plugin_Id+"/"+f+"/0/5/1262304000/"+h,function(a){$("#spinner-status").hide();$(e).addClass("linkedin_stream");if(a.length==0){linkedinError("status-error-panel","No more updates available");$("#linkedin_refresh_stream").show();if(g.length>3){$("#linkedin_stream").hide();$("#linkedin_less").show()}return}$("#linkedin_social_stream").append(getTemplate("linkedin-update-stream",a));$(".time-ago",$("#linkedin_social_stream")).timeago();$("#linkedin_current_activity").hide();$("#linkedin_refresh_stream").show()}).error(function(a){$("#spinner-status").hide();$(e).addClass("linkedin_stream");linkedinError("status-error-panel",a.responseText)})}function sendLinkedInAddRequest(e){var d={};d.headline="Connect";d.info="Connect to "+Linkedin_current_profile_user_name+" on Linkedin";d.description="I'd like to add you to my professional network on LinkedIn.";$("#linkedin_messageModal").remove();var f=getTemplate("linkedin-message",d);$("#content").append(f);$("#linkedin_messageModal").on("shown",function(){head.js(LIB_PATH+"lib/bootstrap-limit.js",function(){$(".linkedin_connect_limit").limit({maxChars:275,counter:"#linkedin_counter"});$("#linkedin_messageModal").find("#link-connect").focus()})});$("#linkedin_messageModal").modal("show");$("#send_linked_request").click(function(a){a.preventDefault();if(!isValidForm($("#linkedin_messageForm"))){return}$(this).text("Saving..");sendRequestToLinkedIn("/core/api/widgets/social/connect/"+LinkedIn_Plugin_Id+"/"+e,"linkedin_messageForm","linkedin_messageModal")})}function sendLinkedInMessage(e){var d={};d.headline="Send Message";d.info="Send message to "+Linkedin_current_profile_user_name+" on LinkedIn";$("#linkedin_messageModal").remove();var f=getTemplate("linkedin-message",d);$("#content").append(f);$("#linkedin_messageModal").modal("show");$("#send_linked_request").click(function(a){a.preventDefault();if(!isValidForm($("#linkedin_messageForm"))){return}$(this).text("Saving..");sendRequestToLinkedIn("/core/api/widgets/social/message/"+LinkedIn_Plugin_Id+"/"+e,"linkedin_messageForm","linkedin_messageModal")})}function sendRequestToLinkedIn(d,f,e){$.post(d,$("#"+f).serialize(),function(a){setTimeout(function(){$("#"+e).modal("hide")},2000)}).error(function(a){$("#"+e).remove();linkedinError("linkedin-error-panel",a.responseText)})}function reSharePost(e,f,d){$.get("/core/api/widgets/social/reshare/"+LinkedIn_Plugin_Id+"/"+e+"/"+f,function(a){$(d).css("color","green");$(d).text("Shared")}).error(function(a){linkedinError("linkedin-error-panel",a.responseText)})}function getLinkedinIdByUrl(e,f){var d={};d.web_url=e;queuePostRequest("widget_queue","/core/api/widgets/social/getidbyurl/"+LinkedIn_Plugin_Id,d,function(a){if(!a){alert("URL provided for linkedin is not valid ");getLinkedinMatchingProfiles();agile_crm_delete_contact_property_by_subtype("website","LINKEDIN",e);return}if(f&&typeof(f)==="function"){f(a)}},function(a){if(a.responseText.indexOf("Public profile URL is not correct")!=-1){alert("URL provided for linkedin is not valid "+a.responseText);agile_crm_delete_contact_property_by_subtype("website","LINKEDIN",e);return}linkedinMainError(LINKEDIN_PLUGIN_NAME,a.responseText)})}function getExperienceOfPerson(b){$("#linkedin_experience_panel").html(LINKEDIN_UPDATE_LOAD_IMAGE);$.get("/core/api/widgets/social/experience/"+LinkedIn_Plugin_Id+"/"+b,function(a){showExperienceInLinkedIn(a)}).error(function(a){$("#status_load").remove();Experience_data=undefined;linkedinMainError("linkedin_experience_panel",a.responseText)})}function getLinkedInSharedConnections(b){$("#linkedin_shared_panel").html(LINKEDIN_UPDATE_LOAD_IMAGE);$.get("/core/api/widgets/social/shared/connections/"+LinkedIn_Plugin_Id+"/"+b,function(d){var a="<div style='padding:10px'>";if(d.length==0){$("#linkedin_shared_panel").html("<div style='padding: 10px;line-height:160%;'>No shared connections</div>");return}Shared_Connections=d;$.each(d,function(f,c){if(c.picture==null){c.picture="https://contactuswidget.appspot.com/images/pic.png"}a=a.concat(getTemplate("linkedin-shared",c))});a=a+"</div>";$("#linkedin_shared_panel").html(a);$(".linkedinSharedImage").die().live("mouseover",function(){$(this).popover({placement:"left"});$(this).popover("show")})}).error(function(a){$("#status_load").remove();linkedinMainError("linkedin_shared_panel",a.responseText)})}function grantAccessToLinkedIn(f){$("#Linkedin").html(LINKEDIN_UPDATE_LOAD_IMAGE);var e=window.location.href;var d="/scribe?service=linkedin&return_url="+encodeURIComponent(e)+"&plugin_id="+encodeURIComponent(LinkedIn_Plugin_Id);$("#Linkedin").html("<div class='widget_content' style='border-bottom:none;line-height: 160%;' >"+f+"<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\""+d+"\" style='text-decoration: none;'>Regrant Access</a></p></div>")}function linkedinError(f,d,e){linkedinMainError(f,d,enable_check);$("#"+f).show();$("#"+f).fadeOut(10000)}function linkedinMainError(g,h,e){if(h=="Access granted to your linkedin account has expired."){grantAccessToLinkedIn(h);return}var f={};f.message=h;f.disable_check=e;$("#"+g).html(getTemplate("linkedin-error-panel",f))};
+function startLinkedinWidget(){
+	showLinkedinMatchingProfilesBasedOnName();
+}
+/**
+ * Fetches matching profiles from LinkedIn based on current contact
+ * first name and last name
+ */
+function showLinkedinMatchingProfilesBasedOnName(){
+	console.log(navigator.userAgent+"user agent");
+	if(navigator.userAgent.indexOf("Chrome") != -1){
+		var evt = document.createEvent('Event');
+		evt.initEvent('plugincheck', true, false);
+		document.dispatchEvent(evt);
+		if($("#contact_name").attr("data-plugin") == "installed"){
+			var linkedin_profile = agile_crm_get_contact_property_by_subtype("website","LINKEDIN");
+			console.log(linkedin_profile+"linkedin profile");
+		    if(!linkedin_profile){
+				var contact_image = agile_crm_get_contact_property("image");
+				var name = "";
+				if (agile_crm_get_contact_property("first_name"))
+					name = name + agile_crm_get_contact_property("first_name");
+				if (agile_crm_get_contact_property("last_name"))
+					name = name + " " + agile_crm_get_contact_property("last_name");
+
+				var evt = document.createEvent('Event');
+				evt.initEvent('myCustomEvent', true, false);
+				document.dispatchEvent(evt);
+			}else{
+				console.log(linkedin_profile+"linkedin profile");
+				var source = linkedin_profile;
+				if(source.startsWith("linkedin")){
+					source = "https://"+source;
+				}
+				$("#Linkedin").html("<iframe id='linkedin-iframe' src='"+source+"' height='500px' width='250px' style='overflow: hidden;' frameBorder='0'><p>Your browser does not support iframes.</p></iframe>");
+			}
+		}else{
+			$("#Linkedin").html("<div class='col-md-12'>"+_agile_get_translated_val('widgets','install-plugin')+"</div>");
+		}
+	}else{		
+		$("#Linkedin").html("<div class='col-md-12'>"+_agile_get_translated_val('widgets','linkedin-browser-info')+"</div>");
+	}
+}
+function checkPropertyValue(propertyName,propValue,subtype){
+	var contact_model = App_Contacts.contactDetailView.model;
+	var properties = contact_model.get('properties');
+	var property_value;
+	$.each(properties, function(index, property){
+		if (property.name == propertyName && property.subtype == subtype && property.value == propValue){
+			property_value = property.value;
+			return false;
+		}
+	});
+	if (property_value){
+		return true;
+	}else{
+		return false;
+	}
+}
+function checkPropertyValueWithOutSubType(propertyName,propValue){
+	var contact_model = App_Contacts.contactDetailView.model;
+	var properties = contact_model.get('properties');
+	var property_value;
+	$.each(properties, function(index, property){
+		if (property.name == propertyName && property.value == propValue){
+			property_value = property.value;
+			return false;
+		}
+	});
+	if (property_value){
+		return true;
+	}else{
+		return false;
+	}
+}
+/**
+ * Updates a contact with the list of property name and its value specified in
+ * propertiesArray. If property name already exists with the given then replaces
+ * the value, if property is new then creates a new field and saves it
+ * 
+ * @param propertiesArray
+ *            Array of the properties to be created/updated
+ * @param callback
+ */
+function agile_crm_update_contact_properties_linkedin(propertiesArray, callback){	
+	var contact_collection;
+	var contact_model = App_Contacts.contactDetailView.model;
+	var contactId = contact_model.id;
+	var properties = contact_model.toJSON()['properties'];
+	for ( var i in propertiesArray){
+		var flag = false;
+		$.each(properties, function(index, property){
+			if (property.name == propertiesArray[i].name){
+				flag = true;
+				if (propertiesArray[i].subtype){
+					if (propertiesArray[i].subtype == property.subtype)
+						property.value = propertiesArray[i].value;
+					else
+						flag = false;
+				}
+				else
+					property.value = propertiesArray[i].value;
+
+				// break each if match is found
+				return false;
+			}
+		});
+		// If flag is false, given property is new then new field is created
+		if (!flag){
+			if(propertiesArray[i].type != "SYSTEM"){
+				properties.push({ "name" : propertiesArray[i].name, "value" : propertiesArray[i].value, "subtype" : propertiesArray[i].subtype, "type" : "CUSTOM" });
+			}else{
+				properties.push({ "name" : propertiesArray[i].name, "value" : propertiesArray[i].value, "subtype" : propertiesArray[i].subtype, "type" : "SYSTEM" });
+			}
+		}
+
+	}
+	// If property is new then new field is created
+	contact_model.set({ "properties" : properties });
+	// Save model
+	console.log("many many times");
+	var model = new Backbone.Model();
+	model.url = "core/api/contacts";
+	model.save(contact_model.toJSON(), {
+		success : function(data){
+			if(data){
+				var currentContactId = App_Contacts.contactDetailView.model.id;
+				console.log(currentContactId + " : "+ contactId);
+				if(currentContactId && contactId == currentContactId){
+					App_Contacts.contactDetailView.model = data;
+
+					var contactDetailsBlock = new Base_Model_View({ 
+						template : "contact-details-block",					
+						data : App_Contacts.contactDetailView.model					
+					});
+
+					var block_el = contactDetailsBlock.render(true).el;
+	      			$('#contact-details-block').html($(block_el)); 
+
+	      			if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+						contact_collection = App_Contacts.contactsListView.collection;
+
+	      			if (contact_collection != null)
+						contact_detail_view_navigation_linkedin(contactId, App_Contacts.contactsListView, el);
+
+	      			var msgType = "success";
+					var msg = _agile_get_translated_val('widgets','linkedin-data-sync-success');
+					showNotyPopUp(msgType , msg, "bottomRight");
+	      		}
+	      	}
+		}
+	});
+}
+/**
+ * To navigate from one contact detail view to other
+ */
+function contact_detail_view_navigation_linkedin(id, contact_list_view){
+	var contact_collection = contact_list_view.collection;
+	var collection_length = contact_collection.length;
+    var current_index = contact_collection.indexOf(contact_collection.get(id));
+    var previous_contact_id;
+    var next_contact_id;
+    //fetch next set so that next link will work further.
+    if(collection_length <= current_index+5) {
+    	contact_list_view.infiniScroll.fetchNext();
+    }
+    if (collection_length > 1 && current_index < collection_length && contact_collection.at(current_index + 1) && contact_collection.at(current_index + 1).has("id")) {
+     
+    	next_contact_id = contact_collection.at(current_index + 1).id
+    }
+
+    if (collection_length > 0 && current_index != 0 && contact_collection.at(current_index - 1) && contact_collection.at(current_index - 1).has("id")) {
+
+    	previous_contact_id = contact_collection.at(current_index - 1).id
+    }
+
+    var route = "contact";
+    if(Current_Route && Current_Route == "lead/" + id)
+    {
+      route = "lead";
+    }
+
+    if(previous_contact_id != null)
+    	$('.navigation').append('<a style="float:left;" href="#'+route+'/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
+    if(next_contact_id != null)
+    	$('.navigation').append('<a style="float:right;" href="#'+route+'/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
+	
+}
+/*function loadframe(){
+	console.log("load frmae valueee");
+	var node = document.getElementById('contact_name');
+	var contactname = node.textContent;
+	var iframeWin = document.getElementById("linkedin-iframe").contentWindow;
+	iframeWin.postMessage(contactname, "https://touch.www.linkedin.com/#search");
+}
+function loadframeWithoutHeaders(){
+	var iframeWin = document.getElementById("linkedin-iframe").contentWindow;
+	iframeWin.postMessage("loadwithoutheaders", "https://touch.www.linkedin.com/#search");
+}*/
