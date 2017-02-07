@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +92,7 @@ public class SalesforceSync extends OneWaySyncService
         }
         
 	} catch (Exception e) {
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 		e.printStackTrace();
 	} finally{
 		finalizeSync();	
