@@ -167,12 +167,12 @@ var addAgileFields = function(json, fields, callback)
 			}
 			else{
 				json[k][i].fields["agilefield"] = agilefield;
-				if(json[k][i].title.includes('Input') || json[k][i].title.includes('Select')){
+				if(json[k][i].title.indexOf('Input') > -1 || json[k][i].title.indexOf('Select') > -1){
 					var reqField = json[k][i].fields["required"];
 					delete json[k][i].fields["required"];
 					json[k][i].fields["required"] = reqField;
 				}
-				else if(json[k][i].title.includes('Text') || json[k][i].title.includes('Checkbox')){
+				else if(json[k][i].title.indexOf('Text') > -1 || json[k][i].title.indexOf('Checkbox') > -1){
 					var reqField = json[k][i].fields["required"];
 					var checkField = json[k][i].fields["checked"];
 					delete json[k][i].fields["checked"];

@@ -251,7 +251,7 @@ define([
 			orderedSaveform[0].fields["agiledomain"] = saveform[0].fields["agiledomain"];
 	    }
 		else{
-			if(saveform[i].title == "Text Input" || saveform[i].title == "Password Input" || saveform[i].title.includes("Text") || saveform[i].title == "Appended Checkbox" || saveform[i].title == "Prepended Checkbox" || saveform.title == "TextArea"){
+			if(saveform[i].title == "Text Input" || saveform[i].title == "Password Input" || saveform[i].title.indexOf("Text") > -1 || saveform[i].title == "Appended Checkbox" || saveform[i].title == "Prepended Checkbox" || saveform.title == "TextArea"){
 				orderedSaveform[i]={};
 				orderedSaveform[i].title = saveform[i].title;
 				orderedSaveform[i].fields = {};
@@ -287,7 +287,7 @@ define([
 				orderedSaveform[i].fields["inputsize"] = null;
 				orderedSaveform[i].fields["agilefield"] = saveform[i].fields["agilefield"];
 			}
-			else if(saveform[i].title.includes("Select")){
+			else if(saveform[i].title.indexOf("Select") > -1){
 				orderedSaveform[i]={};
 				orderedSaveform[i].title = saveform[i].title;
 				orderedSaveform[i].fields = {};
@@ -299,7 +299,7 @@ define([
 				orderedSaveform[i].fields["agilefield"] = saveform[i].fields["agilefield"];
 				orderedSaveform[i].fields["required"] = saveform[i].fields["required"];
 			}
-			else if(saveform[i].title.includes("Radios") || saveform[i].title.includes("Checkboxes")){
+			else if(saveform[i].title.indexOf("Radios") > -1 || saveform[i].title.indexOf("Checkboxes") > -1){
 				orderedSaveform[i]={};
 				orderedSaveform[i].title = saveform[i].title;
 				orderedSaveform[i].fields = {};
@@ -313,7 +313,7 @@ define([
 				}
 				orderedSaveform[i].fields["agilefield"] = saveform[i].fields["agilefield"];
 			}
-			else if(saveform[i].title.includes("Button")){
+			else if(saveform[i].title.indexOf("Button") > -1){
 				orderedSaveform[i] = saveform[i];
 			}
 		}	
