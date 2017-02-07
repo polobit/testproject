@@ -3978,3 +3978,6 @@ aside
 {
   position:relative!important;
 }
+input#add_new_milestone {
+    background: #fff;
+}
