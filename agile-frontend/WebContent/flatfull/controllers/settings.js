@@ -1341,17 +1341,27 @@ var SettingsRouter = Backbone.Router
 									$(".online_summer_note")
 								     .summernote({
 	
-									      toolbar : [
+									      /*toolbar : [
 									        [
 									          'style',
 									          [ 'bold', 'italic', 'underline',
 									            'clear' ] ],
 									        [ 'fontsize', [ 'fontsize' ] ],
-									        [ 'insert', [ 'link' ] ] ],
-									        height:'100'
+									        [ 'insert', [ 'link' ] ] ],*/
+									        height:'100',
+									         onImageUpload: function(files, editor, welEditable) {
+									         if(files[0].name.match(/\.(jpg|jpeg|png|gif)$/))
+                                              sendFile(files[0],editor,welEditable);
+                                          else{
+                                          	$("#image_format_error").text("{{agile_lng_translate 'prefs-online-calendar' 'image_format_error_message'}}");
+                                          	setTimeout(function(){
+                                          		$("#image_format_error").text("");
+                                          	},2000);
+                                          }
+                                             }
 									     });
 										 
-										 $(".online_summer_note").code(view.model.get('user_calendar_title'));
+										$(".online_summer_note").code(view.model.get('user_calendar_title'));
 
 								});
 						
@@ -1517,4 +1527,76 @@ function getCurrentDomain(options){
 		return url.split(exp)[0];
 	}
 	return " ";
+
+}
+
+/*function loadLiveChat(){
+	$("#prefs-dropdown-options").on('click','#clickdesk_live_chat',function(e){
+		e.preventDefault();
+		$(this).closest(".dropdown").removeClass("open");
+		CLICKDESK_LIVECHAT.show();
+	});
+}*/
+function sendFile(file, editor, welEditable) {
+	if(file && file.size > 10485760)
+		{
+			showAlertModal(
+				"{{agile_lng_translate 'upload-custom-doc' 'doc-size-limit-exceeded'}}",
+				undefined,
+				undefined,
+				undefined,
+				"{{agile_lng_translate 'upload-custom-doc' 'upload-doc'}}");
+			
+			return;
+		}
+    
+		var formId = $(".online_summer_note").closest("form").attr("id");
+		var fileName= file.name;
+        var fd = new FormData();
+        if(fileName.lastIndexOf("\\") > 0)
+	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
+
+		var key = "panel/uploaded-logo/"+CURRENT_DOMAIN_USER.domain+"/"+fileName;
+		var fileSizeKB = Math.round(file.size / 1024);
+        
+        fd.append("key", key);
+		fd.append("acl", "public-read");
+		fd.append("content-type", "image/*");
+		fd.append("success_action_redirect", "");
+		fd.append("AWSAccessKeyId", "AKIAIBK7MQYG5BPFHSRQ");
+		fd.append("policy", "IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDEwNDg1NzYwXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IiwgIiIgXQogIF0KfQ==");
+		fd.append("signature", "lJaO/ZQyMANyulpZrP/FcxVLz5M=");
+		fd.append("file", file);
+		$.ajax({ 
+			url : "https://agilecrm.s3.amazonaws.com/",
+			method: "POST",
+			//headers : { 'Content-Type' : 'multipart/form-data' },
+			processData: false,
+			contentType : false,
+			data : fd,
+			
+			success : function(response){
+				var url = "https://s3.amazonaws.com/agilecrm/"+key+"?id="+formId;
+				var image = $("<img>").attr("src",url);
+				$('.online_summer_note').summernote("insertNode",image[0]);
+
+				
+			},
+			error : function(response){
+				
+				var $messageEle = $(response.responseXML).find("Message");
+				var $minSizeAllowedEle = $(response.responseXML).find("MinSizeAllowed");
+				if($messageEle.length > 0 && $minSizeAllowedEle.length > 0)
+				{
+					showAlertModal($messageEle.text()+" - "+$minSizeAllowedEle.text()+" bytes", undefined, 
+						undefined, undefined, "{{agile_lng_translate 'upload-custom-doc' 'upload-doc'}}");
+					return;
+				}
+				if(response.responseText)
+				{
+					showAlertModal(response.responseText, undefined, 
+						undefined, undefined, "{{agile_lng_translate 'upload-custom-doc' 'upload-doc'}}");
+				}
+			},
+		});
 }

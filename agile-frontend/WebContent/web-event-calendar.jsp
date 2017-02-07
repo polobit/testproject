@@ -316,9 +316,10 @@ if (scheduleid != null && multiple_users){  %>
 				 String timezone=pro_pic.get(3);
 				 String domain_user_id=pro_pic.get(4);
 				 String custom_message = "";
-				 if(online_prefs!=null)
+				 if(online_prefs!=null){
 					 custom_message = online_prefs.user_calendar_title;
-				 
+				     custom_message = custom_message.split("</p>")[0];
+				 }
 				 custom_message = Jsoup.parse(custom_message).text();
 				 if(custom_message == null)
 					 custom_message = LanguageUtil.getLocaleJSONValue(localeJSON, "welcome-message-single"); 

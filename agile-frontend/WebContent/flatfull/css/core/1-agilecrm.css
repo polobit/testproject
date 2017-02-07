@@ -5857,3 +5857,6 @@ display: table-cell !important;
     height: 20px;
     margin-left: 166px;
 }
+.note-editable p img {
+  max-width: 100%;
+}

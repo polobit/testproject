@@ -41,6 +41,7 @@ $(function(){
          	$("#updateActivityModal #backgroundColor").val(id);
          }
     });
+
 	$("#updateActivityModal").on('click', '#add_event_desctiption', function(e)
 	{
 		e.preventDefault();
