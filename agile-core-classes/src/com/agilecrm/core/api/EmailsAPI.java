@@ -767,7 +767,7 @@ public String getSendgridReputation(@QueryParam("selectedCount") int selectedCou
 	}
 	catch (Exception e)
 	{
-	    System.err.println("Exception occured while checking sendgrid reputation.." + e.getMessage());
+	    System.err.println("Exception occured while checking sendgrid per day limit.." + e.getMessage());
 	    e.printStackTrace();
 	}
 	return null;

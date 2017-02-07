@@ -426,3 +426,18 @@ small {
 	zoom : 1;
 	opacity:0.3;
 }
+.SMS-nexmo_sms.active{
+	 opacity : 0.3;
+}
+.SMS-nexmo_sms.disable{
+	 zoom : 1;
+	opacity:0.3;
+}
+.SMS-nexmo_sms.active:hover{
+	opacity : 1;
+	zoom : 1.05;
+}
+.SMS-nexmo_sms.disable:hover{
+	zoom : 1;
+	opacity:0.3;
+}

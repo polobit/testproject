@@ -149,6 +149,9 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				if (pluginName == "CallScript") {
 					globalCallWidgetSet();
 				}
+				if (pluginName == "Nexmo"){
+					globalCallWidgetSet();
+				}
 
 			}else{
 				msgType = "error";
@@ -411,7 +414,12 @@ function addConfigurableWidget(widgetId, widgetName, templateName) {
 
 			if (model.name == "TwilioIO" && model.is_added) {
 				fill_twilioio_numbers();
+			}else if(model.name == "Nexmo" && model.is_added){
+				fill_nexmo_numbers();
+
 			}
+
+			
 		});
 
 	});

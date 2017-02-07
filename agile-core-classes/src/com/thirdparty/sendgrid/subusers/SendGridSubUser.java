@@ -307,7 +307,7 @@ public class SendGridSubUser extends SendGridLib
 					+ URLEncoder.encode(DateUtil.getDateInGivenFormat(timestamp, "YYYY-MM-dd", null)
 							, "UTF-8")*/
 					+"&"+ "aggregated_by" + "=" + URLEncoder.encode(statsData.getDuration(), "UTF-8");
-			System.out.println("Send query : "+queryString);
+			
 			response = HTTPUtil.accessURLUsingAuthentication(url + "?" + queryString, username, password,
 					"GET", null, false, "application/json", "application/json");
 		}
@@ -631,7 +631,7 @@ public class SendGridSubUser extends SendGridLib
 		  JSONArray responseJSON = new JSONArray(getSubUserStatistics(domain, null, stats));
 		  emailSent = responseJSON.getJSONObject(0).getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT);
 		  
-		  System.out.println("Per Email sent Count for domain : " + domain + emailSent);
+		  System.out.println("Per Day Email sent Count for : " + emailSent);
 		}
 		catch (Exception e)
 		{
@@ -665,7 +665,7 @@ public class SendGridSubUser extends SendGridLib
 			  for(int index =0; index < responseJSON.length(); index ++)
 			      emailSent += responseJSON.getJSONObject(index).getJSONArray("stats").getJSONObject(0).getJSONObject("metrics").getInt(EMAIL_SENT);
 			  
-			  System.out.println("Last three month Email sent Count for domain : " + + emailSent);
+			  System.out.println("Last three month Email sent Count : "  + emailSent);
 			}
 			catch (Exception e)
 			{

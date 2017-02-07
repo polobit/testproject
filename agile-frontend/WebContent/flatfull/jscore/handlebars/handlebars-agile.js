@@ -140,6 +140,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("paypal.js");
 	}
+	else if (templateName.indexOf("nexmo") == 0)
+	{
+		template_relative_urls.push("nexmo.js");
+	}
 	else if (templateName.indexOf("knowlarity") == 0)
 	{
 		template_relative_urls.push("knowlarity.js");

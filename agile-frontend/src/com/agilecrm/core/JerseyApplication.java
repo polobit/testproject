@@ -195,6 +195,8 @@ public class JerseyApplication extends Application
 
 	//JSONIO
 	s.add(com.agilecrm.core.api.JsonIOAPI.class);
+	//Nexmo
+	s.add(com.agilecrm.core.api.widgets.NexmoWidgetAPI.class);
 
 	return s;
     }

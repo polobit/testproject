@@ -296,5 +296,9 @@ var MODAL_MESSAGES = {
 	"delete_lead" : {
 		"title": "{{agile_lng_translate 'leads-view' 'delete-lead'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
-	}
+	},
+	"no_nexmo_numbers" : {
+		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
+		"message" : "invalid nexmo number"
+	},
 };
