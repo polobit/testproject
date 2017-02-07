@@ -41,7 +41,7 @@ import com.agilecrm.imap.OAuth2Authenticator;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPSSLStore;
 import com.sun.mail.imap.IMAPStore;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+//import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 
 @SuppressWarnings("serial")
 public class IMAPSendReplyServlet extends HttpServlet{

@@ -1103,10 +1103,10 @@ function initializeComposeEmailListeners(){
 	});
 }
 function helperFunction(){
-	//$("#mails-list").remove();
+	$("#mails-list").remove();
 	$("#mails-list-view").append("<ul class='portlet_body portlet_width list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 	$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
-	//$("#mail-details-view").remove();
+	$("#mail-details-view").remove();
 	$("#mail-detail-view").append("<div class='portlet_body portlet_width' id='mail-details-view' style='display:none;'></div>");
 }
 function deSelectCheckBoxes(classname){

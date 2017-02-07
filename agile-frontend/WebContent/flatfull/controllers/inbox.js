@@ -154,10 +154,10 @@ function renderToMailList(url,offset_val,page_size_val, folder_id){
 			this.loadResults();
 		},
 		loadResults: function () {
-			var divhtml=$('<div style="width: 82%;height:100%;-webkit-box-pack: center;justify-content: center;/* -webkit-box-align: center; */align-items: center;top: 0;/* background-color: gray; */position: fixed;/* z-index: 10000; */display:flex;/* align-items: center; */" class="text-center">'+LOADING_HTML+'</div>');
+			//var divhtml=$('<div style="width: 82%;height:100%;-webkit-box-pack: center;justify-content: center;/* -webkit-box-align: center; */align-items: center;top: 0;/* background-color: gray; */position: fixed;/* z-index: 10000; */display:flex;/* align-items: center; */" class="text-center">'+LOADING_HTML+'</div>');
 			//if((("#mails-list").children().size())>1)
 			
-			$("#mails-list").append(divhtml);
+			$("#mails-list").append(LOADING_HTML);
 		    
 			$("#operation-menu").hide();
 			$("#mark-dropdown").hide();

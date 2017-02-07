@@ -17,14 +17,16 @@ package com.agilecrm.imap;
 
 import java.security.Provider;
 import java.security.Security;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import javax.mail.Session;
 import javax.mail.URLName;
 
+import com.google.appengine.api.NamespaceManager;
 import com.sun.mail.auth.OAuth2SaslClientFactory;
-import com.sun.mail.imap.IMAPSSLStore;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
 
@@ -78,6 +80,9 @@ public class OAuth2Authenticator
      * 
      * @return An authenticated IMAPStore that can be used for IMAP operations.
      */
+
+    public static Map<String, IMAPStoreWrapper> cacheMap = new ConcurrentHashMap<String, IMAPStoreWrapper>();
+
     public static IMAPStore connectToImap(String host, int port, String userEmail, String oauthToken, boolean debug)
 	    throws Exception
     {
@@ -86,15 +91,61 @@ public class OAuth2Authenticator
 	props.put("mail.imap.auth.plain.disable", "true");
 	props.put("mail.imaps.sasl.mechanisms", "XOAUTH2");
 	props.put("mail.imaps.sasl.mechanisms.oauth2.oauthToken", oauthToken);
-	System.out.println("the token:"+oauthToken);
+	// System.out.println("the token:" + oauthToken);
 	Session session = Session.getInstance(props);
-	//session.setDebug(debug);
+	String domain = NamespaceManager.get();
+	String connection_key = domain + userEmail;
 
-	final URLName unusedUrlName = null;
-	IMAPSSLStore store = new IMAPSSLStore(session, unusedUrlName);
-	final String emptyPassword = " ";
-	store.connect(host, port, userEmail, oauthToken);
-	return store;
+	IMAPStoreWrapper store = cacheMap.get(connection_key);
+	IMAPStore store1 = null;
+
+	// If exists in cachemap
+	if (store != null)
+	{
+	    store1 = store.getStore();
+
+	    // storeWrapper.setLastUsedTime(System.currentTimeMillis());
+
+	    if (store1 != null)
+	    {
+		if (store1.isConnected())
+		{
+		    System.out.println("Returning store from map cache INBOX...");
+		    return store1;
+		}
+		else
+		{
+		    store1.connect();
+
+		    if (store1.isConnected())
+			return store1;
+		    else
+			store1.close();
+		}
+	    }
+	}
+
+	store1 = (IMAPStore) session.getStore("imaps");
+	store1.connect(host, userEmail, oauthToken);
+	// cacheMap.put(connection_key, store);
+	addStoreToCacheMap(connection_key, store1);
+
+	// CacheUtil.setCache(connection_key, store);
+
+	System.out.println("connected");
+	System.out.println("CacheMap size is " + cacheMap.size());
+	//
+	return store1;
+    }
+
+    public static void addStoreToCacheMap(String key, IMAPStore store)
+    {
+	IMAPStoreWrapper storeWrapper = new IMAPStoreWrapper();
+	storeWrapper.setStore(store);
+	storeWrapper.setLastUsedTime(System.currentTimeMillis());
+	cacheMap.put(key, storeWrapper);
+	// CacheUtil.setCache(key, store);
+	System.out.println("the connection key in addStore method INBOX" + key);
     }
 
     /**
@@ -127,7 +178,7 @@ public class OAuth2Authenticator
 	props.put("mail.smtp.sasl.mechanisms", "XOAUTH2");
 	props.put("mail.imaps.sasl.mechanisms.oauth2.oauthToken", oauthToken);
 	Session session = Session.getInstance(props);
-	//session.setDebug(debug);
+	// session.setDebug(debug);
 
 	final URLName unusedUrlName = null;
 	SMTPTransport transport = new SMTPTransport(session, unusedUrlName);
