@@ -199,10 +199,16 @@ public class EmailsAPI
 	  //  if (url == null)
 	  //  {
 		//passing the agile mail and sending the URL of rest of the pararm
+		
+		EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();
 
 		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
-			null);
-		return EmailUtil.getEmails(contactEmails);
+			null,emailPrefs);
+		JSONObject response = new JSONObject();
+		response.put("emails", contactEmails);
+		response.put("emailPrefs", emailPrefs.getFetchUrls());
+		///return EmailUtil.getEmails(contactEmails);
+		return response.toString();
 		
 	  //  }
 
@@ -240,32 +246,34 @@ public class EmailsAPI
     {
 	try
 	{
+		EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();
+		
 		JSONArray contactEmails = ContactEmailUtil.mergeCompanyEmails(StringUtils.split(searchEmail, ",")[0],
-			null);
-		JSONObject res = new JSONObject();
+			null,emailPrefs);
+		JSONObject response = new JSONObject();
 
 		// return in the same format {emails:[]}
-		EmailPrefs emailPrefs = null;
-		List<String> mailUrls = new ArrayList<>();
-		
-		try
-		{
-		    emailPrefs = ContactEmailUtil.getEmailPrefs();
-		    mailUrls = emailPrefs.getFetchUrls();
-		    String agileEmailsUrl = "core/api/emails/agile-cemails?count=20";
-		    for(int i=0; i< mailUrls.size();i++){
-		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
-		    		mailUrls.remove(i);
-		    	}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
-		res.put("emails", contactEmails);
-		res.put("emailPrefs", mailUrls);
-		return res.toString();
+//		EmailPrefs emailPrefs = null;
+//		List<String> mailUrls = new ArrayList<>();
+//		
+//		try
+//		{
+//		    emailPrefs = ContactEmailUtil.getEmailPrefs();
+//		    mailUrls = emailPrefs.getFetchUrls();
+//		    String agileEmailsUrl = "core/api/emails/agile-cemails?count=20";
+//		    for(int i=0; i< mailUrls.size();i++){
+//		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
+//		    		mailUrls.remove(i);
+//		    	}
+//		    }
+//		}
+//		catch (Exception e)
+//		{
+//		    e.printStackTrace();
+//		}
+		response.put("emails", contactEmails);
+		response.put("emailPrefs", emailPrefs.getFetchUrls());
+		return response.toString();
 	}
 	catch (Exception e)
 	{
@@ -417,6 +425,8 @@ public class EmailsAPI
 	try
 	{
 	    emailPrefs = ContactEmailUtil.getEmailPrefs();
+	    emailPrefs.allInboundUserNames = emailPrefs.getAllUserNames();
+	    emailPrefs.addFetchUrl("core/api/emails/agile-emails?count=20&all=1");
 	}
 	catch (Exception e)
 	{
@@ -441,11 +451,15 @@ public class EmailsAPI
     @Path("agile-emails")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("search_email") String searchEmail,@QueryParam("count") String countString)
+    public List<ContactEmailWrapper> getAgileEmails(@QueryParam("search_email") String searchEmail,@QueryParam("count") String countString,
+    		@QueryParam("all") String allEmails)
     {
 	List<ContactEmailWrapper> emailsList = null;
 	try
 	{
+		boolean all = false;
+		if(StringUtils.isNotBlank(allEmails))
+			all = allEmails.equals("1");
 	    // Removes unwanted spaces in between commas
 	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
 
@@ -476,18 +490,12 @@ public class EmailsAPI
 	    
         if(contactEmails!= null)
         {
-		    JSONArray agileEmails = new JSONArray();
-		    // Merge Contact Emails with obtained imap emails
-		    for (ContactEmail contactEmail : contactEmails)
-		    {
-			// parse email body
-			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-	
-			ObjectMapper mapper = new ObjectMapper();
-			String emailString = mapper.writeValueAsString(contactEmail);
-			agileEmails.put(new JSONObject(emailString));
-		    }
-	
+		    JSONArray agileEmails = null;
+        	if(!all)
+        		agileEmails = ContactEmailUtil.getAgileEmails(contactEmails);
+        	else
+        		agileEmails = ContactEmailUtil.removeDuplicatesFromAgileEmails(contactEmails);
+        	
 		    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
 			    new TypeReference<List<ContactEmailWrapper>>()
 			    {
@@ -892,8 +900,13 @@ public String getSendgridWhitelabelPermission() throws Exception
     {
 	try
 	{
-		JSONArray contactEmails = ContactEmailUtil.mergeLeadEmails(StringUtils.split(searchEmail, ",")[0], null);
-		return EmailUtil.getEmails(contactEmails);
+		EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();
+		JSONArray contactEmails = ContactEmailUtil.mergeLeadEmails(StringUtils.split(searchEmail, ",")[0], null,emailPrefs);
+		JSONObject response = new JSONObject();
+		response.put("emails", contactEmails);
+		response.put("emailPrefs", emailPrefs.getFetchUrls());
+		//return EmailUtil.getEmails(contactEmails);
+		return response.toString();
 	}
 	catch (Exception e)
 	{
