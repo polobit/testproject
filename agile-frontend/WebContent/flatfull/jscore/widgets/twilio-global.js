@@ -142,6 +142,7 @@ $(function(){
 
 		number =getFormattedPhone(number, contact);
 		contact['phone'] = number;
+		contact['widget_name'] = "Twilio";
 		showDraggablePopup(contact, "sms");
 
       /* $.each(SMS_From_Number,function(index,num){ 		

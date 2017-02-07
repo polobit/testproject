@@ -29,7 +29,9 @@ cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
 cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
 
+
 cat flatfull/tpl/voice-mail/*.html > tpl/min/flatfull/voice-mail.js
+cat flatfull/tpl/widget/nexmo/*.html > tpl/min/flatfull/nexmo.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js

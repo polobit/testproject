@@ -1,0 +1,50 @@
+<script id="nexmo-login-template" type="text/html">
+<div>
+	<form autocomplete="off" id="nexmo_login_form" name="nexmo_login_form" method="post" >
+    	<fieldset>
+        <input type="hidden" id="nexmo_number_sid" value="" name="nexmo_number_sid"></input>
+		    <p class="m-t-sm">{{agile_lng_translate 'widgets' 'Nexmo-content-new'}} </p>
+			  
+				<label><b>{{agile_lng_translate 'widgets' 'enter-nexmo-widget-details'}} </b>
+          <span>         
+       			<img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'nexmo-tooltip'}}" id="element-title" data-original-title="{{agile_lng_translate 'widgets' 'how-to-get-this'}}">
+        	</span>
+        </label>    
+
+				<div class="control-group form-group">
+          <div class="controls">
+            <input type="text" id=""  value="" name="nexmo_api_key" style="display:none" />
+                <input autocomplete="off" type="text" id="nexmo_api_key"  value="" name="nexmo_api_key" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'api-key-validation'}}" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'api-key'}}"  minlength= "5" required></input>
+          </div>
+        </div>
+        
+        <div class="control-group form-group">
+            <div class="controls">
+                <input type="password" style="display:none" />
+                    <input autocomplete="off"  type="password" id="nexmo_secret_key" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'secret-key-validation'}}" value="" name="nexmo_secret_key" placeholder="{{agile_lng_translate 'admin-settings-prefs' 'api-screte'}}" minlength= "5" required></input>
+            </div>
+        </div>            
+
+        <div class="control-group form-group" id="nexmo_from_number" style="display:none;">
+				    <label class="control-label">{{agile_lng_translate 'widgets' 'verified-nexmo-caller-ids'}}
+               <span class="v-top">         
+       				   <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'verified-nexmo-caller-ids-tooltip-new'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
+        			  </span>
+            </label>
+				    <div class="controls" id="contactTypeAhead">
+			         <select name="nexmo_number" id="nexmo_number" class="form-control" required>	</select>
+  			   </div> 
+			  </div>  
+          <span id="error-nexmo-number-not-selected" class="help-inline text-danger" style="display:none;">{{agile_lng_translate 'widgets' 'please-select-nexmo-number'}}</span>
+          <span id="note-nexmo-number-not-available" class="help-inline text-danger" style="display:none;"></span>
+          
+        <div class="m-t text-center">
+           <a href="#" id="validate_nexmo_account" class="btn btn-sm btn-primary">{{agile_lng_translate 'widgets' 'validate'}}</a>
+        	<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary" style="display:none;">{{agile_lng_translate 'portlets' 'save'}}</a>
+        	<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
+        </div>              
+     </fieldset>
+    </form>
+  </div>
+</script>
+

@@ -87,6 +87,13 @@
 													{{agile_lng_translate 'deal-view' 'beta'}}
 												</center>  
 				        					{{else}}
+								        	{{#if_equals name "Nexmo"}}
+												<center>  
+									  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
+									  					<img src="{{logo_url}}" style="height: 47px;">					  					
+									  				</span>
+												</center> 
+						                   {{else}}
 										      <center> 
 										        <img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" />
 										      </center> 
@@ -99,6 +106,7 @@
 				 			{{/if_equals}}
 						{{/if_equals}}
 		   			{{/if_equals}}
+		  	 {{/if_equals}}
 		  	 {{/if_equals}}
 	   {{/if_equals}}
   </div>
@@ -121,11 +129,15 @@
 					{{#if_equals name "Asterisk"}}
 						<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
  					{{else}}
+ 					{{#if_equals name "Nexmo"}}
+						<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
+						{{else}}
 						<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip">
 					{{/if_equals}}
 			{{/if_equals}}
 			{{/if_equals}}
 			{{/if_equals}}
+		{{/if_equals}}
 		{{/if_equals}}
 	{{/if_equals}}
 		{{#if_equals widget_type "CUSTOM"}}
@@ -235,6 +247,9 @@
 		                		{{#if_equals name "Asterisk"}}
 		               	  			<a></a>
 		               	  		{{else}}
+		               	  	    {{#if_equals name "Nexmo"}}
+		               	  			<a></a>
+		               	  		{{else}} 	
 			                	{{#isAdmin}}
 	                           		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
 	  									<i class="fa fa-users"></i>
@@ -248,6 +263,7 @@
   				   		    {{/if_equals}}
   				   		     {{/if_equals}}
                 {{/if_equals}}
+                  {{/if_equals}}
                   {{/if_equals}}
                   {{/if_equals}}
                
@@ -305,11 +321,15 @@
 												{{#if_equals name "Asterisk"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 												{{else}}
+													{{#if_equals name "Nexmo"}}
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+												{{else}}
 													<div class="btn-group">
 					  									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a> 
 
 													</div>
 												{{/if_equals}}	
+										{{/if_equals}}
 										{{/if_equals}}
 										{{/if_equals}}
 										{{/if_equals}}
@@ -347,11 +367,16 @@
 												{{else}}
 													{{#if_equals name "Asterisk"}}
 														<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
-													{{else}}																			
+													{{else}}
+													{{#if_equals name "Nexmo"}}
+														<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+														{{else}}
+
 														<div class="btn-group">
 		  												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>		
 													</div>
 												{{/if_equals}}	
+												{{/if_equals}}
 												{{/if_equals}}
 												{{/if_equals}}
 												{{/if_equals}}
@@ -390,7 +415,10 @@
 												{{else}}
 													{{#if_equals name "Asterisk"}}
 														<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
-														{{else}}											
+												{{else}}
+														{{#if_equals name "Nexmo"}}
+														<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+														{{else}}												
 															<div class="btn-group">
   																<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
   															</div>
@@ -398,6 +426,7 @@
 												{{/if_equals}}
 												{{/if_equals}}
 												{{/if_equals}}
+											{{/if_equals}}
 											{{/if_equals}}
 											{{/if_equals}}
 											{{/if_equals}}
@@ -433,6 +462,9 @@
 											{{else}}	
 												{{#if_equals name "Asterisk"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>	
+											{{else}}
+                                                   {{#if_equals name "Nexmo"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>	
 													{{else}}	
 														<div class="btn-group">										
   															<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
@@ -441,6 +473,7 @@
 												{{/if_equals}}
 												{{/if_equals}}
 											{{/if_equals}}
+										{{/if_equals}}
 										{{/if_equals}}
 										{{/if_equals}}
 										{{/if_equals}}
@@ -502,7 +535,11 @@
 									{{else}}	
 										{{#if_equals name "Asterisk"}}
 											<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
+										{{else}}
+										{{#if_equals name "Nexmo"}}
+											<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
 										{{else}}	
+										
 									
 											<div class="btn-group">										
   												<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
@@ -512,6 +549,7 @@
 								{{/if_equals}}
 								{{/if_equals}}
 								{{/if_equals}}
+							{{/if_equals}}
 							{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals}}
@@ -808,8 +846,14 @@
 									<span class="label label-sm bg-danger" style="margin: 5px;">{{agile_lng_translate 'deal-view' 'beta'}}</span>
 								</center>
 			        		{{else}}
+			        		{{#if_equals name "Nexmo"}}
+						<center>
+							<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;"><span><img src="{{logo_url}}" style="height: 40px;margin-right: 4px;margin-top: 1px;"></span></span>
+						</center>
+						{{else}}
 			        <center><img class="m-b-none img-responsive thumb-xl bg-transparent" style="height:47px;" src="{{logo_url}}" /></center>
 			        {{/if_equals}}
+					{{/if_equals}}
 					{{/if_equals}}
 					{{/if_equals}}
 					{{/if_equals}}
