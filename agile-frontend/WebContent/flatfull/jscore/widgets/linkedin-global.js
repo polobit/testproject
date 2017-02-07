@@ -53,7 +53,7 @@ eventer(messageEvent,function(e) {
 			if(l_phone){
 				var p_no = l_phone.split(",");
 				for(var i=0;i<p_no.length;i++){
-					if(!checkPropertyValueWithOutSubType("email",p_no[i].split(" (")[0].trim())){
+					if(!checkPropertyValueWithOutSubType("phone",p_no[i].split(" (")[0].trim())){
 						propertiesArray.push({ "name" : "phone", "value" : p_no[i].split(" (")[0].trim(),"type" : "SYSTEM"});
 					}
 				}
@@ -69,44 +69,84 @@ eventer(messageEvent,function(e) {
 			}
 			var address = {};
 			var contact_address = agile_crm_get_contact_property("address");
-			//if(!contact_address){
-			if(data.city){
-				var l_city = data.city;
-				address.city = l_city.trim();
-			}
-			if(data.state){
-				var l_state = data.state;
-				address.state = l_state.trim();
-			}
-			if(data.country_name){
-				var l_country = data.country_name;
-				var country_code;
-				address.countryname = l_country.trim();
-				$.ajax({
-					url:"https://restcountries.eu/rest/v1/name/"+address.countryname+"?fullText=true",
-					async: false,
-					success:function(data){
-						$.each(data,function(index,item){
-							country_code = item.alpha2Code;
-							if(address){
-								address.country = country_code;
-								if(agile_crm_is_model_property_changed("address",JSON.stringify(address))){
-									propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+			if(!contact_address){
+				if(data.city){
+					var l_city = data.city;
+					address.city = l_city.trim();
+				}
+				if(data.state){
+					var l_state = data.state;
+					address.state = l_state.trim();
+				}
+				if(data.country_name){
+					var l_country = data.country_name;
+					var country_code;
+					address.countryname = l_country.trim();
+					$.ajax({
+						url:"https://restcountries.eu/rest/v1/name/"+address.countryname+"?fullText=true",
+						async: false,
+						success:function(data){
+							$.each(data,function(index,item){
+								country_code = item.alpha2Code;
+								if(address){
+									address.country = country_code;
+									if(agile_crm_is_model_property_changed("address",JSON.stringify(address))){
+										propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+									}
 								}
+							});
+						}
+					});
+
+				}else{
+					if(address){
+						if(agile_crm_is_model_property_changed("address",JSON.stringify(address))){
+							propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+						}
+					}
+
+				}
+			}else{
+				address_contact = jQuery.parseJSON(contact_address);
+				if(!address_contact.city){
+					if(data.city){
+						address_contact.city = data.city;
+					}
+				}
+				if(!address_contact.state){
+					if(data.state){
+						address_contact.state = data.state;
+					}
+				}
+				if(!address_contact.country){
+					if(data.country_name){
+						var l_country = data.country_name;
+						var country_code;
+						address_contact.countryname = l_country.trim();
+						$.ajax({
+							url:"https://restcountries.eu/rest/v1/name/"+address_contact.countryname+"?fullText=true",
+							async: false,
+							success:function(data){
+								$.each(data,function(index,item){
+									country_code = item.alpha2Code;
+									if(address){
+										address_contact.country = country_code;
+										if(agile_crm_is_model_property_changed("address",JSON.stringify(address_contact))){
+											propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address_contact),"type" : "SYSTEM"});
+										}
+									}
+								});
 							}
 						});
 					}
-				});
-
-			}else{
-				if(address){
-					if(agile_crm_is_model_property_changed("address",JSON.stringify(address))){
-						propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address),"type" : "SYSTEM"});
+				}else{
+					if(address_contact){
+						if(agile_crm_is_model_property_changed("address",JSON.stringify(address_contact))){
+							propertiesArray.push({ "name" : "address", "value" : JSON.stringify(address_contact),"type" : "SYSTEM"});
+						}
 					}
 				}
-
 			}
-			//}
 			verifyUpdateImgPermission(function(can_update){
 				if(can_update){
 					agile_crm_update_contact_properties_linkedin(propertiesArray);

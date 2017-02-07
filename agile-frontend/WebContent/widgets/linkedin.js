@@ -97,9 +97,13 @@ function agile_crm_update_contact_properties_linkedin(propertiesArray, callback)
 					else
 						flag = false;
 				}
-				else
-					property.value = propertiesArray[i].value;
-
+				else{
+					if(property.value != propertiesArray[i].value){
+						flag = false;
+					}else{
+						property.value = propertiesArray[i].value;
+					}
+				}
 				// break each if match is found
 				return false;
 			}
