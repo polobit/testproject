@@ -490,8 +490,17 @@ public class ContactEmailUtil
 			// Merge Contact Emails with obtained imap emails
 			for (ContactEmail contactEmail : contactEmails)
 			{
-				String fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
-				if(!(inboundAccountUserNames.contains(fromEmail)))
+				String fromEmail = null;
+				try
+				{
+					fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+				}
+				catch(Exception e)
+				{
+					fromEmail = null;
+					System.out.println(e.getMessage());
+				}
+				if((fromEmail==null) || (!inboundAccountUserNames.contains(fromEmail)))
 				{
 					// parse email body
 					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
@@ -525,8 +534,17 @@ public class ContactEmailUtil
 			// Merge Contact Emails with obtained imap emails
 			for (ContactEmail contactEmail : contactEmails)
 			{
-				String fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
-				if(!(inboundAccountUserNames.contains(fromEmail)))
+				String fromEmail = null;
+				try
+				{
+					fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+				}
+				catch(Exception e)
+				{
+					fromEmail = null;
+					System.out.println(e.getMessage());
+				}
+				if((fromEmail==null) || (!inboundAccountUserNames.contains(fromEmail)))
 				{
 					// parse email body
 					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
@@ -1237,8 +1255,17 @@ public class ContactEmailUtil
 				// Merge Contact Emails with obtained imap emails
 				for (ContactEmail contactEmail : contactEmails)
 				{
-					String fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
-					if(!(inboundAccountUserNames.contains(fromEmail)))
+					String fromEmail = null;
+					try
+					{
+						fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+					}
+					catch(Exception e)
+					{
+						fromEmail = null;
+						System.out.println(e.getMessage());
+					}
+					if((fromEmail==null) || (!inboundAccountUserNames.contains(fromEmail)))
 					{
 						// parse email body
 						contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
