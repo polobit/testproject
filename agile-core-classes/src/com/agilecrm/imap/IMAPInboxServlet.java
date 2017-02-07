@@ -256,7 +256,7 @@ public class IMAPInboxServlet extends HttpServlet
 		    IMAPFolder folder = folders.get(i);
 		    if (folder != null)
 			folder.close(false);
-		    folder.close(true);
+		    
 		}
 	    }
 	}
