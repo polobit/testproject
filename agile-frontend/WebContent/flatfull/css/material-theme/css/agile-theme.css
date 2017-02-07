@@ -3947,3 +3947,6 @@ margin-top:0px;
 #landingPageSettingForm #cnameSettingsFields .form-group label.input-group-addon {
     padding: 14px 10px;
 }
+input#add_new_milestone {
+    background: #fff;
+}
