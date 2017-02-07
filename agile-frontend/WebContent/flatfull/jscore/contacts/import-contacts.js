@@ -897,6 +897,35 @@ $('#' + id).on('click', '#import-leads', function(e)
 
 });
 
+	$('#' + id).off('change', '.import-select');
+	$('#' + id).on('change', '.import-select', function(e)
+	{
+		if($(this).find("option:selected").hasClass("add-custom-field-from-import"))
+		{
+			var field_label = $(e.currentTarget).parent().siblings("td:first").text();
+			if(field_label)
+			{
+				field_label = field_label.trim();
+			}
+			var scope = "CONTACT";
+			if($("#import-comp").length > 0)
+			{
+				scope = "COMPANY";
+			}
+			else if($("#import-deals").length > 0)
+			{
+				scope = "DEAL";
+			}
+			showCustomFieldModel({"scope" : scope, "field_label" : field_label, "Current_Route" : Current_Route});
+			App_Contacts.SELECTED_OPTION_ROW = $(e.currentTarget).parents("tr").index();
+			$("#selected-row", $("#custom-field-add-modal")).val(App_Contacts.SELECTED_OPTION_ROW);
+		}
+		else
+		{
+			$("#custom-field-add-modal").modal("hide");
+		}
+	});
+
 }
 // Validation function for import contacts.
 function importContactsValidate() 
@@ -1084,6 +1113,10 @@ function parseCSV(key, type)
 					return;
 				constructCustomfieldOptions(type, function(fields, el)
 				{
+					if(fields)
+					{
+						App_Contacts.CUSTOM_FIELDS_FOR_IMPORT = fields;
+					}
 					/*
 					 * $('#custom_fields', template).each(function(index,
 					 * element) { $(element).html(el); });

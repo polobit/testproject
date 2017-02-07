@@ -296,17 +296,17 @@ Proceed to Trial
 </div> <!-- End of form-horizontal -->
 </div>  <!-- End of tab-pane -->
 <div class="tab-pane" role="tab-panel" id="email-content" onclick="document.getElementById('email-quantity').focus();">
-<div class="row" style="display: flex;align-items:stretch;flex-flow:row wrap;">
+<div class="row emailCreditInfo" style="display: flex;align-items:stretch;flex-flow:row wrap;">
 <!-- start of purchase email -->
 <div class="col-md-6 col-sm-6 col-xs-12 {{#is_mobile}} p-r {{else}} p-r-none {{/is_mobile}}" id="purchase-email" {{#is_mobile}} {{else}}style="flex: 1 0;height: auto;"{{/is_mobile}}>
  
 </div>
 <!-- end of purchase email -->
-<div {{#is_mobile}} {{else}}style="flex: 1 0;position: relative;"{{/is_mobile}}>
+<div {{#is_mobile}} {{else}} style="flex: 1 0;position: relative;"{{/is_mobile}}>
 {{#getSubscriptionBasedOnPlan billingData emailPlan}}
 
 <!-- Detailedinfo second dashlet -->
-			<div class="col-md-12 col-sm-12 col-xs-12 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} pos-t-0 ">
+			<div class="col-md-12 col-sm-12 col-xs-12 {{#is_mobile}} pos-rlt {{else}} pos-abs emailCreditCol{{/is_mobile}} pos-t-0 ">
 				<div class="panel panel-default m-t-sm">
 					<div class="panel-heading ">
 						{{agile_lng_translate "portlets" "branded-emails-details"}}
@@ -353,7 +353,7 @@ Proceed to Trial
 <!--end of second onfo dashlet -->
 {{else}}
 <!-- Detailedinfo first dashlet -->
-		<div class="col-md-12 col-sm-12 col-xs-12 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} pos-t-0 ">
+		<div class="col-md-12 col-sm-12 col-xs-12 {{#is_mobile}} pos-rlt {{else}} pos-abs emailCreditCol{{/is_mobile}} pos-t-0 ">
 			<div class="panel panel-default m-t-sm">
 				<div class="panel-heading ">
 				Free Emails
@@ -402,7 +402,7 @@ Proceed to Trial
 <!-- End of detailed Info first dashlet-->
 {{/getSubscriptionBasedOnPlan}}
 <!-- start of email credits dashlet -->
-<div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} emailCreditsDetails" >
+<div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 {{#is_mobile}} pos-rlt {{else}} pos-abs emailCreditCol{{/is_mobile}} emailCreditsDetails" >
 <div class="panel panel-default m-t-sm m-b-sm">
 		<div class="panel-heading ">
 		{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}

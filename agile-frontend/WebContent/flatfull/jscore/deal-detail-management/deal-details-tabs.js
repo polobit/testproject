@@ -781,6 +781,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 						var id = $(targetEl).attr('data');
 						var value = dealEventsView.collection.get(id).toJSON();
 						deserializeForm(value, $("#updateActivityForm"));
+						var color_box_id = $("#updateActivityForm #backgroundColor").val().replace("#","");
+					    $("#updateActivityForm").find('div[id='+color_box_id+']').children().addClass('bcp-selected');
 
 						$('.update-start-timepicker').val(fillTimePicker(value.start));
 						$('.update-end-timepicker').val(fillTimePicker(value.end));
