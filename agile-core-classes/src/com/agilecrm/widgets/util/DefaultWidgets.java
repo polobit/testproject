@@ -135,6 +135,14 @@ public class DefaultWidgets {
 			"Leverage towerdata to personalize content for your customers based on their interests.",
 			"/widgets/rapleaf.js", "/img/plugins/towerdata.png",
 			"/widgets/towerdata-logo-small.png", null, WidgetType.SOCIAL));
+		
+		  widgets.add(new Widget( 
+			  "Linkedin",
+			  "Linkedin",
+			  " LinkedIn helps build professional relationships with contacts and helps keep tabs about their business interests.",
+			  "/widgets/linkedin.js", "/img/plugins/linkedin.png",
+			  "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
+		
 		/**
 		 * Support widgets Order
 		 */
