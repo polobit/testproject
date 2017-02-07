@@ -311,10 +311,11 @@ public class SalesforceAPI {
 	}
 
 	public static void main(String[] args) {
+		long time1 = Calendar.getInstance().getTimeInMillis();
 		try {
-			long time1 = Calendar.getInstance().getTimeInMillis();
+			
 			// SalesforceAPI api = new SalesforceAPI("tejaswitest@gmail.com", "agile1234", "CgBv3oy3GAY7eoNNQnx7yb2e");
-			SalesforceAPI api = new SalesforceAPI("laurence@authoritas.com", "M78wHD6jcT", "ZAMRZi56QRbnvX4oFopc2xwx");
+			SalesforceAPI api = new SalesforceAPI("laurence@authoritas.com", "\\leU\"`6mk6vriL(9", "ZAMRZi56QRbnvX4oFopc2xwx");
 			String query = "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
 			System.out.println(api.retrieveEntities(query));
 			query = "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
@@ -325,10 +326,12 @@ public class SalesforceAPI {
 			// System.out.println(api.retrieveEntities(query));
 			// query = "SELECT AccountId, Name, Description, ExpectedRevenue, Probability,  IsDeleted, IsWon, IsClosed, CloseDate FROM Opportunity";
 			// System.out.println(api.retrieveEntities(query));
-			System.out.println(time1 - Calendar.getInstance().getTimeInMillis());
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println( Calendar.getInstance().getTimeInMillis() - time1);
 	}
 }
