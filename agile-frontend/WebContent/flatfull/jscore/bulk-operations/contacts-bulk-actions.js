@@ -124,7 +124,7 @@ var contacts_bulk_actions = {
 			showModalConfirmation(
 					"{{agile_lng_translate 'bulk-actions' 'assign-campaign'}}",
 					"{{agile_lng_translate 'bulk-actions' 'no-pem-to-update-contacts'}}<br/><br/>{{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}",
-					show_bulk_campaign_assign_page, function()
+					show_bulk_campaign_assign_page(count), function()
 					{
 						// No callback
 					}, function()
@@ -170,7 +170,7 @@ var contacts_bulk_actions = {
 			else
 				message = "{{agile_lng_translate 'billing' 'have-only'}} " + pendingEmails + " {{agile_lng_translate 'bulk-actions' 'emails-left-quota'}}. " + upgrade_link + " {{agile_lng_translate 'bulk-actions' 'wanna-continue'}}<br/><br/>{{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}";
 
-			showModalConfirmation(title, message, show_bulk_campaign_assign_page, function(element)
+			showModalConfirmation(title, message, show_bulk_campaign_assign_page(count), function(element)
 			{
 
 				// No callback

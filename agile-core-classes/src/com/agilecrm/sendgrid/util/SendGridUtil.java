@@ -1012,7 +1012,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 				  remainingEmail = emailSentLimit - todayEmailSent;
 			  }
 			  
-			  if(remainingEmail <= 0)
+			  if(remainingEmail < 0)
 				  return false;
 			  		  
 		}

@@ -360,6 +360,8 @@ public class SMTPPrefsUtil {
             properties.setProperty("mail.smtp.ssl.enable", FALSE);
         	properties.setProperty("mail.transport.protocol", "smtp");
         }
+        
+        properties.setProperty("mail.smtp.connectiontimeout", "30000");
 		return properties;
 	}
 
