@@ -106,9 +106,8 @@ public class NexmoWidgetAPI {
 		System.out.println("In get nexmo number" + apikey + " " + secretkey);
 		try {
 			// Calls NexmoUtil method to retrieve numbers return
-			// return NexmoUtil.getNexmoFromNumbers(apikey, secretkey);
+			 return NexmoUtil.getNexmoFromNumbers(apikey, secretkey);
 
-			return "[\"+919908164425\",\"+918121528351\",\"+919989875839\"]";
 		} catch (Exception e) {
 			throw ExceptionUtil.catchWebException(e);
 		}
