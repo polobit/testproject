@@ -6093,3 +6093,6 @@ email-spam.alert1,Your email reputation has gone low as people have tagged your 
 email-spam.alert2,To avoid your business domain being completely blacklisted by mail servers&#44; Agile has reduced the daily sending limit to,,,,,
 email-spam.alert3,This limit will automatically change in coming days based on the email activity.,,,
 email-spam.reputation,Email Reputation Alert,,,
+tasks.event-color,Event Color
+prefs-online-calendar.image_format_error_message,Selected file is not an image
+prefs-online-calendar.tooltip_message,Note: Only first paragraph will be shown in tooltip

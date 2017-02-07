@@ -5837,3 +5837,23 @@ display: table-cell !important;
   position: relative;
   vertical-align: top;
 }
+#event-color-checkbox li{
+  display: inline;
+}
+.color-checkbox {
+  margin-right: 0px;
+}
+#event-color-checkbox .i-checks {
+  padding-left: 14px !important;
+}
+.bcp-select {
+    height: 17px;
+    width: 17px;
+    display: inline-block;
+    
+}
+#checkboxes-div {
+    width: 99%;
+    height: 20px;
+    margin-left: 166px;
+}
