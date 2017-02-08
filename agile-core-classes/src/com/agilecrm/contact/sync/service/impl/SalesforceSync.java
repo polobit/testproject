@@ -83,7 +83,13 @@ public class SalesforceSync extends OneWaySyncService
     	 
     	if(importOptions.contains("contacts")){
         	System.out.println("Importing contacts");
-        	importSalesforceContacts();
+        	try {
+        		importSalesforceContacts();
+			} catch (Exception e) {
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				e.printStackTrace();
+			}
+        	
         }
         
         if(importOptions.contains("tasks")){
