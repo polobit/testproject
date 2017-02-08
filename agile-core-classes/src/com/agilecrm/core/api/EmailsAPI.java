@@ -188,6 +188,7 @@ public class EmailsAPI
 	try
 	{	
 		EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();
+		//Fetches personal emails sent through agile
 		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
 			null,emailPrefs);
 		JSONObject response = new JSONObject();
@@ -210,8 +211,8 @@ public class EmailsAPI
     {
 	try
 	{
-		EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();
-		
+		EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();	
+		//Fetches personal emails sent through agile
 		JSONArray contactEmails = ContactEmailUtil.mergeCompanyEmails(StringUtils.split(searchEmail, ",")[0],
 			null,emailPrefs);
 		JSONObject response = new JSONObject();
@@ -370,6 +371,7 @@ public class EmailsAPI
 	{
 	    emailPrefs = ContactEmailUtil.getEmailPrefs();
 	    emailPrefs.allInboundUserNames = emailPrefs.getAllUserNames();
+	    //following is the url for fetching personal emails sent through agile
 	    emailPrefs.addFetchUrl("core/api/emails/agile-emails?count=20&all=1");
 	}
 	catch (Exception e)
@@ -845,6 +847,7 @@ public String getSendgridWhitelabelPermission() throws Exception
 	try
 	{
 		EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();
+		//Fetches personal emails sent through agile
 		JSONArray contactEmails = ContactEmailUtil.mergeLeadEmails(StringUtils.split(searchEmail, ",")[0], null,emailPrefs);
 		JSONObject response = new JSONObject();
 		response.put("emails", contactEmails);

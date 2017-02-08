@@ -391,7 +391,16 @@ public class ContactEmailUtil
 		    // Merge Contact Emails with obtained imap emails
 		    for (ContactEmail contactEmail : contactEmails)
 		    {
-		    	String fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+		    	String fromEmail = null;
+				try
+				{
+					fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+				}
+				catch(Exception e)
+				{
+					fromEmail = null;
+					System.out.println(e.getMessage());
+				}
 		    	if(!(inboundAccountUserNames.contains(fromEmail)))
 				{
 					// parse email body
