@@ -272,6 +272,9 @@ function saveNode(e) {
 				 //templateContinue(nodeId);
 				 
 				 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
+
+		        // using for campaign exit popup
+		        window.parent.IS_CAMPAIGN_EXIT_POPUP = true;
 				 
 				 // Shows 'Save Campaign' message. Naresh (21/02/2014)
 				 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);

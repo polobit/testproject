@@ -850,13 +850,17 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 								App_Tasks.navigate("task/" + task.id, { trigger : true });
 							taskDetailView = data;
 
-							getTemplate("task-detail", data.toJSON(), undefined, function(template_ui){
-								if(!template_ui)
-									  return;
-								$('#content').html($(template_ui));	
-								task_details_tab.loadActivitiesView();
-								initializeTaskDetailListeners();
-							}, "#content");
+							// This condition for task created when we design the Campaign and without saving Campaign we create new Task from 'Add' option on top. 
+							if(SHOW_EXIT_CAMPAIGN_POPUP != true){
+								getTemplate("task-detail", data.toJSON(), undefined, function(template_ui){
+									if(!template_ui)
+										  return;
+									$('#content').html($(template_ui));	
+									task_details_tab.loadActivitiesView();
+									initializeTaskDetailListeners();
+								}, "#content");
+							}
+							
 						}
 						
 					},

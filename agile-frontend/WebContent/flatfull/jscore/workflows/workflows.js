@@ -366,6 +366,9 @@ function update_workflow(e,name, designerJSON, unsubscribe_json, trigger_data, i
     var targetEl = $(e.currentTarget);
     var $clicked_button = $(targetEl);
 
+    // Disable Campaign(unsave) exit popup if Campaign is save 
+    IS_CAMPAIGN_EXIT_POPUP = false;
+
     var workflowJSON = {};
 
     workflowJSON = App_Workflows.workflow_model;
@@ -568,6 +571,9 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
     workflowJSON.is_disabled = is_disabled;
     workflowJSON.was_disabled = was_disabled;
     workflowJSON.access_level = access_level; 
+
+    // Disable Campaign(unsave) exit popup if Campaign is save 
+    IS_CAMPAIGN_EXIT_POPUP = false;
 
     var workflow = new Backbone.Model(workflowJSON);
 
