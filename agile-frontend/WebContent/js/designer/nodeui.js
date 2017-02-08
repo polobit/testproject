@@ -523,7 +523,7 @@ function showNodeConnectPopup(nodeId){
 
 // Node Level validation, based on Nodename validation happens
 function nodeLevelValidation(nodeName, callbackFunction){
-	var validation_nodes = ['URL Visited?','Replied?'];
+	var validation_nodes = ['URL Visited?','Replied?','Clicked?','Opened?'];
 
 	if(!nodeName || validation_nodes.indexOf(nodeName) == -1)
 		return callbackFunction(true);
@@ -554,6 +554,28 @@ function nodeLevelValidation(nodeName, callbackFunction){
 		    callbackFunction(true);
 		    return;
   		});	    
+  	}
+
+  	// Clicked Node alert message while saving
+  	if(nodeName == 'Clicked?'){ 
+  		window.parent.showModalConfirmation("Things to check",
+            '1. Clicked node should not be connected to “Wait” or “Wait Till” Nodes.<br/>2. If you want to track email link clicks, the Send Email node must have HTML Content & also in the Send Email Node Settings, Yes or Yes & Push Option should be enabled.',
+            null,null,null                      
+            ,"Close", ""); 
+
+		    callbackFunction(true);
+		    return;    
+  	}
+
+  	// Opened Node alert message while saving
+  	if(nodeName == 'Opened?'){ 
+  		window.parent.showModalConfirmation("Things to check",
+            '1. Opened node should not be connected to “Wait” or “Wait Till” Nodes.<br/>2. If you want to track email opens, the Send Email node must have HTML Content.',
+            null,null,null                      
+            ,"Close", ""); 
+
+		    callbackFunction(true);
+		    return;    
   	}
 
 }	
