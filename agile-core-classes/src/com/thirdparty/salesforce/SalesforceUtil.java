@@ -35,13 +35,14 @@ public class SalesforceUtil
 	 */
 	public static String getEntities(ContactPrefs contactPrefs, String query) throws Exception
 	{
-		JSONObject pluginPrefsJSON = buildPluginPrefsJSON(contactPrefs);
+		/*JSONObject pluginPrefsJSON = buildPluginPrefsJSON(contactPrefs);
 		pluginPrefsJSON.put("salesforce_query", query);
 
 		JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON);
 
 		System.out.println(prefsJSON);
-
+		*/
+		
 		SalesforceAPI salesforce = new SalesforceAPI(contactPrefs.userName, contactPrefs.password, contactPrefs.apiKey);
 
 		JSONArray result = salesforce.retrieveEntities(query);

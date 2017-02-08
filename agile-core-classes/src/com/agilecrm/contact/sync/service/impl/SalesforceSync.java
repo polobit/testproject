@@ -380,7 +380,7 @@ public class SalesforceSync extends OneWaySyncService {
 		int length = entries.length();
 		for (int i = 0; i < length; i++) {
 			try {
-				taskIds += "," + entries.getJSONObject(i).getString("Id");
+				taskIds += ",'" + entries.getJSONObject(i).getString("Id") + "'";
 				if(((i + 1) % 100) != 0 && ((i + 1) != length))
 					continue;
 

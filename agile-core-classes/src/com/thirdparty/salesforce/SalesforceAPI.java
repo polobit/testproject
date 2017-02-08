@@ -56,7 +56,7 @@ public class SalesforceAPI {
 	 */
 	public SalesforceAPI(String userName, String password, String apiKey) throws Exception {
 
-		System.out.println("slaesforce password:" + password);
+		System.out.println("salesforce account password:" + password);
 		String api = password.trim() + apiKey.trim();
 
 		PartnerConnection connection = Connector.newConnection(userName.trim(), api);
@@ -344,7 +344,7 @@ public class SalesforceAPI {
 			 * "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact"
 			 * ; System.out.println(api.retrieveEntities(query));
 			 */
-			String query = "select Id From Task";
+			String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task where id in ('00TD0000018cS3OMAU','00TD0000018cS41MAE')";
 			System.out.println(api.retrieveEntities(query));
 			// query = "SELECT Subject,Status, Description, ContactId FROM
 			// Case";
