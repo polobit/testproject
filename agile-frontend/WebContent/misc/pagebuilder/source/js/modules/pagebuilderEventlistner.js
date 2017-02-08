@@ -2,18 +2,24 @@
     "use strict";
 
     var appUI = require('./ui.js').appUI;
+    var styleEditor = require('./styleeditor.js');
+    var siteBuilder = require('./builder.js');
    
     var customAgileEvents={
 
         agileformId: document.getElementById('agileform_id'),
         refreshFormList: document.querySelector('#refresh-formlist > .refresh-formlist'),
         lpInstructPopupId: document.getElementById('lp-instruct-popup'),
+        chooseMediaMode: document.getElementsByClassName('choose-media-mode'),
+        applyMediaOption: document.getElementById('apply-media'),
 
         init: function() {
             //events
             $(this.agileformId).on('change', this.chnageAgileform);
             $(this.refreshFormList).on('click', this.refreshFormsLists);  
-            $(this.lpInstructPopupId).on('click', this.lpInstructPopup);           
+            $(this.lpInstructPopupId).on('click', this.lpInstructPopup);
+            $(this.chooseMediaMode).on('click', this.showchooseMediaModalPopup);  
+            $(this.applyMediaOption).on('click', this.applyMediaType);         
 
         },
 
@@ -65,7 +71,52 @@
                 localStorage.setItem("lp-instruct-popup",true);
             else
                 localStorage.removeItem("lp-instruct-popup",false);
+        },
+        showchooseMediaModalPopup : function(el){            
+            $('#chooseMediaModal').modal('show');
+            if($(styleEditor.styleeditor.activeElement.element).hasClass('frameCover'))
+                //console.log("video");
+                $('#choose-media-option').val('video');
+            else if(styleEditor.styleeditor.activeElement.element.tagName === "IMG")
+                //console.log("image");
+                $('#choose-media-option').val('image');
+            else if(styleEditor.styleeditor.activeElement.element.id === "agileform_div")
+                //console.log("form");
+                $('#choose-media-option').val('form');
+        },
+        applyMediaType : function(el){
+            //console.log(styleEditor.activeElement);
+            $("#styleEditor").css("left","-305px");
+            var mediaSelected= $('#choose-media-option').val();
+            if($(styleEditor.styleeditor.activeElement.element).hasClass('frameCover')){
+                $(styleEditor.styleeditor.activeElement.element).siblings().remove();
+                $(styleEditor.styleeditor.activeElement.element).parent().removeClass('videoWrapper');
+            }
+            if(mediaSelected === "form"){
+                window.current_agileform=null;
+                var formel= $('<div class="choose-media-options" id="agileform_div"><img id= "agileform" src="https://agilecrm.s3.amazonaws.com/pagebuilder/static/images/lp-form-placeholder.png" class="img-responsive" /></div>  ');
+                $(styleEditor.styleeditor.activeElement.element).replaceWith(formel);
+                styleEditor.styleeditor.setupCanvasElements(styleEditor.styleeditor.activeElement.parentBlock);
+                siteBuilder.site.setPendingChanges(true);
+                siteBuilder.site.activePage.heightAdjustment(); 
+            }
+            else if (mediaSelected === "image"){
+                var imgel= $('<img src="https://s3.amazonaws.com/agilecrm/pagebuilder/static/elements/images/image1.png"  class="img-responsive choose-media-options" /> ');
+                $(styleEditor.styleeditor.activeElement.element).replaceWith(imgel);
+                styleEditor.styleeditor.setupCanvasElements(styleEditor.styleeditor.activeElement.parentBlock);
+                siteBuilder.site.setPendingChanges(true);
+                siteBuilder.site.activePage.heightAdjustment(); 
+            }
+            else if (mediaSelected === "video"){
+                var videoel=$('<div class="videoWrapper"><img data-video="" src="https://agilecrm.s3.amazonaws.com/pagebuilder/static/images/lp-video-thumb.jpg"  title="Play Video" class="video_placeholder img-responsive" /><div class="frameCover choose-media-options" data-type="video"></div><button class="video__button"></button></div>');
+                $(styleEditor.styleeditor.activeElement.element).replaceWith(videoel);
+                styleEditor.styleeditor.setupCanvasElements(styleEditor.styleeditor.activeElement.parentBlock);
+                siteBuilder.site.setPendingChanges(true);
+                siteBuilder.site.activePage.heightAdjustment();    
+            }
+
         }
+
     };
 
     $(document).keyup(function(e) {

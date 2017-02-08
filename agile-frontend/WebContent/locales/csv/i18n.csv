@@ -6119,3 +6119,6 @@ widgets.widget-nexmo-error,Please Enter the valid Api key and Secret key.
 widgets.saved-nexmo-success,Nexmo widget saved.
 tickets.minimal_template,Minimalistic,,,
 tickets.default_template,Default,,,
+landingpage-builder.select-one-media-type,Please select the media type,
+landingpage-builder.media-type,Media Type,
+landingpage-builder.select-media-type,Select media type,

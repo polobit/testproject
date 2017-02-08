@@ -327,7 +327,9 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
             
                 <!-- /tabs -->
                 <div class="tab-pane imageFileTab" id="image_Tab">
-                    
+                    <div style="float: right;margin-top: -15px;" id="choose-media-div">
+                        <a style="font-size: 14px!important; cursor: pointer;" class="choose-media-mode"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-media-type")%></a>
+                    </div>
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image-url")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="imageURL" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>" value=""> 
@@ -348,6 +350,9 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 </div><!-- /.tab-pane -->
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
+                    <div style="float: right;margin-top: -15px;" id="choose-media-div">
+                        <a style="font-size: 14px!important; cursor: pointer;" class="choose-media-mode"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-media-type")%></a>
+                    </div>
                     <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block ">
                         <option value="default"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-form")%></option>
                     </select> 
@@ -1988,6 +1993,10 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <!-- /tabs -->
                 <div class="tab-pane videoTab" id="video_Tab">
                     
+                    <div style="float: right;margin-top: -15px;" id="choose-media-div">
+                        <a style="font-size: 14px!important; cursor: pointer;" class="choose-media-mode"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-media-type")%></a>
+                    </div>
+
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-url")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-url")%>" value="">
@@ -2440,6 +2449,29 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         </div><!-- /.modal-dialog -->
                 
     </div><!-- /.modal -->
+
+    <div class="modal fade chooseMedia" id="chooseMediaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 500px;">            
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h5 class="modal-title" id="myModalLabel"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "media-type")%></h5>
+                </div>
+                <div class="modal-body" style="padding: 25px;">
+                    <div class="col-md-6"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-one-media-type")%></div>
+                    <select name="choose-media" id="choose-media-option" class="form-control" style="width: 50%;margin-top: -7px;">
+                        <option value="form"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "form")%></option>
+                        <option value="image"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Image")%></option>
+                        <option value="video"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "video")%></option>
+                    </select>                    
+                </div>
+                <div class="modal-footer" style="padding: 15px;">
+                    <button type="button" id="apply-media" class="btn btn-primary" data-dismiss="modal">Apply</button>
+                </div>
+            </div>
+        </div> <!-- /.modal-dialog -->
+
+    </div>    
     
     <div class="modal fade backModal" id="backModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         
