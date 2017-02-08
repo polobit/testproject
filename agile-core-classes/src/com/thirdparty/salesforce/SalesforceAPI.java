@@ -82,8 +82,10 @@ public class SalesforceAPI {
 	public JSONArray retrieveEntities(String query) throws Exception {
 
 		System.out.println("query = " + query);
+		if(query.contains("From Task"))
+			setPageSize();
+		
 		QueryResult qResult = connection.query(query);
-		setPageSize();
 		
 		int size = qResult.getSize();
 		if (size == 0 && qResult.getRecords().length == 0)
