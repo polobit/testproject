@@ -17,7 +17,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         'click #workflow-unsubscribe-option': 'unsubscribeCampaign',
         'click #workflow-designer-help': 'helpCampaign',
         'change #unsubscribe-action': 'unsubscribeCampaignOptionSelect',
-        'change #disable-workflow':'saveCampaignClick',
+        'change #disable-workflow':'disableCampaign',
         'change .emailSelect,click .emailSelect' : 'fillDetails',
         'click #campaign_access_level': 'accessLevelChange',
         'click #campaign-restore-alert': 'showRestoreAlert'
@@ -351,7 +351,37 @@ var Workflow_Model_Events = Base_Model_View.extend({
          }, function decline(modal){
 
          }, "Restore Workflow");  
+    },
+    disableCampaign : function(e, trigger_data){
+        e.preventDefault();        
+        var currentCampaign = this;
+        if($('#disable-workflow').prop("checked")==true){
+            var yesPath = false;
+            showModalConfirmation("{{agile_lng_translate 'campaigns' 'campaign-disable'}}",
+                    "{{agile_lng_translate 'campaigns' 'campaign-disable-msg'}}",
+                    function(){
+                        // when click on continue button
+                        yesPath = true;
+                        currentCampaign.saveCampaignClick(e, trigger_data,function(){});
+                    },  
+                    function(){
+                        // when click on cancel button
+                        $('#disable-workflow').prop("checked", false);
+                        return;                            
+                    }, 
+                    function(){
+                        // When modal close
+                        if(!yesPath){
+                            $('#disable-workflow').prop("checked", false);                            
+                        }
+                    },"{{agile_lng_translate 'widgets' 'continue'}}", "{{agile_lng_translate 'contact-details' 'cancel'}}");
+        }
+        else{
+            currentCampaign.saveCampaignClick(e, trigger_data,function(){});
+        }
+
     }
+        
 
 });
 
@@ -365,6 +395,9 @@ var Workflow_Model_Events = Base_Model_View.extend({
 function update_workflow(e,name, designerJSON, unsubscribe_json, trigger_data, is_disabled, access_permission,callback){
     var targetEl = $(e.currentTarget);
     var $clicked_button = $(targetEl);
+
+    // Disable Campaign(unsave) exit popup if Campaign is save 
+    IS_CAMPAIGN_EXIT_POPUP = false;
 
     var workflowJSON = {};
 
@@ -402,16 +435,16 @@ function update_workflow(e,name, designerJSON, unsubscribe_json, trigger_data, i
                 if (is_disabled && status) {
                         disabled.attr("data", true);
                         $('#designer-tour').addClass("blur").removeClass("anti-blur");
-                        window.frames[1].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
-                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        $('iframe[id=designer]').contents().find('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        $('iframe[id=designer]').contents().find('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
                         show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'campaign-has-been-disabled-successfully'}}","red");
                     } else {
                         disabled.attr("data", false);
                         $('#designer-tour').addClass("anti-blur").removeClass("blur");
-                        window.frames[1].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
-                        window.frames[1].$('#toolbartabs').removeClass("disable-iframe");
+                        $('iframe[id=designer]').contents().find('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        $('iframe[id=designer]').contents().find('#toolbartabs').removeClass("disable-iframe");
                        // $('#designer-tour').css("pointer-events","none");
-                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        $('iframe[id=designer]').contents().find('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
                         show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'enabled-campaign'}}");
                     }
                 }
@@ -568,6 +601,9 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
     workflowJSON.is_disabled = is_disabled;
     workflowJSON.was_disabled = was_disabled;
     workflowJSON.access_level = access_level; 
+
+    // Disable Campaign(unsave) exit popup if Campaign is save 
+    IS_CAMPAIGN_EXIT_POPUP = false;
 
     var workflow = new Backbone.Model(workflowJSON);
 

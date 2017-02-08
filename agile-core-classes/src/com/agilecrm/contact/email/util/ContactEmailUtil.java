@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
@@ -357,6 +358,66 @@ public class ContactEmailUtil
 	    saveContactEmailAndSend(contactEmail);
 	}
 	
+	public static JSONArray getAgileEmails(List<ContactEmail> contactEmails)
+	{
+		JSONArray agileEmails = new JSONArray();
+		try
+		{
+		    // Merge Contact Emails with obtained imap emails
+		    for (ContactEmail contactEmail : contactEmails)
+		    {
+				// parse email body
+				contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+		
+				ObjectMapper mapper = new ObjectMapper();
+				String emailString = mapper.writeValueAsString(contactEmail);
+				agileEmails.put(new JSONObject(emailString));
+		    }
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	    return agileEmails;
+	}
+	
+	public static JSONArray removeDuplicatesFromAgileEmails(List<ContactEmail> contactEmails)
+	{
+		JSONArray agileEmails = new JSONArray();
+		try
+		{
+			EmailPrefs emailPrefs = ContactEmailUtil.getEmailPrefs();
+			Set<String> inboundAccountUserNames = emailPrefs.getAllUserNames();
+		    // Merge Contact Emails with obtained imap emails
+		    for (ContactEmail contactEmail : contactEmails)
+		    {
+		    	String fromEmail = null;
+				try
+				{
+					fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+				}
+				catch(Exception e)
+				{
+					fromEmail = null;
+					System.out.println(e.getMessage());
+				}
+		    	if(!(inboundAccountUserNames.contains(fromEmail)))
+				{
+					// parse email body
+					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+					ObjectMapper mapper = new ObjectMapper();
+					String emailString = mapper.writeValueAsString(contactEmail);
+					agileEmails.put(new JSONObject(emailString));
+				}
+		    }
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	    return agileEmails;
+	}
+	
 	/**
 	 * Saves email sent through agilecrm.
 	 * 
@@ -423,7 +484,7 @@ public class ContactEmailUtil
 	 *            - array of imap emails obtained.
 	 * @return JSONArray
 	 */
-	public static JSONArray mergeContactEmails(String searchEmail, JSONArray imapEmails)
+	public static JSONArray mergeContactEmails(String searchEmail, JSONArray imapEmails, EmailPrefs emailPrefs)
 	{
 		// if email preferences are not set.
 		if (imapEmails == null)
@@ -433,16 +494,30 @@ public class ContactEmailUtil
 		{
 			// Fetches contact emails
 			List<ContactEmail> contactEmails = getContactEmails(ContactUtil.searchContactByEmail(searchEmail).id);
+			Set<String> inboundAccountUserNames = emailPrefs.getAllUserNames();
 
 			// Merge Contact Emails with obtained imap emails
 			for (ContactEmail contactEmail : contactEmails)
 			{
-				// parse email body
-				contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-
-				ObjectMapper mapper = new ObjectMapper();
-				String emailString = mapper.writeValueAsString(contactEmail);
-				imapEmails.put(new JSONObject(emailString));
+				String fromEmail = null;
+				try
+				{
+					fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+				}
+				catch(Exception e)
+				{
+					fromEmail = null;
+					System.out.println(e.getMessage());
+				}
+				if((fromEmail==null) || (!inboundAccountUserNames.contains(fromEmail)))
+				{
+					// parse email body
+					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+					ObjectMapper mapper = new ObjectMapper();
+					String emailString = mapper.writeValueAsString(contactEmail);
+					imapEmails.put(new JSONObject(emailString));
+				}
 			}
 		}
 		catch (Exception e)
@@ -453,7 +528,7 @@ public class ContactEmailUtil
 
 		return imapEmails;
 	}
-	public static JSONArray mergeCompanyEmails(String searchEmail, JSONArray imapEmails)
+	public static JSONArray mergeCompanyEmails(String searchEmail, JSONArray imapEmails,EmailPrefs emailPrefs)
 	{
 		// if email preferences are not set.
 		if (imapEmails == null)
@@ -463,16 +538,30 @@ public class ContactEmailUtil
 		{
 			// Fetches contact emails
 			List<ContactEmail> contactEmails = getContactEmails(ContactUtil.searchCompanyByEmail(searchEmail).id);
+			Set<String> inboundAccountUserNames = emailPrefs.getAllUserNames();
 
 			// Merge Contact Emails with obtained imap emails
 			for (ContactEmail contactEmail : contactEmails)
 			{
-				// parse email body
-				contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-
-				ObjectMapper mapper = new ObjectMapper();
-				String emailString = mapper.writeValueAsString(contactEmail);
-				imapEmails.put(new JSONObject(emailString));
+				String fromEmail = null;
+				try
+				{
+					fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+				}
+				catch(Exception e)
+				{
+					fromEmail = null;
+					System.out.println(e.getMessage());
+				}
+				if((fromEmail==null) || (!inboundAccountUserNames.contains(fromEmail)))
+				{
+					// parse email body
+					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+					ObjectMapper mapper = new ObjectMapper();
+					String emailString = mapper.writeValueAsString(contactEmail);
+					imapEmails.put(new JSONObject(emailString));
+				}
 			}
 		}
 		catch (Exception e)
@@ -1023,7 +1112,7 @@ public class ContactEmailUtil
 
 		List<String> emailFetchUrls = new ArrayList<String>();
 		//First Adding URL for fetching emails sent through agile.
-		String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
+		//String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
 		if (socialPrefsList != null & socialPrefsList.size() > 0)
 		{
 		    for (SocialPrefs gmailPrefs : socialPrefsList)
@@ -1078,7 +1167,7 @@ public class ContactEmailUtil
 			emailFetchUrls.add(officeUrl);
 		    }
 		}
-		emailFetchUrls.add(agileEmailsUrl);
+		//emailFetchUrls.add(agileEmailsUrl);
 		return emailFetchUrls;
 	    }
 	
@@ -1157,7 +1246,7 @@ public class ContactEmailUtil
 	 *            - array of imap emails obtained.
 	 * @return JSONArray
 	 */
-	public static JSONArray mergeLeadEmails(String searchEmail, JSONArray imapEmails)
+	public static JSONArray mergeLeadEmails(String searchEmail, JSONArray imapEmails,EmailPrefs emailPrefs)
 	{
 		// if email preferences are not set.
 		if (imapEmails == null)
@@ -1168,18 +1257,32 @@ public class ContactEmailUtil
 			Contact lead = ContactUtil.searchContactByEmailAndType(searchEmail, com.agilecrm.contact.Contact.Type.LEAD);
 			if(lead != null)
 			{
+				Set<String> inboundAccountUserNames = emailPrefs.getAllUserNames();
 				// Fetches contact emails
 				List<ContactEmail> contactEmails = getContactEmails(lead.id);
 
 				// Merge Contact Emails with obtained imap emails
 				for (ContactEmail contactEmail : contactEmails)
 				{
-					// parse email body
-					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-
-					ObjectMapper mapper = new ObjectMapper();
-					String emailString = mapper.writeValueAsString(contactEmail);
-					imapEmails.put(new JSONObject(emailString));
+					String fromEmail = null;
+					try
+					{
+						fromEmail = StringUtils.substringBetween(contactEmail.from,"<",">").trim();
+					}
+					catch(Exception e)
+					{
+						fromEmail = null;
+						System.out.println(e.getMessage());
+					}
+					if((fromEmail==null) || (!inboundAccountUserNames.contains(fromEmail)))
+					{
+						// parse email body
+						contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+						ObjectMapper mapper = new ObjectMapper();
+						String emailString = mapper.writeValueAsString(contactEmail);
+						imapEmails.put(new JSONObject(emailString));
+					}
 				}
 			}
 		}

@@ -59,6 +59,7 @@ import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.api.NamespaceManager;
 import com.google.apphosting.api.ApiProxy;
+import com.google.apphosting.api.ApiProxy.RequestTooLargeException;
 import com.googlecode.objectify.Key;
 
 /**
@@ -329,12 +330,16 @@ public class SendgridInboundParser extends HttpServlet
 		
 		if (isNewTicket)
 		{
-			// Creating new Ticket in Ticket table
-			ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1], json.getString("subject"), ccEmails,
-					plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
-					attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
+			try {
+				// Creating new Ticket in Ticket table
+				ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1], json.getString("subject"), ccEmails,
+						plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
+						attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
+				TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
+			} catch(RequestTooLargeException e) {
+				throw e;
+			}
 
-			TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
 		}
 		else
 		{

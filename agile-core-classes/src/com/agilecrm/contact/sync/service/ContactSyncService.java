@@ -171,7 +171,7 @@ public abstract class ContactSyncService implements IContactSyncService
 
 	    contact = saveContact(contact,mergedContacts,object);
 	    System.out.println("Contact After saving"+contact);
-	   contactWrapper.updateContact(contact);
+	    contactWrapper.updateContact(contact);
 	    // Works as save callback to perform actions like creating
 	    // notes/tasks
 	    // and relating to newly created contact

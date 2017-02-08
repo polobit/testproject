@@ -1,6 +1,9 @@
 package com.agilecrm.user;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class EmailPrefs
 {
@@ -13,16 +16,17 @@ public class EmailPrefs
 	private boolean emailAccountsLimitReached;
 	private int emailAccountsCount;
 
-	private List<String> imapUserNames;
-	private List<String> exchangeUserNames;
-	private List<String> gmailUserNames;
-	private List<String> smtpUserNames;
-	private List<String> gmailSendUserNames;
+	private List<String> imapUserNames = null;
+	private List<String> exchangeUserNames = null;
+	private List<String> gmailUserNames = null;
+	private List<String> smtpUserNames = null;
+	private List<String> gmailSendUserNames = null;
 	
-	private List<String> sharedImapUserNames;
-	private List<String> sharedGmailUserNames;
-	private List<String> sharedExchangeUserNames;
-	private List<String> fetchUrls;
+	private List<String> sharedImapUserNames = null;
+	private List<String> sharedGmailUserNames = null;
+	private List<String> sharedExchangeUserNames = null;
+	private List<String> fetchUrls = null;
+	public Set<String> allInboundUserNames = null;
 
 	    
 	public EmailPrefs() { }
@@ -171,6 +175,50 @@ public class EmailPrefs
 
 	public void setGmailSendUserNames(List<String> gmailSendUserNames) {
 		this.gmailSendUserNames = gmailSendUserNames;
+	}
+	
+	public Set<String> getAllUserNames()
+	{
+		Set<String> allUserNames = new HashSet<String>();
+		if(imapUserNames!=null)
+		{
+			for(String userName : imapUserNames)
+				allUserNames.add(userName);
+		}
+		if(gmailUserNames!=null)
+		{
+			for(String userName : gmailUserNames)
+				allUserNames.add(userName);
+	    }
+		if(exchangeUserNames!=null)
+		{
+			for(String userName : exchangeUserNames)
+				allUserNames.add(userName);
+		}
+		if(sharedImapUserNames!=null)
+		{
+			for(String userName : sharedImapUserNames)
+				allUserNames.add(userName);
+		}
+		if(sharedGmailUserNames!=null)
+		{
+			for(String userName : sharedGmailUserNames)
+				allUserNames.add(userName);
+		}
+		if(sharedExchangeUserNames!=null)
+		{
+			for(String userName : sharedExchangeUserNames)
+				allUserNames.add(userName);
+		}
+		return allUserNames;
+	}
+	
+	public void addFetchUrl(String url)
+	{
+		if(fetchUrls!=null)
+		{
+			fetchUrls.add(url);
+		}
 	}
 
 }

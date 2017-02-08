@@ -17,7 +17,7 @@ $(function(){
      if(!HANDLEBARS_PRECOMPILATION)
           return;
       
-     startFunctionTimer("loadtemplates");
+     // startFunctionTimer("loadtemplates");
      tpl_directory.loadTemplates(["contact-view", "case", "document", "workflow", "portlets", "web-rules", "landingpages", "settings", "admin", "admin-settings", "tickets"],
         function () {
             endFunctionTimer("loadtemplates");

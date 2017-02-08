@@ -3974,7 +3974,6 @@ aside
 {
   margin-right:0px;
 }
-#ticket-model-list > tr > td
-{
-  position:relative!important;
+input#add_new_milestone {
+    background: #fff;
 }

@@ -224,3 +224,107 @@ $(document).ready(function(){
 
 SUBSCRIBERS_SELECT_ALL = false;
 
+
+var IS_CAMPAIGN_EXIT_POPUP = false;
+var SHOW_EXIT_CAMPAIGN_POPUP = false;
+// Observed route triggerring for Some unsafe changes like Campaign.
+Backbone.History.prototype.loadUrl = function (fragment, options) {
+    var opts = options;
+    var nextRoute = Backbone.history.fragment = Backbone.history.getFragment(fragment);
+    var is_campaign_unsave = getCampaignAction(Current_Route);
+    var currentRoute = Current_Route;
+    if(nextRoute == 'navigate-dashboard'){
+    	var userRole = CURRENT_DOMAIN_USER.role;
+    }
+    try{
+    	// Validation for unsave Campaign, If we are in middle of designing a Campaign and trigger another route then show confirmation popup
+	    //if (is_campaign_unsave && fragment === void (0) && options === void (0) && this.confirmationDisplay !== void(0))
+	    if (is_campaign_unsave && SHOW_EXIT_CAMPAIGN_POPUP == false && IS_CAMPAIGN_EXIT_POPUP == true)
+	    {	    	
+	    	if(nextRoute == 'navigate-dashboard'){
+	    		$("#agile-menu-navigation-container").html(getTemplate("marketing-menu-items", {due_tasks_count : due_tasks_count}));
+	    		$('[id="rolecontainer"]').text('MARKETING');
+	    	}
+	    	SHOW_EXIT_CAMPAIGN_POPUP = true;	
+			var response = false;
+			// Showing modal for unsave Campaign
+	    	showModalConfirmation(
+					"{{agile_lng_translate 'landingpage-builder' 'are-you-sure'}}?",
+					"{{agile_lng_translate 'landingpage-builder' 'back-modal-info'}}",
+					function()
+					{
+						// Yes callback
+						response = true;
+						if(nextRoute == 'navigate-dashboard')
+							$('.menu-service-select').attr('data-service-name',userRole).click();
+						else
+							Backbone.history.navigate(nextRoute, { trigger : true });
+						return;
+					},function()
+					{
+						// No callback
+						response = true;
+						Backbone.history.navigate(currentRoute);
+						return;
+					}, function()
+					{
+						// Popup close callback
+						if(!response)
+							Backbone.history.navigate(currentRoute);
+
+						SHOW_EXIT_CAMPAIGN_POPUP = false;
+						return;			   
+					}, "{{agile_lng_translate 'landingpage-builder' 'leave-the-page'}}", "{{agile_lng_translate 'landingpage-builder' 'stay-on-the-page'}}");
+	    	// Stay on same page while Exit Campaign popup response
+	    	Backbone.history.navigate(currentRoute); 
+		    return this;
+	    }
+	    else{ 
+	    	IS_CAMPAIGN_EXIT_POPUP = false;
+		    //this.confirmationDisplay = true;
+		    return _.any(Backbone.history.handlers, function (handler) {
+		        if (handler.route.test(nextRoute)) {
+		            //We just pass in the options
+		            handler.callback(nextRoute, opts);
+		            return true;
+		        }
+		    });		       	
+	    }
+    }
+    catch(err){
+    	console.log(err);
+    	SHOW_CAMPAIGN_POPUP = false;
+    	Backbone.history.navigate(currentRoute); 
+	    return this;
+    }    
+}
+
+// Find the route for campaign.
+function getCampaignAction(previous_route){
+	var is_campaign_unsave = false;
+	try{
+		if(previous_route == undefined)
+			return is_campaign_unsave;
+
+		// Check for new Campaign
+		if(previous_route == 'workflow-add'){
+			is_campaign_unsave = true;
+		}
+		else{
+			// Check for existing Campaign
+			var route = previous_route.split('/');
+			if(route[0] && route[0] == 'workflow'){
+				if(route[1] && typeof(parseInt(route[1])) == 'number')
+					is_campaign_unsave = true;
+			}
+			if(route[0] && route[0] == 'workflow-add'){
+				is_campaign_unsave = true;
+			}
+		}
+		return is_campaign_unsave;
+	}
+	catch(err){
+		console.log(err);
+		return is_campaign_unsave;
+	}
+}

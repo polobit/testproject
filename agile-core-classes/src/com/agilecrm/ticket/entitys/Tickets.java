@@ -32,12 +32,14 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
-import com.agilecrm.util.HTMLUtil;
+import com.agilecrm.util.CompressionUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.apphosting.api.ApiProxy.RequestTooLargeException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -201,6 +203,15 @@ public class Tickets extends Cursor implements Serializable
 	 * Stores last created plain text ticket content
 	 */
 	public String last_reply_text = "";
+	
+	@NotSaved(IfDefault.class)
+	public boolean is_compressed = false;
+	
+	@NotSaved(IfDefault.class)
+	public Blob compressed_first_notes_text = null;
+	
+	@NotSaved(IfDefault.class)
+	public Blob compressed_last_reply_text = null;
 
 	public static enum Status
 	{
@@ -577,7 +588,11 @@ public class Tickets extends Cursor implements Serializable
 	public Tickets putEntity()
 	{
 		// Updating ticket entity
-		Tickets.ticketsDao.put(this);
+		try {
+			ticketsDao.put(this);
+		} catch(RequestTooLargeException e) {
+			compressTicketAndSave();
+		}
 
 		return this;
 	}
@@ -606,7 +621,13 @@ public class Tickets extends Cursor implements Serializable
 	public Key<Tickets> saveWithNewID() throws Exception
 	{
 		if (this.id != null)
-			return ticketsDao.put(this);
+		{
+			try {
+				return ticketsDao.put(this);
+			} catch(RequestTooLargeException e) {
+				return compressTicketAndSave();
+			}
+		}
 
 		String namespace = NamespaceManager.get(), syncKey = namespace + "_tickets_lock";
 
@@ -635,7 +656,11 @@ public class Tickets extends Cursor implements Serializable
 			CacheUtil.setCache(namespace + "_tickets_count", ticketsCount);
 
 			// Saving ticket
-			return ticketsDao.put(this);
+			try {
+				return ticketsDao.put(this);
+			} catch(RequestTooLargeException e) {
+				return compressTicketAndSave();
+			}
 		}
 		catch (Exception e)
 		{
@@ -718,6 +743,15 @@ public class Tickets extends Cursor implements Serializable
 			{
 				labels.add(key.getId());
 			}
+		}
+		
+		if( is_compressed )
+		{
+			this.first_notes_text = CompressionUtil.uncompressBlobToString(compressed_first_notes_text);
+			this.last_reply_text = CompressionUtil.uncompressBlobToString(compressed_last_reply_text);
+			this.compressed_first_notes_text = null;
+			this.compressed_last_reply_text = null;
+			this.is_compressed = false;
 		}
 	}
 
@@ -814,6 +848,17 @@ public class Tickets extends Cursor implements Serializable
 		}
 
 		return "Tickets []";
+	}
+	
+	
+	private Key<Tickets> compressTicketAndSave()
+	{
+		this.compressed_first_notes_text = CompressionUtil.compressStringToBlob(first_notes_text);
+		this.compressed_last_reply_text = CompressionUtil.compressStringToBlob(last_reply_text);
+		this.first_notes_text = "";
+		this.last_reply_text = "";
+		this.is_compressed = true;
+		return ticketsDao.put(this);
 	}
 
 }

@@ -6117,3 +6117,5 @@ widgets.api-key-validation,Account API Key starts with d5 and length should be m
 widgets.secret-key-validation,Secret Key length should be more then 5.,
 widgets.widget-nexmo-error,Please Enter the valid Api key and Secret key.
 widgets.saved-nexmo-success,Nexmo widget saved.
+tickets.minimal_template,Minimalistic,,,
+tickets.default_template,Default,,,

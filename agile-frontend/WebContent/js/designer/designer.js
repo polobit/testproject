@@ -410,6 +410,9 @@ function showContextMenu(action, el, pos)
             return;
         }
         node.remove();
+
+        // Enable Campaign(unsave) exit popup if Campaign is not save 
+        window.parent.IS_CAMPAIGN_EXIT_POPUP = true;
         break;
 
     case 'duplicate':
@@ -422,6 +425,9 @@ function showContextMenu(action, el, pos)
 
         // Create duplicate node1
         node.createDuplicateNode();
+
+        // Enable Campaign(unsave) exit popup if Campaign is not save 
+        window.parent.IS_CAMPAIGN_EXIT_POPUP = true;
         break;
 
     }
