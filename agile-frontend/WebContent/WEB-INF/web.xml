@@ -160,6 +160,15 @@
 		<url-pattern>/login</url-pattern>
 		<url-pattern>/login/normal</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DomainContactAddressFix</servlet-name>
+		<servlet-class>com.agilecrm.misc.DomainContactAddressFix</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DomainContactAddressFix</servlet-name>
+		<url-pattern>/DomainContactAddressFix</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>register</servlet-name>
