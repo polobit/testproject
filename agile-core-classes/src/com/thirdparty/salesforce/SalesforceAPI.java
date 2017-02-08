@@ -1,11 +1,13 @@
 package com.thirdparty.salesforce;
 
 import java.net.URLDecoder;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import net.sf.json.JSON;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -14,6 +16,7 @@ import org.json.JSONObject;
 import com.sforce.soap.partner.Connector;
 import com.sforce.soap.partner.Error;
 import com.sforce.soap.partner.PartnerConnection;
+import com.sforce.soap.partner.QueryOptions_element;
 import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.SaveResult;
 import com.sforce.soap.partner.sobject.SObject;
@@ -30,8 +33,7 @@ import com.sforce.ws.bind.XmlObject;
  * @author Tejaswi
  * @since December 2012
  */
-public class SalesforceAPI
-{
+public class SalesforceAPI {
 	/**
 	 * Holds an instance of PartnerConnection which connects to Salesforce
 	 * server
@@ -52,8 +54,7 @@ public class SalesforceAPI
 	 * @throws Exception
 	 *             if parameters are null or given credentials are wrong
 	 */
-	public SalesforceAPI(String userName, String password, String apiKey) throws Exception
-	{
+	public SalesforceAPI(String userName, String password, String apiKey) throws Exception {
 
 		System.out.println("slaesforce password:" + password);
 		String api = password.trim() + apiKey.trim();
@@ -64,20 +65,50 @@ public class SalesforceAPI
 		this.connection = new PartnerConnection(config);
 	}
 
-	public JSONArray retrieveEntities(String query) throws Exception
-	{
+	private void setPageSize() {
+		// Set Page size
+		int pageSize = 250;
+		try {
+			connection.setQueryOptions(pageSize);
+			QueryOptions_element batchHeader = new QueryOptions_element();
+			batchHeader.setBatchSize(pageSize);
+			connection.__setQueryOptions(batchHeader);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
 
-		QueryResult queryResult = connection.query(query);
+	public JSONArray retrieveEntities(String query) throws Exception {
+
+		System.out.println("query = " + query);
+		QueryResult qResult = connection.query(query);
+		setPageSize();
+		
+		if (qResult.getSize() == 0 && qResult.getRecords().length == 0)
+			return new JSONArray();
+
+		System.out.println(qResult.getRecords().length);
+
 		JSONArray arrayOfEntities = new JSONArray();
+		boolean done = false;
+		System.out.println("Logged-in user can see a total of " + qResult.getSize() + " contact records.");
+		while (!done) {
+			SObject[] records = qResult.getRecords();
+			for (int i = 0; i < records.length; ++i) {
+				arrayOfEntities.put(getJSONObjectFromSObject(records[i]));
+			}
+			// done = true;
+			if (qResult.isDone()) {
+				done = true;
+			} else {
+				qResult = connection.queryMore(qResult.getQueryLocator());
+			}
+		}
 
-		if (queryResult.getSize() == 0 && queryResult.getRecords().length == 0)
-			return arrayOfEntities;
+		// for (int i = 0; i < queryResult.getRecords().length; i++)
 
-		System.out.println(queryResult.getRecords().length);
-
-		for (int i = 0; i < queryResult.getRecords().length; i++)
-			arrayOfEntities.put(getJSONObjectFromSObject(queryResult.getRecords()[i]));
-
+		System.out.println(arrayOfEntities.length());
 		return arrayOfEntities;
 	}
 
@@ -93,8 +124,7 @@ public class SalesforceAPI
 	 * @throws Exception
 	 *             if parameters are null or if there is no entity found.
 	 */
-	public String getEntityDetails(String email, String query) throws Exception
-	{
+	public String getEntityDetails(String email, String query) throws Exception {
 
 		JSONObject resultJSON = new JSONObject();
 
@@ -104,8 +134,7 @@ public class SalesforceAPI
 		QueryResult queryResult = connection.query(query);
 
 		System.out.println("salesforce query result" + queryResult);
-		if (queryResult.getSize() == 0)
-		{
+		if (queryResult.getSize() == 0) {
 			throw new Exception("No records found for this visitor");
 		}
 
@@ -133,8 +162,7 @@ public class SalesforceAPI
 	 * @throws Exception
 	 *             if parameters are null or if visitor already exists
 	 */
-	public String addEntity(String name, String email, String query) throws Exception
-	{
+	public String addEntity(String name, String email, String query) throws Exception {
 
 		JSONObject queryJSON = getJSONObjectFromQuery(query);
 
@@ -144,8 +172,7 @@ public class SalesforceAPI
 		QueryResult queryResult = connection.query(searchQuery);
 
 		System.out.println("salesforce query result" + queryResult);
-		if (queryResult.getSize() != 0)
-		{
+		if (queryResult.getSize() != 0) {
 			throw new Exception("Visitor already exists");
 		}
 
@@ -181,8 +208,7 @@ public class SalesforceAPI
 	 *             the given email.
 	 */
 	public String addNoteToEntity(String email, String subject, String description, String query, String preChatQuery)
-			throws Exception
-	{
+			throws Exception {
 
 		System.out.println("note query" + query);
 		JSONObject queryJSON = getJSONObjectFromQuery(query);
@@ -206,10 +232,8 @@ public class SalesforceAPI
 	 * @throws Exception
 	 *             if Salesforce server throws an Exception
 	 */
-	public void logout() throws Exception
-	{
-		if (connection != null)
-		{
+	public void logout() throws Exception {
+		if (connection != null) {
 			connection.logout();
 			connection = null;
 		}
@@ -224,26 +248,20 @@ public class SalesforceAPI
 	 * @throws Exception
 	 *             if Salesforce server throws an Exception
 	 */
-	private JSONObject insertSObect(JSONObject queryJSONObject) throws Exception
-	{
+	private JSONObject insertSObect(JSONObject queryJSONObject) throws Exception {
 		SObject sObject = new SObject();
 		sObject.setType(URLDecoder.decode(queryJSONObject.getString("Type"), "UTF-8"));
 		// there is no field "Type" in Entity it is just used to set type
 		queryJSONObject.remove("Type");
 
 		HashMap<String, String> params = new ObjectMapper().readValue(queryJSONObject.toString(),
-				new TypeReference<HashMap<String, String>>()
-				{
+				new TypeReference<HashMap<String, String>>() {
 				});
 
-		for (String key : params.keySet())
-		{
-			if (!queryJSONObject.getString(key).contains("$"))
-			{
+		for (String key : params.keySet()) {
+			if (!queryJSONObject.getString(key).contains("$")) {
 				sObject.addField(key, queryJSONObject.getString(key));
-			}
-			else
-			{
+			} else {
 				sObject.addField(key, "unknown");
 			}
 		}
@@ -252,14 +270,11 @@ public class SalesforceAPI
 
 		JSONObject responseJSON = new JSONObject();
 
-		if (saveResults[0].isSuccess())
-		{
+		if (saveResults[0].isSuccess()) {
 			responseJSON.put("Id", saveResults[0].getId());
 			String url = "https://ap1.salesforce.com/" + responseJSON.getString("Id");
 			responseJSON.put("URL", url);
-		}
-		else
-		{
+		} else {
 			System.out.println("error");
 			Error[] errors = saveResults[0].getErrors();
 			throw new Exception(errors[0].getMessage());
@@ -277,14 +292,12 @@ public class SalesforceAPI
 	 * @throws Exception
 	 *             if Salesforce server throws an Exception
 	 */
-	private JSONObject getJSONObjectFromSObject(SObject sfObject) throws Exception
-	{
+	private JSONObject getJSONObjectFromSObject(SObject sfObject) throws Exception {
 		JSONObject responseJSON = new JSONObject();
 
 		Iterator<XmlObject> fields = sfObject.getChildren();
 
-		while (fields.hasNext())
-		{
+		while (fields.hasNext()) {
 			com.sforce.ws.bind.XmlObject elem = fields.next();
 			responseJSON.put(elem.getName().getLocalPart(), elem.getValue());
 		}
@@ -300,47 +313,52 @@ public class SalesforceAPI
 	 * @throws Exception
 	 *             if the string is not in JSON format
 	 */
-	private JSONObject getJSONObjectFromQuery(String query) throws Exception
-	{
+	private JSONObject getJSONObjectFromQuery(String query) throws Exception {
 		query = "{Type:" + query + "}";
 		query = query.replaceAll("\\r\\n|\\r|\\n", ",").replaceAll("\\r\\n|\\r|\\n", ",").replaceAll(" ", "").trim();
 
 		JSONObject queryJSON = null;
 
-		try
-		{
+		try {
 			System.out.println("json object" + query);
 			queryJSON = new JSONObject(query);
 
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new Exception("Improper query");
 		}
 		return queryJSON;
 	}
 
-	public static void main(String[] args)
-	{
-		try
-		{
-			SalesforceAPI api = new SalesforceAPI("tejaswitest@gmail.com", "agile1234", "CgBv3oy3GAY7eoNNQnx7yb2e");
-			String query = "SELECT OwnerId, ConvertedContactId, ConvertedAccountId, ConvertedOpportunityId, FirstName, LastName, Description, Email, Title, Phone, Website,  Rating, Street,City,State, Country, PostalCode,  Company,  LeadSource FROM Lead";
-			System.out.println(api.retrieveEntities(query));
-			query = "SELECT  FirstName, LastName, name, Email, Title, Description,Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet, LeadSource FROM Contact";
-			System.out.println(api.retrieveEntities(query));
-			query = "SELECT Name, Website, Phone, Fax, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
-			System.out.println(api.retrieveEntities(query));
-			query = "SELECT Subject,Status, Description, ContactId FROM Case";
-			System.out.println(api.retrieveEntities(query));
-			query = "SELECT AccountId, Name, Description, ExpectedRevenue, Probability,  IsDeleted, IsWon, IsClosed, CloseDate FROM Opportunity";
-			System.out.println(api.retrieveEntities(query));
+	public static void main(String[] args) {
+		long time1 = Calendar.getInstance().getTimeInMillis();
+		try {
 
-		}
-		catch (Exception e)
-		{
+			// SalesforceAPI api = new SalesforceAPI("tejaswitest@gmail.com",
+			// "agile1234", "CgBv3oy3GAY7eoNNQnx7yb2e");
+			SalesforceAPI api = new SalesforceAPI("laurence@authoritas.com", "\\leU\"`6mk6vriL(9",
+					"ZAMRZi56QRbnvX4oFopc2xwx");
+			/*
+			 * String query =
+			 * "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account"
+			 * ; System.out.println(api.retrieveEntities(query)); query =
+			 * "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact"
+			 * ; System.out.println(api.retrieveEntities(query));
+			 */
+			String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
+			System.out.println(api.retrieveEntities(query));
+			// query = "SELECT Subject,Status, Description, ContactId FROM
+			// Case";
+			// System.out.println(api.retrieveEntities(query));
+			// query = "SELECT AccountId, Name, Description, ExpectedRevenue,
+			// Probability, IsDeleted, IsWon, IsClosed, CloseDate FROM
+			// Opportunity";
+			// System.out.println(api.retrieveEntities(query));
+
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		System.out.println(Calendar.getInstance().getTimeInMillis() - time1);
 	}
 }

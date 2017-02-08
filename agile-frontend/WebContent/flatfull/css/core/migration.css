@@ -2722,4 +2722,6 @@ padding-right:0px !important;
 
 }
 #fat-menu .dropdown-menu li a.username{line-height: 20px !important;}
+.milestones-table{table-layout: fixed;}
+.milestones-table tbody tr td{padding-right: 10px; padding-left: 10px;}
 /*end custom css code*/

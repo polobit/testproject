@@ -55,7 +55,7 @@ String template = request.getParameter("template");
         System.out.println("hi..........."+custThmList);
         %>
    customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
-   var isCopyForm = window.location.href.indexOf("&copy=1") != -1;
+   var isCopyForm = window.location.href.indexOf("&copy=1") > -1;
    var isFormChange = false;
    if(isCopyForm || typeof formTemplate != "undefined"){
       isFormChange = true;
@@ -169,7 +169,7 @@ String template = request.getParameter("template");
             }
          }
       </script>
-      <script data-main="misc/formbuilder/main-built-13.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-14.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       
    </body>
 </html>

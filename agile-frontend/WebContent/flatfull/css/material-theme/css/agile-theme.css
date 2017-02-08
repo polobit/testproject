@@ -3974,3 +3974,6 @@ aside
 {
   margin-right:0px;
 }
+input#add_new_milestone {
+    background: #fff;
+}

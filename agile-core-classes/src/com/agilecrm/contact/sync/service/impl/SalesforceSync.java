@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,7 +83,13 @@ public class SalesforceSync extends OneWaySyncService
     	 
     	if(importOptions.contains("contacts")){
         	System.out.println("Importing contacts");
-        	importSalesforceContacts();
+        	try {
+        		importSalesforceContacts();
+			} catch (Exception e) {
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				e.printStackTrace();
+			}
+        	
         }
         
         if(importOptions.contains("tasks")){
@@ -91,6 +98,7 @@ public class SalesforceSync extends OneWaySyncService
         }
         
 	} catch (Exception e) {
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
 		e.printStackTrace();
 	} finally{
 		finalizeSync();	
@@ -363,13 +371,15 @@ public class SalesforceSync extends OneWaySyncService
 			System.out.println("In exception ");
 			importSalesforceTasks();
 		}catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
 		
 	}
     
 	protected JSONArray getTasksFromSalesForce() throws Exception{
-		String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
+		// String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
+		String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
 		System.out.println("In tasks------------------------------------");
 		return new JSONArray(SalesforceUtil.getEntities(prefs, query));
 	}
