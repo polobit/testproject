@@ -357,8 +357,8 @@ var Workflow_Model_Events = Base_Model_View.extend({
         var currentCampaign = this;
         if($('#disable-workflow').prop("checked")==true){
             var yesPath = false;
-            showModalConfirmation("{{agile_lng_translate 'campaigns' 'disable-campaign'}}",
-                    "{{agile_lng_translate 'campaigns' 'disable-campaign-msg'}}",
+            showModalConfirmation("{{agile_lng_translate 'campaigns' 'campaign-disable'}}",
+                    "{{agile_lng_translate 'campaigns' 'campaign-disable-msg'}}",
                     function(){
                         // when click on continue button
                         yesPath = true;
