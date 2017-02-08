@@ -618,7 +618,7 @@
 
 	 					//Fetching all email templates
 						fillSelect('template_id', '/core/api/email/templates', '', 
-							function(collection){}, optionTemplate, false, el);
+							function(collection){$("#template_id",el).append('<option value=1>{{agile_lng_translate "tickets" "minimal_template"}}</option>'); }, optionTemplate, false, el,"{{agile_lng_translate 'tickets' 'default_template'}}");
 	 				}
 	 			});
 
@@ -672,15 +672,16 @@
 	 							$("input[data='"+ agents_keys[i] +"']").attr('checked', 'checked');
 
 	 						var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
-
+	
 		 					//Fetching all email templates and selecting chosen template
 							fillSelect('template_id', '/core/api/email/templates', '', 
 								function(){
 
+									$("#template_id",el).append("<option value=1>{{agile_lng_translate 'tickets' 'minimal_template'}}</option>");	
 									if(data.template_id)
 										$('#template_id option[value=' + data.template_id + ']', el).attr('selected','selected');
 								
-								}, optionTemplate, false, el);
+								}, optionTemplate, false, el,"{{agile_lng_translate 'tickets' 'default_template'}}");
 
 	 						//Initializing copy to clipboard button
 	 						loadZeroclipboard2(function()
