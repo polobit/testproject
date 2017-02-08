@@ -66,6 +66,8 @@ public class SalesforceAPI {
 	public JSONArray retrieveEntities(String query) throws Exception {
 
 		QueryResult qResult = connection.query(query);
+		connection.setQueryOptions(500);
+		
 		if (qResult.getSize() == 0 && qResult.getRecords().length == 0)
 			return new JSONArray();
 		
@@ -319,7 +321,7 @@ public class SalesforceAPI {
 			System.out.println(api.retrieveEntities(query));
 			query = "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
 			System.out.println(api.retrieveEntities(query));*/
-			String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
+			String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
 			System.out.println(api.retrieveEntities(query));
 			// query = "SELECT Subject,Status, Description, ContactId FROM Case";
 			// System.out.println(api.retrieveEntities(query));

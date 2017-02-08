@@ -378,7 +378,8 @@ public class SalesforceSync extends OneWaySyncService
 	}
     
 	protected JSONArray getTasksFromSalesForce() throws Exception{
-		String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
+		// String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
+		String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
 		System.out.println("In tasks------------------------------------");
 		return new JSONArray(SalesforceUtil.getEntities(prefs, query));
 	}
