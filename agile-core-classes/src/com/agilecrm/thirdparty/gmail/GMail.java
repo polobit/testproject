@@ -159,10 +159,9 @@ public class GMail {
 			if ((documentIds != null && documentIds.size() != 0) 
     				|| (mailAttach != null && mailAttach.length > 0 
     						&& StringUtils.isNotBlank(mailAttach[0]))) {
-				
 				SMTPAttachmentDeferredTask smtpTask = new SMTPAttachmentDeferredTask(to, cc, bcc, 
 						subject, html, null, fromEmail, gmailUserName, attachFile, gmailPrefs, null, null);
-				
+				System.out.println("Adding smtpTask to queue");
 				// Add to queue
 				Queue queue = QueueFactory.getQueue(AgileQueues.EMAIL_ATTACHEMNT_QUEUE);
 				queue.add(TaskOptions.Builder.withPayload(smtpTask));
@@ -261,9 +260,10 @@ public class GMail {
 			throws MessagingException, IOException, Exception {
 
 		// Set mail properties with content and attachments
-		MimeMessage mimeMsg = createMimeMessage(to, cc, bcc, fromEmail, subject, gmailUserName, html, 
-				attachFile);	
 		
+		MimeMessage mimeMsg = createMimeMessage(to, cc, bcc, fromEmail, subject, gmailUserName, html, 
+				attachFile);
+		System.out.println("Inside sendByGmailApi: "+mimeMsg);
 		if(mimeMsg == null) return;
 		
 		// Convert mimeMessage into raw type using base64 encoding
