@@ -85,16 +85,19 @@ public class SalesforceAPI {
 		QueryResult qResult = connection.query(query);
 		setPageSize();
 		
-		if (qResult.getSize() == 0 && qResult.getRecords().length == 0)
+		int size = qResult.getSize();
+		SObject[] records = qResult.getRecords();
+		
+		if (size == 0 && records.length == 0)
 			return new JSONArray();
 
-		System.out.println(qResult.getRecords().length);
+		System.out.println(records.length);
 
 		JSONArray arrayOfEntities = new JSONArray();
 		boolean done = false;
 		System.out.println("Logged-in user can see a total of " + qResult.getSize() + " contact records.");
 		while (!done) {
-			SObject[] records = qResult.getRecords();
+			
 			for (int i = 0; i < records.length; ++i) {
 				arrayOfEntities.put(getJSONObjectFromSObject(records[i]));
 			}
@@ -344,7 +347,7 @@ public class SalesforceAPI {
 			 * "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact"
 			 * ; System.out.println(api.retrieveEntities(query));
 			 */
-			String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
+			String query = "select Id From Task";
 			System.out.println(api.retrieveEntities(query));
 			// query = "SELECT Subject,Status, Description, ContactId FROM
 			// Case";
