@@ -8,26 +8,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.jboss.resteasy.util.Encode;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.subscription.Subscription;
@@ -248,7 +242,23 @@ public class TicketNotesUtil
 				notesArray.put(eachNoteJSON);
 				count++;
 		}
-
+		
+		
+		long lastNoteId = ticket.last_notes_key.getId();
+				
+		System.out.println(lastNoteId+"notes list sree");
+		
+		//creating encoded urls for feedback
+		for(int i=1;i<=5;i++ ){
+			
+			String url= Base62.fromDecimalToOtherBase(62, i)+"-"+Base62.fromDecimalToOtherBase(62, lastNoteId)+"-"+Base62.fromDecimalToOtherBase(62, contact.id);
+	
+			json.put("url"+i, url);
+		}
+		
+		
+		json.put("agent_reply", TicketNotesUtil.convertNewLinesToBreakTags(ticket.last_reply_text));
+		
 		json.put("note_json_array", notesArray);
 
 		// Set merge fields data
@@ -274,11 +284,15 @@ public class TicketNotesUtil
 
 	public static String prepareHTML(TicketGroups group, JSONObject dataJSON)
 	{
+		 Long Minimal_Template_value = 1L;
 		try
 		{
 			// No template is chosen so returning default template html content
 			if (group.template_id == null)
 				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE);
+			
+			if (group.template_id == Minimal_Template_value)
+				return MustacheUtil.templatize(SendMail.TICKET_MINIMAL_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE);
 
 			dataJSON.put("ticket_comments",
 					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
@@ -473,19 +487,8 @@ public class TicketNotesUtil
 		String oldNamespace = NamespaceManager.get();
 		
 		JSONObject json = new JSONObject();
-
-		
-
 		
 		if(count == 0){
-			
-		//creating encoded urls for feedback
-		for(int i=1;i<=5;i++ ){
-			
-			String url= Base62.fromDecimalToOtherBase(62, i)+"-"+Base62.fromDecimalToOtherBase(62, notes.id)+"-"+Base62.fromDecimalToOtherBase(62, contact.id);
-	
-			json.put("url"+i, url);
-		}
 		
 		json.put("count", true);
 		json.put("namespace", oldNamespace);
