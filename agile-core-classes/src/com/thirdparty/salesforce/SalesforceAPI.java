@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import net.sf.json.JSON;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import com.sforce.soap.partner.Connector;
 import com.sforce.soap.partner.Error;
 import com.sforce.soap.partner.PartnerConnection;
+import com.sforce.soap.partner.QueryOptions_element;
 import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.SaveResult;
 import com.sforce.soap.partner.sobject.SObject;
@@ -63,16 +65,31 @@ public class SalesforceAPI {
 		this.connection = new PartnerConnection(config);
 	}
 
+	private void setPageSize() {
+		// Set Page size
+		int pageSize = 250;
+		try {
+			connection.setQueryOptions(pageSize);
+			QueryOptions_element batchHeader = new QueryOptions_element();
+			batchHeader.setBatchSize(pageSize);
+			connection.__setQueryOptions(batchHeader);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
+
 	public JSONArray retrieveEntities(String query) throws Exception {
 
+		System.out.println("query = " + query);
 		QueryResult qResult = connection.query(query);
-		connection.setQueryOptions(500);
+		setPageSize();
 		
 		if (qResult.getSize() == 0 && qResult.getRecords().length == 0)
 			return new JSONArray();
-		
+
 		System.out.println(qResult.getRecords().length);
-		
+
 		JSONArray arrayOfEntities = new JSONArray();
 		boolean done = false;
 		System.out.println("Logged-in user can see a total of " + qResult.getSize() + " contact records.");
@@ -81,6 +98,7 @@ public class SalesforceAPI {
 			for (int i = 0; i < records.length; ++i) {
 				arrayOfEntities.put(getJSONObjectFromSObject(records[i]));
 			}
+			// done = true;
 			if (qResult.isDone()) {
 				done = true;
 			} else {
@@ -89,7 +107,7 @@ public class SalesforceAPI {
 		}
 
 		// for (int i = 0; i < queryResult.getRecords().length; i++)
-		
+
 		System.out.println(arrayOfEntities.length());
 		return arrayOfEntities;
 	}
@@ -314,25 +332,33 @@ public class SalesforceAPI {
 	public static void main(String[] args) {
 		long time1 = Calendar.getInstance().getTimeInMillis();
 		try {
-			
-			// SalesforceAPI api = new SalesforceAPI("tejaswitest@gmail.com", "agile1234", "CgBv3oy3GAY7eoNNQnx7yb2e");
-			SalesforceAPI api = new SalesforceAPI("laurence@authoritas.com", "\\leU\"`6mk6vriL(9", "ZAMRZi56QRbnvX4oFopc2xwx");
-			/*String query = "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
-			System.out.println(api.retrieveEntities(query));
-			query = "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
-			System.out.println(api.retrieveEntities(query));*/
+
+			// SalesforceAPI api = new SalesforceAPI("tejaswitest@gmail.com",
+			// "agile1234", "CgBv3oy3GAY7eoNNQnx7yb2e");
+			SalesforceAPI api = new SalesforceAPI("laurence@authoritas.com", "\\leU\"`6mk6vriL(9",
+					"ZAMRZi56QRbnvX4oFopc2xwx");
+			/*
+			 * String query =
+			 * "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account"
+			 * ; System.out.println(api.retrieveEntities(query)); query =
+			 * "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact"
+			 * ; System.out.println(api.retrieveEntities(query));
+			 */
 			String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
 			System.out.println(api.retrieveEntities(query));
-			// query = "SELECT Subject,Status, Description, ContactId FROM Case";
+			// query = "SELECT Subject,Status, Description, ContactId FROM
+			// Case";
 			// System.out.println(api.retrieveEntities(query));
-			// query = "SELECT AccountId, Name, Description, ExpectedRevenue, Probability,  IsDeleted, IsWon, IsClosed, CloseDate FROM Opportunity";
+			// query = "SELECT AccountId, Name, Description, ExpectedRevenue,
+			// Probability, IsDeleted, IsWon, IsClosed, CloseDate FROM
+			// Opportunity";
 			// System.out.println(api.retrieveEntities(query));
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		System.out.println( Calendar.getInstance().getTimeInMillis() - time1);
+
+		System.out.println(Calendar.getInstance().getTimeInMillis() - time1);
 	}
 }
