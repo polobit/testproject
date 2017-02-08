@@ -66,13 +66,12 @@ public class SalesforceAPI {
 	public JSONArray retrieveEntities(String query) throws Exception {
 
 		QueryResult qResult = connection.query(query);
-		JSONArray arrayOfEntities = new JSONArray();
-
 		if (qResult.getSize() == 0 && qResult.getRecords().length == 0)
-			return arrayOfEntities;
-
+			return new JSONArray();
+		
 		System.out.println(qResult.getRecords().length);
-
+		
+		JSONArray arrayOfEntities = new JSONArray();
 		boolean done = false;
 		System.out.println("Logged-in user can see a total of " + qResult.getSize() + " contact records.");
 		while (!done) {
@@ -316,12 +315,12 @@ public class SalesforceAPI {
 			
 			// SalesforceAPI api = new SalesforceAPI("tejaswitest@gmail.com", "agile1234", "CgBv3oy3GAY7eoNNQnx7yb2e");
 			SalesforceAPI api = new SalesforceAPI("laurence@authoritas.com", "\\leU\"`6mk6vriL(9", "ZAMRZi56QRbnvX4oFopc2xwx");
-			String query = "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
+			/*String query = "SELECT Id, ParentId, Name, Website, Phone, Type, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
 			System.out.println(api.retrieveEntities(query));
 			query = "SELECT  Id, AccountId, FirstName, LastName, Email, Title, Department,  Phone, Fax, MobilePhone, MailingCity, MailingState, MailingCountry, MailingPostalCode, MailingStreet FROM Contact";
+			System.out.println(api.retrieveEntities(query));*/
+			String query = "select Id, OwnerId, whoId, whatId, Subject, Description, ActivityDate, Priority, Status, Who.Type, Who.Name, Who.Id From Task";
 			System.out.println(api.retrieveEntities(query));
-			// query = "SELECT Name, Website, Phone, Fax, Industry, Description, Type, NumberOfEmployees, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account";
-			// System.out.println(api.retrieveEntities(query));
 			// query = "SELECT Subject,Status, Description, ContactId FROM Case";
 			// System.out.println(api.retrieveEntities(query));
 			// query = "SELECT AccountId, Name, Description, ExpectedRevenue, Probability,  IsDeleted, IsWon, IsClosed, CloseDate FROM Opportunity";
