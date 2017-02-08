@@ -371,6 +371,7 @@ public class SalesforceSync extends OneWaySyncService
 			System.out.println("In exception ");
 			importSalesforceTasks();
 		}catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
 		
