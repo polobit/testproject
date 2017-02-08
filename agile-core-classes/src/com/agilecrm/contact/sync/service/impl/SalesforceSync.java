@@ -366,8 +366,8 @@ public class SalesforceSync extends OneWaySyncService {
 		// String query = "select Id, OwnerId, whoId, whatId, Subject,
 		// Description, ActivityDate, Priority, Status, Who.Type, Who.Name,
 		// Who.Id From Task";
-		String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
-		// String query = "select Id From Task";
+		// String query = "select Id, whoId, Subject, Description, ActivityDate, Priority, Status From Task";
+		String query = "select Id From Task";
 		System.out.println("In tasks------------------------------------");
 		return new JSONArray(SalesforceUtil.getEntities(prefs, query));
 	}
@@ -380,7 +380,7 @@ public class SalesforceSync extends OneWaySyncService {
 		int length = entries.length();
 		for (int i = 0; i < length; i++) {
 			try {
-				/*taskIds += "," + entries.getJSONObject(i).getString("Id");
+				taskIds += "," + entries.getJSONObject(i).getString("Id");
 				if(((i + 1) % 100) != 0 && ((i + 1) != length))
 					continue;
 
@@ -389,11 +389,12 @@ public class SalesforceSync extends OneWaySyncService {
 
 				for (int j = 0; j < tasksList.length(); j++) {
 					wrapTaskToAgileSchemaAndSave(tasksList.getJSONObject(j));
-				}*/
-				wrapTaskToAgileSchemaAndSave(entries.getJSONObject(i));
+				}
+				// wrapTaskToAgileSchemaAndSave(entries.getJSONObject(i));
 
 			} catch (Exception e) {
 				System.out.println(ExceptionUtils.getFullStackTrace(e));
+				taskIds = "";
 			}
 		}
 	}
