@@ -83,7 +83,7 @@ public class SalesforceAPI {
 
 		System.out.println("query = " + query);
 		QueryResult qResult = connection.query(query);
-		setPageSize();
+		// setPageSize();
 		
 		int size = qResult.getSize();
 		SObject[] records = qResult.getRecords();
@@ -95,7 +95,7 @@ public class SalesforceAPI {
 
 		JSONArray arrayOfEntities = new JSONArray();
 		boolean done = false;
-		System.out.println("Logged-in user can see a total of " + qResult.getSize() + " contact records.");
+		System.out.println("Logged-in user can see a total of " + size + " contact records.");
 		while (!done) {
 			
 			for (int i = 0; i < records.length; ++i) {
@@ -108,8 +108,6 @@ public class SalesforceAPI {
 				qResult = connection.queryMore(qResult.getQueryLocator());
 			}
 		}
-
-		// for (int i = 0; i < queryResult.getRecords().length; i++)
 
 		System.out.println(arrayOfEntities.length());
 		return arrayOfEntities;

@@ -45,7 +45,7 @@ public class SalesforceUtil
 		SalesforceAPI salesforce = new SalesforceAPI(contactPrefs.userName, contactPrefs.password, contactPrefs.apiKey);
 
 		JSONArray result = salesforce.retrieveEntities(query);
-		System.out.println("result = " + result);
+		// System.out.println("result = " + result);
 		
 		
 		salesforce.logout();
