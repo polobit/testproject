@@ -21,11 +21,15 @@ import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CompressionUtil;
 import com.agilecrm.util.HTMLUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.Blob;
+import com.google.apphosting.api.ApiProxy.RequestTooLargeException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * <code>TicketNotes</code> class contains Tickets sent by requester and agent.
@@ -185,6 +189,15 @@ public class TicketNotes
 	 */
 	@NotSaved
 	public boolean close_ticket = false;
+	
+	@NotSaved(IfDefault.class)
+	public boolean is_compressed = false;
+	
+	@NotSaved(IfDefault.class)
+	public Blob compressed_plain_text = null;
+	
+	@NotSaved(IfDefault.class)
+	public Blob compressed_html_text = null;
 
 	/**
 	 * Default constructor
@@ -250,7 +263,18 @@ public class TicketNotes
 
 	public TicketNotes save()
 	{
-		Key<TicketNotes> key = TicketNotes.ticketNotesDao.put(this);
+		Key<TicketNotes> key;
+		
+		try {
+			key = TicketNotes.ticketNotesDao.put(this);
+		} catch(RequestTooLargeException e) {
+			compressed_html_text = CompressionUtil.compressStringToBlob(html_text);
+			compressed_plain_text = CompressionUtil.compressStringToBlob(plain_text);
+			is_compressed = true;
+			html_text = "";
+			plain_text = "";
+			key = TicketNotes.ticketNotesDao.put(this);
+		}
 
 		System.out.println("Notes created with key: " + key);
 
@@ -342,7 +366,15 @@ public class TicketNotes
 		if(feedback_time == 0 || feedback_time == null)
 		   feedback_time = created_time;
 		
+		// If the text is compressed, restore it using CompressionUtil
+		if( is_compressed )
+		{
+			html_text = CompressionUtil.uncompressBlobToString(compressed_html_text);
+			plain_text = CompressionUtil.uncompressBlobToString(compressed_plain_text);
+		}
+		
 		html_text =HTMLUtil.removeScriptFromHtmltext(html_text); 	    
+		
 	}
 
 	/**
