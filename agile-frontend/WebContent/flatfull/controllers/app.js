@@ -249,7 +249,7 @@ Backbone.History.prototype.loadUrl = function (fragment, options) {
 			var response = false;
 			// Showing modal for unsave Campaign
 	    	showModalConfirmation(
-					"{{agile_lng_translate 'landingpage-builder' 'are-you-sure'}} ?",
+					"{{agile_lng_translate 'landingpage-builder' 'are-you-sure'}}?",
 					"{{agile_lng_translate 'landingpage-builder' 'back-modal-info'}}",
 					function()
 					{
