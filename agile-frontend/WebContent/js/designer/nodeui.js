@@ -556,7 +556,7 @@ function nodeLevelValidation(nodeName, callbackFunction){
   	// Clicked Node alert message while saving
   	if(nodeName == 'Clicked?'){ 
   		window.parent.showModalConfirmation("Things to check",
-            "1. 'Wait' or 'Wait Till' node should not be above 'Clicked?' node.<br/>2. Track Clicks Yes/Yes&Push should be enable.<br/>3. HTML should exists for tracking.",
+            '1. Clicked node should not be connected to “Wait” or “Wait Till” Nodes.<br/>2. If you want to track email link clicks, the Email template must have HTML Content & also in the Send Email Node Settings, Yes or Yes & Push Option should be enabled.',
             null,null,null                      
             ,"Close", ""); 
 
@@ -567,7 +567,7 @@ function nodeLevelValidation(nodeName, callbackFunction){
   	// Opened Node alert message while saving
   	if(nodeName == 'Opened?'){ 
   		window.parent.showModalConfirmation("Things to check",
-            "1. 'Wait' or 'Wait Till' node should not be above 'Opened?' node.<br/>2. Track Clicks Yes/Yes&Push should be enable.<br/>3. HTML should exists for tracking.",
+            '1. Opened node should not be connected to “Wait” or “Wait Till” Nodes.<br/>2. If you want to track email opens, the Email template must have HTML Content in the Send Email Node.',
             null,null,null                      
             ,"Close", ""); 
 
