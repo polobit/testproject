@@ -41,7 +41,13 @@
   </li>
   {{/isRestrictedMenuScope}} 
   
-
+  <li id="inboxmenu">
+    <a  href="#inbox">
+      <i class="icon icon-inbox"></i>
+      <span>{{agile_lng_translate 'menu' 'menu-inbox'}}</span>
+    </a>
+  </li>
+  
   {{#isRestrictedMenuScope "CASES"}} {{else}}
   {{#isNewVersionDomainUser}} {{else}}
   <li id="casesmenu">

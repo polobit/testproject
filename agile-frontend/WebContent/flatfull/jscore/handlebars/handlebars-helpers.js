@@ -2017,8 +2017,10 @@ $(function()
 	{
 
 		console.log(content);
-
-		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+		if(content)
+			return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+		else
+			return content;
 	});
 
 	Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options)
@@ -4176,8 +4178,10 @@ $(function()
 	{
 
 		console.log(content);
-
-		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+		if(content)
+			return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+		else
+			return content;
 	});
 
 	Handlebars.registerHelper('if_keyboard_shortcuts_enabled', function(options)

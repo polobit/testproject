@@ -3,7 +3,8 @@ var GLOBAL_MODAL_MESSAGES = {
 	"global_delete": "{{agile_lng_translate 'others' 'delete-warn'}}",
 	"global_error_title" : "{{agile_lng_translate 'contact-details' 'error'}}",
 	"global_validation_title" : "{{agile_lng_translate 'admin-settings-custom-fields' 'validation'}}",
-	"global_error_message" : "{{agile_lng_translate 'others' 'error-occured'}}"
+	"global_error_message" : "{{agile_lng_translate 'others' 'error-occured'}}",
+	"global_mail_delete": "{{agile_lng_translate 'inbox' 'perminanet-delete'}}",
 }
 var MODAL_MESSAGES = {
 
@@ -285,6 +286,7 @@ var MODAL_MESSAGES = {
 		"title": "{{agile_lng_translate 'stripe' 'custom-field'}}",
 		"message" : "{{agile_lng_translate 'stripe' 'select-custom-field'}}"
 	},
+<<<<<<< HEAD
 	"complete_task" : {
 		"title": "{{agile_lng_translate 'tasks' 'completed'}}",
 		"message" : "{{agile_lng_translate 'tasks' 'confirm-delete'}}"
@@ -301,4 +303,14 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
 		"message" : "invalid nexmo number"
 	},
+
+	"delete_mail" : {
+		"title": "{{agile_lng_translate 'events','delete-mail'}}",
+		"message" : GLOBAL_MODAL_MESSAGES.global_delete
+	},
+	"delete_trash_mail" : {
+		"title": "{{agile_lng_translate 'events','delete-mail'}}",
+		"message" : GLOBAL_MODAL_MESSAGES.global_mail_delete
+	}
+
 };

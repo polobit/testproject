@@ -64,5 +64,15 @@ Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
 	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return str;
 });
+Handlebars.registerHelper('getFromName', function(fromname){
+	console.log(fromname)
+	var retVal = "";
+	if(fromname && fromname.indexOf("<") > -1)
+		retVal = fromname.replace("\"","").replace("\"","").split("<")[0];
+	else
+		retVal = fromname;
+
+	return retVal;
+});
 
 

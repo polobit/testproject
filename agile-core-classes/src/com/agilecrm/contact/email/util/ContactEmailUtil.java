@@ -57,7 +57,10 @@ import com.google.common.base.Splitter;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-
+import org.apache.commons.lang.exception.ExceptionUtils;
+import com.google.appengine.api.datastore.QueryResultIterator;
+import com.googlecode.objectify.Query;
+import com.google.appengine.api.datastore.Cursor;
 /**
  * <code>ConactEmailUtil</code> is the utility class for {@link ContactEmail}.
  * It retrieves the {@link ContactEmail} based on contactId.
@@ -469,7 +472,12 @@ public class ContactEmailUtil
 		contactEmail.trackerId = trackerId;
 
 		contactEmail.attachment_ids = documentIds;
+
 		System.out.println("before save contact email");
+
+//		contactEmail.is_deleted = false;
+//		contactEmail.is_read = true;
+
 		contactEmail.save();
 	}
 
@@ -695,6 +703,30 @@ public class ContactEmailUtil
 				if (StringUtils.isNotBlank(ownerEmail))
 					emailsArray.getJSONObject(i).put("owner_email", ownerEmail);
 
+				// parse email body.
+				JSONObject email = emailsArray.getJSONObject(i);
+
+				if (email.has("message"))
+				{
+					String parsedHTML = EmailUtil.parseEmailData(emailsArray.getJSONObject(i).getString("message"));
+					email.put("message", parsedHTML);
+				}
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occurred " + e.getMessage());
+		}
+		return emailsArray;
+	}
+	public static JSONArray ParseEmailBody(JSONArray emailsArray){
+		try
+		{
+			// inserts owner email to each and parse each email body
+			for (int i = 0; i < emailsArray.length(); i++)
+			{
 				// parse email body.
 				JSONObject email = emailsArray.getJSONObject(i);
 
@@ -1236,6 +1268,7 @@ public class ContactEmailUtil
 	}
 	
 	/**
+
 	 * Merges lead-emails with imap emails if exists, otherwise returns
 	 * lead-emails. Fetches lead emails of the lead with search email
 	 * and merge them with imap emails.
@@ -1294,5 +1327,216 @@ public class ContactEmailUtil
 
 		return imapEmails;
 	}
+
+	 /* To get all agile emails
+	 * 
+	 */
+	public static List<ContactEmail> getAgileEmails(Long userid,int count,String offset, String folder_name)
+	{
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+		conditionsMap.put("user_id_from_email", userid);
+		return fetchAllAgileMailsByOrder(count,offset,conditionsMap, false, false, "-date_secs",folder_name);
+	}
+	/**
+	 * Retrieves the ContactEmails based on contactId.
+	 * 
+	 * @param contactId
+	 *            - Contact Id.
+	 * @return List
+	 */
+	public static List<ContactEmail> getAgileEmails(Long userid)
+	{
+		return dao.listByProperty("user_id_from_email", userid);
+	}
+	
+	/**
+	 * send flags to gmail and imap
+	 */
+	
+	public static Boolean sendFlagstoServer(String url){
+		try{
+			
+			HTTPUtil.accessURL(url);
+			//String data[] = url.split("\\?");
+			//HTTPUtil.accessHTTPURL(url,data[1],"POST");
+			return true;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	/**
+	 * send falgs to exchange server
+	 * @param url
+	 * @return
+	 */
+	public static Boolean sendFlagstoExchangeServer(String url){
+		try{
+			
+			//HTTPUtil.accessURL(url);
+			String data[] = url.split("\\?");
+			HTTPUtil.accessHTTPURL(url,data[1],"POST");
+			return true;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	/**
+	 * get content from gmail and imap
+	 * @param url
+	 * @return
+	 */
+	public static List<EmailWrapper> getMailContentfromServer(String url){
+		List<EmailWrapper> emailsList = null;
+		try{
+			String jsonResult = HTTPUtil.accessURL(url);
+			//String data[] = url.split("\\?");
+			//String jsonResult = HTTPUtil.accessHTTPURL(url,data[1],"POST");
+			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+			JSONArray emailsArray = emails.getJSONArray("emails");
+			emailsArray = ContactEmailUtil.ParseEmailBody(emailsArray);
+			
+			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>(){});
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return emailsList;
+	}
+	/**
+	 * get content from Exchange server
+	 * @param url
+	 * @return
+	 */
+	public static List<EmailWrapper> getMailContentfromExchangeServer(String url){
+		List<EmailWrapper> emailsList = null;
+		try{
+			//String jsonResult = HTTPUtil.accessURL(url);
+			String data[] = url.split("\\?");
+			String jsonResult = HTTPUtil.accessHTTPURL(url,data[1],"POST");
+			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+			JSONArray emailsArray = emails.getJSONArray("emails");
+			emailsArray = ContactEmailUtil.ParseEmailBody(emailsArray);
+			
+			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>(){});
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return emailsList;
+	}
+	/**
+	 * Fetches emails from server, server can be either IMAP,Microsoft Exchange
+	 * Fetches emails based on pageSize and cursor
+	 * 
+	 * @param url
+	 *            server url
+	 * @param pageSize
+	 *            number of items to fetch from server
+	 * @param cursor
+	 *            the offset
+	 * @return
+	 */
+	public static List<EmailWrapper> getInboxEmailsfromServer(String url, String pageSize, String cursor, String fromEmail)
+	{
+		List<EmailWrapper> emailsList = null;
+		try
+		{
+			// Returns imap emails, usually in form of {emails:[]}, if not build
+			// result like that.
+			String jsonResult = HTTPUtil.accessURL(url);
+
+			// Convert emails to json.
+			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+
+			// Fetches JSONArray from {emails:[]}
+			JSONArray emailsArray = emails.getJSONArray("emails");
+			
+			// Add owner email to each email and parse each email body.
+			emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray, fromEmail);
+
+			/*if (emailsArray.length() < Integer.parseInt(pageSize))
+				return new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
+				{
+				});*/
+
+			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>()
+			{
+			});
+			if(emailsList != null && emailsList.size() > 0){
+				EmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
+				lastEmail.cursor = Integer.parseInt(cursor)+ ""; //(Integer.parseInt(cursor) + Integer.parseInt(pageSize)) + "";
+			}
+		}
+
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return null;
+		}
+		return emailsList;
+	}
+	
+		/**
+	    * For getting mails
+	    */
+	    
+	    public static List<ContactEmail> fetchAllAgileMailsByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,String orderBy,String folder_name){
+	    	Query<ContactEmail> query = dao.ofy().query(ContactEmail.class);
+	    	if (map != null)
+	    	    for (String propName : map.keySet())
+	    	    {
+	    		System.out.println(propName);
+	    		query.filter(propName, map.get(propName));
+	    	    }
+
+	    	if (!StringUtils.isEmpty(orderBy))
+	    	    query.order(orderBy);
+	    	
+	    	return fetchAllAgileMailsWithCursor(max, cursor, query, forceLoad, cache, folder_name);
+	    }
+
+	    public static List<ContactEmail> fetchAllAgileMailsWithCursor(int max, String cursor, Query<ContactEmail> query, boolean forceLoad, boolean cache, String folder_name){
+	    	int toalcount = 0;
+	    	int count = 0;
+	    	
+	    	if(StringUtils.equals("Sent", folder_name)){
+	    		toalcount = query.filter("is_deleted", false).count();
+	    	}else{
+	    		toalcount = query.filter("is_deleted", true).count();
+	    	}
+	    	if(max > toalcount){
+	    		max = toalcount;
+	    		count = toalcount+1;
+	    	}else{
+	    		count = max;
+	    	}
+	    	
+    		int cursor1 = Integer.parseInt(cursor);
+    		List<ContactEmail> results = new ArrayList<>();
+    		if(toalcount > 0){
+	    		if(StringUtils.equals("Sent", folder_name)){
+	    			query.offset(cursor1-1).limit(count);
+	    		}else{
+	    			query.offset(cursor1-1).limit(count);
+	    		}
+		    	QueryResultIterator<ContactEmail> iterator = query.iterator();
+		    	while (iterator.hasNext()){
+		    		ContactEmail result = iterator.next();
+		    		//result.flags ="read";
+		    		
+		    		int inc_cur = cursor1++;
+		    		System.out.println(inc_cur+"========"+max);
+		    		if(inc_cur == max){
+		    			result.count = String.valueOf(toalcount);
+		    		}
+		    	    results.add(result);
+		    	}
+    		}
+	    	return results;
+		 }
+
 
 }

@@ -1538,7 +1538,6 @@
 		<servlet-name>AmazonSESWebhook</servlet-name>
 		<url-pattern>/backend/amazonseswebhook</url-pattern>
 	</servlet-mapping>
-
 	<!-- Push notification -->
 	<servlet>
 		<servlet-name>PushNotification</servlet-name>
@@ -1666,33 +1665,15 @@
 		<url-pattern>/backend/cron/delete-duplicate-companies-to-contact</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>IMAPServlet</servlet-name>
-		<servlet-class>com.agilecrm.imap.IMAPServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
+	<!-- <servlet> <servlet-name>IMAPServlet</servlet-name> <servlet-class>com.agilecrm.imap.IMAPServlet</servlet-class> 
+		</servlet> <servlet-mapping> <servlet-name>IMAPServlet</servlet-name> <url-pattern>/imap</url-pattern> 
+		</servlet-mapping> <servlet> <servlet-name>IMAPInboxServlet</servlet-name> 
+		<servlet-class>com.agilecrm.imap.IMAPInboxServlet</servlet-class> </servlet> 
+		<servlet-mapping> <servlet-name>IMAPInboxServlet</servlet-name> <url-pattern>/imapinbox</url-pattern> 
+		</servlet-mapping> <servlet> <servlet-name>IMAPSendReplyServlet</servlet-name> 
+		<servlet-class>com.agilecrm.imap.IMAPSendReplyServlet</servlet-class> </servlet> 
+		<servlet-mapping> <servlet-name>IMAPSendReplyServlet</servlet-name> <url-pattern>/imapinboxreply</url-pattern> 
+		</servlet-mapping> -->
 
-		<servlet-name>IMAPServlet</servlet-name>
-		<url-pattern>/imap</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>IMAPInboxServlet</servlet-name>
-		<servlet-class>com.agilecrm.imap.IMAPInboxServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-
-		<servlet-name>IMAPInboxServlet</servlet-name>
-		<url-pattern>/imapinbox</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>IMAPSendReplyServlet</servlet-name>
-		<servlet-class>com.agilecrm.imap.IMAPSendReplyServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-
-		<servlet-name>IMAPSendReplyServlet</servlet-name>
-		<url-pattern>/imapinboxreply</url-pattern>
-	</servlet-mapping>
 </web-app>	
 

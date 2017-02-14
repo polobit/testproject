@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.email.util.ContactGmailUtil;
 import com.agilecrm.contact.email.util.ContactImapUtil;
 import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -291,5 +292,130 @@ public class IMAPAPI
 	}
 	result = users.toString();
 	return result;
+    }
+    /**
+     * Code Added by Rajesh
+     * @param fromEmail
+     * @param searchEmail
+     * @param pageSize
+     * @param cursor
+     * @return
+     */
+    @Path("all-imap-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getAllIMAPEmails(@QueryParam("from_email") String fromEmail, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor,@QueryParam("folder_name") String foldernames)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    if (StringUtils.isBlank(cursor))
+		cursor = "0";
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+
+	    // Gets IMAPPrefs url
+	    String imapURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail, cursor, pageSize, foldernames,"","","");
+
+	    if (StringUtils.isNotBlank(imapURL))
+		emails = ContactEmailUtil.getInboxEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in IMAPAPI while fetching mails: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
+    /**
+     * Search email functionality
+     */
+    @Path("search-imap-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getIMAPEmailsBySearchCondition(@QueryParam("from_email") String fromEmail, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor,@QueryParam("search_content") String search_content)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    if (StringUtils.isBlank(cursor))
+		cursor = "0";
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+
+	    // Gets IMAPPrefs url
+	    String imapURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail, cursor, pageSize, "",search_content,"","");
+
+	    if (StringUtils.isNotBlank(imapURL))
+		emails = ContactEmailUtil.getInboxEmailsfromServer(imapURL, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in IMAPAPI while fetching mails: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
+    
+    /**
+     * Setting flags
+     * @param fromEmail
+     * @param pageSize
+     * @param cursor
+     * @param foldernames
+     * @return
+     */
+    @Path("setFlags")
+    @GET
+    @Produces({ MediaType.TEXT_HTML})
+    public String setFlags(@QueryParam("from_email") String fromEmail, @QueryParam("folder_name") String folder_name,@QueryParam("flag") String flag, @QueryParam("messageid") String messageid){
+    	
+    	String status="";
+		try{
+		    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+		    // Gets GmailPrefs url
+		    String gmailURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail,"","", folder_name,"", flag, messageid);
+		    // If both are not set, return Contact emails.
+		    if (StringUtils.isNotBlank(gmailURL)){
+		    	if(ContactEmailUtil.sendFlagstoServer(gmailURL)){
+		    		status = "success";
+		    	}else{
+		    		status = "failed";
+		    	}
+		    }
+		}
+		catch (Exception e){
+		    e.printStackTrace();
+		    status ="error";
+		}
+		return status;
+    }
+    
+    /**
+     * for getting mail content
+     */
+    @Path("getContent")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getMailContent(@QueryParam("from_email") String fromEmail, @QueryParam("folder_name") String folder_name,@QueryParam("flag") String flag, @QueryParam("messageid") String messageid){
+		List<EmailWrapper> emails = null;
+		try{
+		    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+	
+		    // Gets IMAPPrefs url
+		    String imapURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail,"","", folder_name,"", flag, messageid);
+	
+		    if (StringUtils.isNotBlank(imapURL))
+			emails = ContactEmailUtil.getMailContentfromServer(imapURL);
+		}catch (Exception e){
+		    System.out.println("Got an exception in IMAPAPI while fetching mails: " + e.getMessage());
+		    e.printStackTrace();
+		    return null;
+		}
+		return emails;
     }
 }

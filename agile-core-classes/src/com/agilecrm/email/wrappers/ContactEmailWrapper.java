@@ -3,6 +3,7 @@ package com.agilecrm.email.wrappers;
 import java.util.List;
 
 import com.agilecrm.cursor.Cursor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ContactEmailWrapper extends Cursor
 {
@@ -184,7 +185,10 @@ public class ContactEmailWrapper extends Cursor
     private String attachment_name;
     private String attachment_url;
     private String signature;
-    
+    private String flags;
+    private String count;
+    private boolean is_deleted;
+    private boolean is_read;
     private boolean track_clicks;
 
     public enum PushParams
@@ -318,5 +322,39 @@ public class ContactEmailWrapper extends Cursor
 	public void setContact_type(String contact_type) {
 		this.contact_type = contact_type;
 	}
+	public String getFlags()
+    {
+	return flags;
+    }
 
+    public void setFlags(String flags)
+    {
+	this.flags = flags;
+    }
+    public String getCount()
+    {
+	return count;
+    }
+
+    public void setCount(String count)
+    {
+	this.count = count;
+    }
+    
+    public boolean isIs_deleted()
+	{
+		return is_deleted;
+	}
+
+	public void setIs_deleted(boolean is_deleted)
+	{
+		this.is_deleted = is_deleted;
+	}
+	public boolean isIs_read(){
+		return is_read;
+	}
+	public void setIs_read(boolean is_read){
+		this.is_read = is_read;
+	}
+    
 }

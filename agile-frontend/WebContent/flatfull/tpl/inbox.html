@@ -1,0 +1,472 @@
+<script id="inbox-template" type="text/html">
+<div id="message_sent_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
+  <span class="free_plan_message">
+   Your message has been sent successfully
+  </span>
+  <span class="message_sent_strip_close p-l-sm c-p">×</span>
+</div>
+<div class="app-content-body fade-in-up ng-scope" ui-view="">
+<div class="hbox hbox-auto-xs hbox-auto-sm ng-scope" ng-controller="MailCtrl">
+  <div class="col w-md dk b-r bg-auto">
+    <div class="wrapper b-b bg">
+      <button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
+      <a class="btn btn-sm btn-danger w-xs font-bold  mail-compose" href="#compose">Compose</a>
+      <button class="btn btn-sm btn-bg btn-default" data-toggle="tooltip" data-placement="bottom" data-title="Refresh" data-original-title="" title="" onclick="javascript:refreshInbox()" style="float: right;"><i class="fa fa-refresh"></i></button>
+    </div>
+    <div class="wrapper hidden-sm hidden-xs" id="email-menu">
+      <ul class="nav nav-pills nav-stacked nav-sm inbox-menu">
+       	<li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope active">
+          <a class="ng-binding folder-link" href="#inbox" id="mail-inbox">{{agile_lng_translate 'menu' 'menu-inbox'}}
+          </a>
+        </li>
+        <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
+          <a class="ng-binding folder-link" href="#sent" id="mail-sent">{{agile_lng_translate 'inbox' 'sent'}}
+          </a>
+        </li>
+         <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
+          <a class="ng-binding folder-link" href="#sent" id="mail-draft">Drafts
+          </a>
+        </li>
+        <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
+          <a class="ng-binding folder-link" href="#sent" id="mail-trash">Trash
+          </a>
+        </li>
+      </ul>
+      
+      <ul class="nav nav-pills nav-stacked nav-sm">
+
+      </ul>
+      <div class="wrapper">
+      </div>
+    </div>
+  </div>
+  <div class="col">
+<div ui-view="" class="ng-scope">
+<div ng-controller="MailListCtrl" class="ng-scope">
+  <!-- header -->
+  <div class="wrapper bg-light lter b-b">
+  <!--<i class="icon-spinner icon-spin icon-large"></i>Loading...<span class="sr-only	">Loading...</span>-->
+    <div class="btn-group pull-right" id="filter-options">
+      
+    </div>
+    <div class="btn-toolbar">
+        <div class="btn-group dropdown">
+	        <div class="btn btn-default btn-sm btn-bg dropdown-toggle" data-toggle="dropdown">
+	          <span class="dropdown-label"><label class="i-checks i-checks-sm button-check" style="margin-bottom: 0px;"><input type="checkbox" class="inbox-all"><i></i></label></span>                    
+	          <span class="caret"></span>
+	        </div>
+	        <ul class="dropdown-menu text-left text-sm">
+	          <li class="select-mails" data-val="All"><a>All</a></li>
+	          <li class="select-mails" data-val="None"><a>None</a></li>
+	          <li class="select-mails" data-val="Read"><a>Read</a></li>
+	          <li class="select-mails" data-val="Unread"><a>Unread</a></li>
+	        </ul>
+      	</div>
+      	<div class="btn-group pos-stc m-r-sm" id="operation-menu" style="display:none;">
+	      <!--<button class="btn btn-sm btn-default w-xxs w-auto-xs bulk-archive" tooltip="Archive"><i class="fa fa-archive"></i></button>
+	      <button class="btn btn-sm btn-default w-xxs w-auto-xs bulk-report" tooltip="Report"><i class="fa fa-exclamation-circle"></i></button>-->
+	      <button class="btn btn-sm btn-default w-xxs w-auto-xs bulk-delete" tooltip="Delete"><i class="fa fa-trash-o"></i></button>
+	    </div>
+	    <div class="btn-group dropdown" id="mark-dropdown" style="display:none;">
+	        <button class="btn btn-default btn-sm btn-bg dropdown-toggle" data-toggle="dropdown">
+	          <span class="dropdown-label">More</span>                    
+	          <span class="caret"></span>
+	        </button>
+	        <ul class="dropdown-menu text-left text-sm">
+	          <li class="mark-read" data-val="mark-read"><a>Mark as read</a></li>
+	          <li class="mark-unread" data-val="mark-unread"><a>Mark as unread</a></li>
+	        </ul>
+      	</div>
+    	<div class="form-group col-md-4" style="margin-bottom:0px;">
+            <div class="input-group" style="z-index:0; float:none;">
+              <input type="text" name="email-search" class="form-control input-sm bg-light no-border rounded padder ng-pristine ng-valid ng-touched" id="search-mail" autocomplete="on" placeholder="Search Emails...">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-sm bg-light rounded" id="search_email"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </div>
+       	<div class="btn-group" id="pagination" style="display:none;">
+       		<div class="count-val pull-left" style="margin-top: 5px;"><span class="inti-val"></span> of <span class="totalcount"></span></div>&nbsp;&nbsp;&nbsp;&nbsp;
+	       	<div class="pull-right">
+		      <button type="button" class="btn btn-sm btn-bg btn-default previous"><i class="fa fa-chevron-left"></i></button>
+		      <button type="button" class="btn btn-sm btn-bg btn-default next"><i class="fa fa-chevron-right"></i></button>
+		      </div>
+	    </div>
+    </div>
+  </div>
+  <!-- / header -->
+  <!-- list -->
+  <div id="mails-list-view">
+	  <ul class="portlet_body portlet_width list-group list-group-lg no-radius m-b-none m-t-n-xxs" id="mails-list">
+
+	  </ul>
+  </div>
+  <!-- / list -->
+  <div id="mail-detail-view">
+	  <div class="portlet_body" id="mail-details-view" style="display:none;">
+
+	  </div>
+  </div>
+  <div id="compose" style="display:none;"></div>
+</div></div>
+  </div>
+</div></div>
+</script>
+
+<!-- Template for email account types -->
+<script id="account-types-template" type="text/x-handlebars-template">
+    <div  align="right">
+	<div class="btn-group pos-rlt">
+	{{#each []}}
+		{{#if hasEmailAccountsConfigured}}
+				<label id="inbox_has_email_configured" data-val="{{#if hasEmailAccountsConfigured}}{{hasEmailAccountsConfigured}}{{else}}false{{/if}}"></label>
+		{{/if}}
+	{{/each}}
+	<button class="btn btn-sm btn-default filter-dropdown" id="inbox-email-type-select"><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</button>
+	<button class="btn btn-sm btn-default dropdown-toggle" id="inbox-email-type-select-dropdown" data-toggle="dropdown">
+	<span class="caret"></span>
+	</button>
+	<ul id = "inbox-account-type-select" class="pull-right dropdown-menu" role="menu">
+    <!--<li>
+	<a href="" class="inbox-emails" email-server="all" data-url="all" email-server-type="all">{{agile_lng_translate 'contact-details' 'all-mail'}}</a>
+	</li>-->
+	<li>
+	{{#each []}}
+	{{#if agileUserName}}
+	<li>
+	<a href="" class="inbox-emails" email-server="agile" data-url="core/api/emails/all-agile-emails?" email-server-type={{this.agileUserNmae}}><i class="icon-cloud" style="margin-right:4px;font-size: 1.2em"></i>{{agile_lng_translate 'contact-details' 'agile'}}</a>
+	</li>
+	{{/if}}
+	{{#if gmailUserNames}}
+	{{#each gmailUserNames}}
+	<li>
+	<a href="" class="inbox-emails" email-server="google" data-url="core/api/social-prefs/all-google-emails?from_email=" email-server-type={{this}}><i class="fa fa-google" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if imapUserNames}}
+	{{#each imapUserNames}}
+	<li>
+	<a href="" class="inbox-emails" email-server="imap" data-url="core/api/imap/all-imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if exchangeUserNames}}
+	{{#each exchangeUserNames}}
+	<li>
+	<a href="" class="inbox-emails" email-server="exchange" data-url="core/api/office/all-office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}}</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedGmailUserNames}}
+	{{#each sharedGmailUserNames}}
+	<li>
+	<a href="" class="inbox-emails" email-server="google" data-url="core/api/social-prefs/all-google-emails?from_email=" email-server-type={{this}}><i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedImapUserNames}}
+	{{#each sharedImapUserNames}}
+	<li>
+	<a href="" class="inbox-emails" email-server="imap" data-url="core/api/imap/all-imap-emails?from_email=" email-server-type={{this}}><i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{#if sharedExchangeUserNames}}
+	{{#each sharedExchangeUserNames}}
+	<li>
+	<a href="" class="inbox-emails" email-server="exchange" data-url="core/api/office/all-office365-emails?from_email=" email-server-type={{this}}><i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>{{this}} (Shared)</a>
+	</li>
+	{{/each}}
+	{{/if}}
+	{{/each}}
+	</ul>
+	</div>
+	</div>
+	<div class="clearfix"></div>
+</script>
+<!-- Template for emails list -->
+<script type="text/html" id="mail-template">
+	{{#each []}}
+		{{#if errormssg}}
+	    	<span class="text-dark">{{agile_lng_translate 'contact-details' 'error'}}: {{errormssg}}</span>
+	    {{else}}
+	   		{{#if cursor}}
+	    		<li style="display:none" class="get-counts" data-cursor="{{this.cursor}}" data-count="{{this.count}}"></li>
+	    	{{/if}}
+		    <li id="li{{removeSpecialCharacter this.id}}" class="list-group-item text-ellipsis clearfix b-l-3x ng-scope" style="overflow: hidden;">
+		      <!--<a ui-sref="app.page.profile" class="avatar thumb pull-left m-r" href="#/app/page/profile">
+		        <img ng-src="img/a10.jpg" src="img/a10.jpg">
+		      </a>-->
+		      <label class="i-checks i-checks-sm pull-left"><input type="checkbox" id="check-{{removeSpecialCharacter this.id}}" name="mailcheck" class="mail_check mail-{{this.flags}}" value="{{this.id}}"><i></i></label>
+		      <div class="pull-right text-sm text-muted">
+		        <span class="hidden-xs ng-binding"><time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time></span>
+		      </div>
+		      <div class="clear {{this.flags}}" data-folder="{{this.folder_name}}" id="flag{{removeSpecialCharacter this.id}}" data-val="{{this.id}}">
+		        <div><a class="toggle-class text-md ng-binding" data-toggle="collapse" data-target="#{{removeSpecialCharacter this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-7" style="overflow: hidden;">{{this.subject}}</span><span class="col-md-1" style="width: 100%;"></span></a></div>
+		        <!--<div class="text-ellipsis m-t-xs ng-binding">{{{this.message}}}</div>-->
+		      </div>      
+	    	</li>
+		{{/if}}
+	{{/each}}
+</script>
+<!-- Template for email view -->
+<script type="text/html" id="mail-view-template">
+	{{#each []}}
+		{{#if errormssg}}
+	    	
+	    {{else}}	
+	    	<div id="inbox-reply-div">
+			<div class="collapse" id="{{removeSpecialCharacter this.id}}">
+		    	<div ui-view="" class="ng-scope"><div ng-controller="MailDetailCtrl" class="ng-scope">
+			  <!-- header -->
+			  <div class="wrapper bg-light lter b-b">
+			    <a class="btn btn-sm btn-default w-xxs m-r-sm back-to-inbox" tooltip="Back to Inbox"><i class="fa fa-long-arrow-left"></i></a>
+			    <div class="btn-group pos-stc m-r-sm">
+			      <!--<button class="btn btn-sm btn-default w-xxs w-auto-xs archive" tooltip="Archive" data-id="{{this.id}}"><i class="fa fa-archive"></i></button>
+			      <button class="btn btn-sm btn-default w-xxs w-auto-xs report" tooltip="Report" data-id="{{this.id}}"><i class="fa fa-exclamation-circle"></i></button>-->
+			      <button class="btn btn-sm btn-default w-xxs w-auto-xs delete" tooltip="Delete" data-id="{{this.id}}"><i class="fa fa-trash-o"></i></button>
+			    </div>
+			  </div>
+			  <!-- / header -->
+			  <div class="wrapper b-b">
+			    <h2 class="font-thin m-n ng-binding subject">{{this.subject}}</h2>
+			  </div>
+			  <div class="wrapper b-b ng-binding">
+			  <img ng-src="//ssl.gstatic.com/ui/v1/icons/mail/profile_mask2.png" class="img-circle img-circle-inbox thumb-xs m-r-sm" src="//ssl.gstatic.com/ui/v1/icons/mail/profile_mask2.png">
+			    From <a class="ng-binding showtoaddress">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
+			    &nbsp;&nbsp;&nbsp;&nbsp;<div class="toaddress" style="margin-left:48px;display:none;">To <a class="ng-binding">{{this.to}}</a></div>
+			  </div>
+			  
+			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.to}}" data-from="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
+			    {{{this.message}}}
+			  </div>
+			  <div class="wrapper" style="width: 100%;float: left;">
+			    <div class="panel b-a">
+			      <div class="panel-heading ng-show" id="id{{this.date_secs}}" ng-hide="reply" aria-hidden="false">
+			        <div class="m-b-lg">
+			        Click here to <a data-val="{{this.date_secs}}" class="inbox-reply text-u-l">Reply</a><!-- or <a data-val="{{this.date_secs}}"class="farward text-u-l">Forward</a>-->
+			        </div>
+			      </div>
+			      <div class="inbox-reply-view ng-hide" id="{{this.date_secs}}">
+
+			        
+			    </div>
+			  </div>
+			</div>
+			</div>
+		</div>
+		</div>
+		{{/if}}
+	{{/each}}
+</script>
+<script type="text/html" id="mail-message-template">
+	{{#each []}}
+		<div>{{{this.message}}}</div>
+	{{/each}}
+</script>
+<script type="text/html" id="inbox-compose-template">
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form id='emailForm' name="emailForm" class="form-horizontal" accept-charset="UTF-8">
+            <fieldset>
+                <input type="hidden"  id="agile_attachment_name" name="attachment_name"/>
+                <input type="hidden"  id="agile_attachment_url" name="attachment_url"/>
+                <input type="hidden"  id="contact_type"  name="contact_type" value="PERSON"/>
+                <div id="bulk-count" style="margin-left: 17%; padding-bottom: 5px; display: none;">
+                <p></p></div>
+				<div class="control-group form-group">
+                    <label class="control-label col-sm-2 col-xs-12">{{agile_lng_translate 'other' 'from'}} <span class="field_req">*</span></label>
+                    <div class="controls p-r-none col-sm-3 col-xs-6">
+                        <input type="text" placeholder="{{agile_lng_translate 'prefs-email' 'from-name'}}" class="form-control b-r-none" id="from_name" name="from_name" />
+                    </div>
+                    <div class="controls p-l-none col-sm-5 col-xs-6">
+                        <select class="email required form-control verified-email" id="from_email" 
+                            name="from" fieldType="dynamicselect"
+                            type="verified_email" onchange="openVerifyEmailModal(this)"
+                            style="margin-left:-1px;"><option value=""></option>
+                            <option value="verify_email">{{agile_lng_translate 'others' 'add-new'}}</option></select>
+                    </div>
+                </div>
+			<!--	<div class="control-group form-group">
+                    <div class="controls col-sm-offset-2 col-sm-8">
+                    	<div style="line-height:0px;">
+						<a href="#" id="from_email_link" class="text-info">From</a>
+ 						</div>
+                     </div> 
+				</div>  -->
+				
+                <div class="control-group form-group m-b-sm">
+                    <label class="control-label col-sm-2 p-t">{{agile_lng_translate 'other' 'to'}} <span class="field_req">*</span></label>
+					<div class="controls col-sm-8" class="contactTypeAhead">
+						<div>
+							<div>
+								<ul name="contact_to_ids" class="contacts tagsinput tags p-n"></ul>
+							</div>
+							<input type="text" id="to" name="to"
+								placeholder="{{agile_lng_translate 'other' 'contact-email'}}" class="typeahead typeahead_contacts multipleEmails form-control"
+								data-provide="typeahead" data-mode="multiple" /><!--  {{#if properties}} value="{{getPropertyValue properties "email"}}" {{/if}} -->
+						</div>
+					</div>
+                </div>
+               
+                <div class="control-group form-group" style="display: none;">
+                    <label class="control-label col-sm-2 p-t">{{agile_lng_translate 'other' 'cc'}}</label>
+                    <div class="controls col-sm-8" class="contactTypeAhead">
+						<div>
+							<div>
+								<ul name="contact_cc_ids" class="contacts tagsinput tags" style="padding: 0px;"></ul>
+							</div>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="{{agile_lng_translate 'other' 'cc'}}" data-provide="typeahead" data-mode="multiple"/>
+                    	</div>
+					</div>
+                </div>
+                
+                <div class="control-group form-group" style="display: none;">
+                    <label class="control-label col-sm-2 p-t">{{agile_lng_translate 'other' 'bcc'}}</label>
+                    <div class="controls col-sm-8" class="contactTypeAhead">
+						<div>
+							<div>
+								<ul name="contact_bcc_ids" class="contacts tagsinput tags" style="padding: 0px;"></ul>
+							</div>
+                        	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="{{agile_lng_translate 'other' 'bcc'}}" data-provide="typeahead" data-mode="multiple"/>
+						</div>
+                    </div>
+                </div>
+
+				<div class="control-group form-group">
+                    <div class="controls  col-sm-10 ">
+                    	<div style="line-height:0px;" class="text-xs pull-right">
+						<a href="#" id="cc-link" class="text-info ">{{agile_lng_translate 'other' 'cc'}}</a>
+ 						<a href="#" id="bcc-link" style="padding-left: 5px;" class="text-info">{{agile_lng_translate 'other' 'bcc'}}</a>
+                        </div>
+                     </div>
+				</div>
+
+                <div class="control-group form-group m-b-sm">
+                    <label class="control-label col-sm-2">{{agile_lng_translate 'other' 'choose-template'}} </label>
+                    <div class="controls col-sm-8">
+                        <select class="emailSelect form-control pull-left" id="sendEmailSelect" title="{{agile_lng_translate 'other' 'fill-from-template'}}" name="sendEmailSelect"><option class="default-select" value="">- {{agile_lng_translate 'other' 'fill-from-template'}} -</option></select>
+                    </div>
+                    
+                </div>
+
+                <div class="control-group form-group">
+                    <div class="controls  col-sm-10 ">
+                        <div style="line-height:0px;" class="text-xs pull-right">
+                             <a class="text-info pull-right" href="#emailbuilder-templates">{{agile_lng_translate 'other' 'create-new-template'}}</a>
+                        </div>
+                     </div>
+                </div>
+
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-2">{{agile_lng_translate 'other' 'subject'}} <span class="field_req">*</span></label>
+                    <div class="controls col-sm-8">
+                        <input type="text" class="form-control required" name="subject" id="subject" placeholder="{{agile_lng_translate 'other' 'subject'}}" />
+                    </div>
+                </div>
+                    
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-2">{{agile_lng_translate 'other' 'message'}} </label>
+                    <div class="controls col-sm-8 email-editor-custom-scroll-bar">
+                        <div id="loading-editor"></div>
+                        <textarea class="form-control required" name="message" id="email-body" placeholder="{{agile_lng_translate 'other' 'description'}}" style="width: 75%; height: 300px; display: none;"></textarea>
+                    </div>
+                </div>   
+                
+
+                <div class="control-group form-group" id="eattachment_error" style="display:none">
+                    <div class="controls col-sm-8 col-sm-offset-2 text-danger">
+                        {{agile_lng_translate 'other' 'email-template-has-an-attached-document'}}     
+                    </div>
+                </div>
+
+				<div class="control-group form-group" style="display:none">
+                    <div class="controls col-sm-8">
+                        <input type="text" class="form-control" name="attachment_key" id="eattachment_key"/>
+                    </div>
+                </div>
+
+                <div class="control-group form-group m-b-sm">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <div class="checkbox p-t-none pull-left" id="enable_tracking">
+                            <label class="i-checks i-checks-sm">
+                            <input type="checkbox" name="track_clicks" checked="checked"><i></i>
+                           {{agile_lng_translate 'other' 'enable-tracking'}}
+                            </label>
+                        </div>
+                        <div class="pull-right">
+                            <select name="push_param" class="form-control">
+                                <option value="YES">{{agile_lng_translate 'portlets' 'yes'}}</option>
+                                <option value="YES_AND_PUSH_EMAIL_ONLY"> {{agile_lng_translate 'prefs-email' 'yes-and-push-email-only'}}</option>
+                                <option value="YES_AND_PUSH">{{agile_lng_translate 'prefs-email' 'yes-and-push'}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group form-group" id="eattachment" style="display:none">
+                    <div class="controls col-sm-10 col-sm-offset-2">
+                        <div id="attachment_id" name="blob_key" style="display: inline-block">
+                        <i class="fa fa-paperclip m-r-xs text-info"></i>
+                        <a id="attachment_fname" class="text-ellipsis text-info"></a>   
+                        </div> 
+                        <a href="#" class="add-attachment-cancel text-danger"><i class="fa fa-times"></i></a>       
+                    </div>
+                </div>
+
+               <div class="control-group form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+               	        	<div class="controls">
+               	       		<a href="#" class="add-attachment-select text-info"><i class="fa fa-paperclip m-r-xs"></i>{{agile_lng_translate 'other' 'attach-file'}}</a>
+					   		<span class="attachment-document-select" style="display:none;">
+								<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control pull-left w overflow-auto text-xs input-xs">
+								</select>
+                            	<a href="#" class="add-attachment-confirm pull-left text-info text-xs  m-l-xs m-t-sm">{{agile_lng_translate 'other' 'add'}}</a> 
+                                <a href="#" class="add-attachment-cancel text-info pull-left text-xs m-l-xs m-t-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+								<!--&nbsp;
+                            	<a href="#" class="add-attachment-cancel"><i class="icon-remove-circle"></i></a>-->
+                            	<span class="attachment-status"></span>
+								<span class="save-status"></span>
+							</span>
+				  		 </div>			
+					
+				</div>
+				<div class="clearfix"></div>           
+			</div>
+                <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
+				<div class="line ling-lg b-b"></div>
+                <div class="form-actions col-sm-offset-2 col-sm-8">          
+					<a href="#inbox" class="btn btn-sm btn-danger" id="inbox-send-email-close">{{agile_lng_translate 'report-add' 'close'}}</a>
+                    <a href="#"  id="sendEmailInbox" class="btn btn-sm btn-primary">{{agile_lng_translate 'tasks' 'Send'}}</a>
+                    &nbsp;&nbsp;<span id="msg"></span>  
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</div>
+</script>
+
+<script type="text/html" id="no-mail-template">
+	<div class="dta-contatiner table-responsive m-r-sm contacts-inner-div" style="margin:0px;">
+		<div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;background-color:#edf1f2;" id="bulk-select"></div>
+		<div class="panel panel-default" style="overflow-x:auto; border-left:none;">
+	        <div class="m-l-sm" id="slate">
+	        	<div class="alert bg-white ">
+		    		<div class="slate-content p-md">
+		        		<div class="box-left pull-left m-r-md">
+		 	           		<img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+						</div>
+						<div class="box-right pull-left">
+		            		<h4 class="m-t-none">You do not have any emails currently.</h4>
+		            		<!--<div class="text">You have no emails {{agile_lng_translate 'contact-details' 'in'}} {{read_global_var}} {{agile_lng_translate 'contact-details' 'account'}}</div>
+		            	<a href="#" modal_id="personModal" class="modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Contacts</a>-->
+		        		</div>
+	    			</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>

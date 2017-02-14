@@ -8,6 +8,8 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -117,6 +119,18 @@ public class ContactEmail
 	 **/
 	@NotSaved(IfDefault.class)
 	public long email_opened_at = 0L;
+	
+	
+	public Boolean is_deleted = false;
+	
+	public Boolean is_read = false;
+	
+	@NotSaved
+	public String flags = null;
+	
+	@NotSaved
+	public String count = null;
+	
 	
 	/**
 	 * To store email link clicked time

@@ -724,6 +724,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+
     </li>
     <!-- <li id="home_dashboard">
       <a  href="#">
@@ -737,6 +738,54 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <a  href="#leads">
       <i class="icon icon-group"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-leads") %></span>
+
+   </li>
+        
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+  %>      
+  <li id="contactsmenu">
+    <a  href="#contacts">
+      <i class="icon icon-user"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+
+  <li id="companiesmenu">
+    <a  href="#companies">
+      <i class="icon icon-building"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
+    </a>
+  </li>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+  %>
+   <li  id="dealsmenu">
+    <a  href="#deals">
+      <i class="fa fa-money"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-deals") %></span>
+    </a>
+  </li>
+  <%
+      }
+  %>
+  <li id="inboxmenu">
+    <a  href="#inbox">
+      <i class="icon icon-inbox"></i>
+      <span>Inbox</span>
+    </a>
+  </li>
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
+  %>
+  <li id="casesmenu">
+    <a  href="#cases">
+      <i class="icon icon-folder"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-cases") %></span>
     </a>
   </li> -->
     <%

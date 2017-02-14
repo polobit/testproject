@@ -68,6 +68,32 @@ public class ContactOfficeUtil
 	
 	return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs, searchEmail, offset, count, fetchItems);
     }
+    
+    /**
+     * Returns url to fetch emails with respect to "fromemail" office account.
+     * 
+     * @param searchEmail
+     *            - search email-id.
+     * @param fromEmail
+     *            - username of the office365 account
+     * 
+     * @param offset
+     *            - offset.
+     * @param count
+     *            - count or limit to number of emails.
+     * @return String
+     */
+    public static String getNewOfficeURL(String fromEmail, String folder_name, String offset, String count,String search_content,String falg,String messageid)
+    {
+	// Get Office Exchange Prefs
+	Objectify ofy = ObjectifyService.begin();
+	OfficeEmailPrefs officePrefs = ofy.query(OfficeEmailPrefs.class).filter("user_name", fromEmail).get();
+
+	if (officePrefs == null)
+	    return null;
+
+	return ContactOfficeUtil.geNewtOfficeURLForPrefs(officePrefs, folder_name, offset, count, search_content, falg, messageid);
+    }
 
     /**
      * Returns Office url
@@ -85,6 +111,7 @@ public class ContactOfficeUtil
 
     public static String getOfficeURLForPrefs(OfficeEmailPrefs OfficePrefs, String searchEmail, String offset,
 	    String count, String fetch_items)
+
     {
 
 	String userName = OfficePrefs.user_name;
@@ -152,6 +179,63 @@ public class ContactOfficeUtil
 					+ "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
 				    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
 				    + "&domain=" + URLEncoder.encode(namespace, "UTF-8") + "&fetch_items=default_folders";
+		}
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in getOfficeURLForPrefs " + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return url;
+    }
+    
+    /**
+     * Returns Office url
+     * 
+     * @param officePrefs
+     *            - OfficeEmailPrefs
+     * @param searchEmail
+     *            - email
+     * @param offset
+     *            - offset
+     * @param count
+     *            - emails count
+     * @return String
+     */
+
+    public static String geNewtOfficeURLForPrefs(OfficeEmailPrefs OfficePrefs, String foldername, String offset, String count,String search_content,String flag,  String messageid){
+
+	String userName = OfficePrefs.user_name;
+	String host = OfficePrefs.server_url;
+	String password = OfficePrefs.password;
+
+	String protocal = "http://";
+	if (OfficePrefs.is_secure)
+	    protocal = "https://";
+
+	String url = null;
+
+	String namespace = NamespaceManager.get();
+
+	if (StringUtils.isBlank(namespace))
+	    namespace = "localhost";
+
+	try
+	{
+		//http://54.87.153.50:8080/exchange-app-beta/inbox-exchange
+		//http://localhost:8080/DemoProject/inboxexchange
+		
+		if(flag != null && !flag.equals("") && flag != ""){
+			url = "http://54.87.153.50:8080/exchange-app-beta/inbox-exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+				    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+				    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+				    + "&domain=" + URLEncoder.encode(namespace, "UTF-8")+"&flag="+URLEncoder.encode(flag)+"&mesnum="+URLEncoder.encode(messageid);
+		}else{
+		    url = "http://54.87.153.50:8080/exchange-app-beta/inbox-exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+			    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+			    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+			    + "&domain=" + URLEncoder.encode(namespace, "UTF-8")+ "&search_content="+ URLEncoder.encode(search_content);
 		}
 	}
 	catch (Exception e)

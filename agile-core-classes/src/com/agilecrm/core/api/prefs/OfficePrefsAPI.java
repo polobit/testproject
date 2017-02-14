@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -21,7 +22,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+
 import com.agilecrm.contact.email.util.ContactImapUtil;
+
+import com.agilecrm.contact.email.util.ContactGmailUtil;
+
 import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -307,5 +312,155 @@ public class OfficePrefsAPI
 	}
 	result = users.toString();
 	return result;
+    }
+    
+    
+    /**
+     * Returns office365 emails . Emails json string are returned in the format
+     * {emails:[]}.
+     * 
+     * @param searchEmail
+     *            - to get all emails
+     * @param count
+     *            - required number of emails.
+     * @param offset
+     *            - offset.
+     * @return String
+     */
+    @Path("all-office365-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getAllOffice365Emails(@QueryParam("from_email") String fromEmail,
+	    @QueryParam("folder_name") String folder_name, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    /*if (StringUtils.isBlank(cursor))
+		cursor = "0";*/
+	    // Removes unwanted spaces in between commas
+	    //String normalisedSearchEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+
+	    // Gets office365Prefs url if not null, otherwise imap url.
+	    String url = ContactOfficeUtil.getNewOfficeURL(normalisedFromEmail, folder_name, cursor, pageSize,"","","");
+
+	    // If both are not set, return Contact emails.
+	    if (StringUtils.isNotBlank(url))
+		emails = ContactEmailUtil.getInboxEmailsfromServer(url, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in OfficePrefsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
+    /**
+     * Mail Search functionality
+     * @param fromEmail
+     * @param pageSize
+     * @param cursor
+     * @param foldernames
+     * @return
+     */
+    @Path("search-office-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getGoogleEmailsBySearchCondition(@QueryParam("from_email") String fromEmail, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor,@QueryParam("search_content") String search_content)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    if (StringUtils.isBlank(cursor))
+		cursor = "0";
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+	    // Gets GmailPrefs url
+	    String gmailURL = ContactOfficeUtil.getNewOfficeURL(normalisedFromEmail,"", cursor, pageSize,search_content,"","");
+	    // If both are not set, return Contact emails.
+	    if (StringUtils.isNotBlank(gmailURL))
+		emails = ContactEmailUtil.getInboxEmailsfromServer(gmailURL, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in SocialPrefsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
+    
+    /**
+     * Setting flags
+     * @param fromEmail
+     * @param pageSize
+     * @param cursor
+     * @param foldernames
+     * @return
+     */
+    @Path("setFlags")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.TEXT_HTML})
+    public String setFlags(@FormParam("from_email") String fromEmail, @FormParam("folder_name") String folder_name,@FormParam("flag") String flag, @FormParam("messageid") String messageid){
+    	
+    	String status="";
+		try{
+		    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+		    // Gets GmailPrefs url
+		    String gmailURL = ContactOfficeUtil.getNewOfficeURL(normalisedFromEmail,folder_name,"", "","", flag, messageid);
+		    // If both are not set, return Contact emails.
+		    if (StringUtils.isNotBlank(gmailURL)){
+		    	if(ContactEmailUtil.sendFlagstoExchangeServer(gmailURL)){
+		    		status = "success";
+		    	}else{
+		    		status = "failed";
+		    	}
+		    }
+		}
+		catch (Exception e){
+		    e.printStackTrace();
+		    status ="error";
+		}
+		return status;
+    }
+    
+    /**
+     * to get mail content
+     * @param fromEmail
+     * @param pageSize
+     * @param cursor
+     * @param foldernames
+     * @return
+     */
+    @Path("getContent")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getMailContent(@FormParam("from_email") String fromEmail, @FormParam("folder_name") String folder_name,@FormParam("flag") String flag, @FormParam("messageid") String messageid)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+	    // Gets GmailPrefs url
+	    String gmailURL = ContactOfficeUtil.getNewOfficeURL(normalisedFromEmail,folder_name,"", "","", flag, messageid);
+	    // If both are not set, return Contact emails.
+	    if (StringUtils.isNotBlank(gmailURL))
+		emails = ContactEmailUtil.getMailContentfromExchangeServer(gmailURL);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in SocialPrefsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
     }
 }
