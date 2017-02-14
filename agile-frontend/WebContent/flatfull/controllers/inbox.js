@@ -87,6 +87,11 @@ function syncContacts(){
 		},
 		getEmails: function(e){
 			e.preventDefault();
+			//remove all data from cookies
+			_agile_delete_prefs('inbox_data_inbox');
+			_agile_delete_prefs('inbox_data_sent');
+			_agile_delete_prefs('inbox_data_draft');
+			_agile_delete_prefs('inbox_data_trash');
 			$("#pagination").hide();
 			var targetEl = $(e.currentTarget);
 			var email_server = $(targetEl).attr('email-server');
@@ -131,7 +136,8 @@ function syncContacts(){
 function renderToMailList(url,offset_val,page_size_val, folder_id){
 	var fetchurl= '';
 	fetchurl = url;
-
+	var folder_id= $("#inbox-email-type-select").attr("folder-type");
+	//var folder_id= $("#inbox-email-type-select").attr("folder-type");
 	var mailCollection = Backbone.Collection.extend({
 		url:function () { 
 			return fetchurl+'&cursor='+this.offset+'&page_size='+this.page_size
@@ -519,7 +525,7 @@ function refreshInbox(){
 	globalMailCollectionInstance = new globalMailCollection();
 	helperFunction();
 	SHOW_TOTALCOUNT = true;
-	renderToMailList(url,1,10);
+	renderToMailList(url,1,10,folder_type);
 }
 function displayNoEmailTemplate(){
 	var html ="";
