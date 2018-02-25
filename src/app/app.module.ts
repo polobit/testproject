@@ -1,12 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
+// import { RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-
-
+import { AppRoutingModule } from './app.routing';
 import {
   MatToolbarModule,
   MatSidenavModule,
@@ -28,16 +27,23 @@ import {
   MatChipsModule
 } from '@angular/material';
 import { HomePageComponent } from './home-page/home-page.component';
+import { HealthHacksComponent } from './health-hacks/health-hacks.component';
+import { AdDisplayComponent } from './ad-display/ad-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent
+    // routingComponents
+    HomePageComponent,
+    HealthHacksComponent,
+    AdDisplayComponent
   ],
   imports: [
     BrowserModule,
+    // RouterModule,
     HttpModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
