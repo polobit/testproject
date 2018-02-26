@@ -1,17 +1,23 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {HomePageComponent} from './home-page/home-page.component';
+import {AppComponent} from './app.component';
 import { HealthHacksComponent} from './health-hacks/health-hacks.component';
 import {AdDisplayComponent} from './ad-display/ad-display.component';
+import {SingleArticleComponent} from './single-article/single-article.component';
 const routeLinks: Routes = [
     {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'health',
         pathMatch: 'full'
     },
+    // {
+    //     path: '**',
+    //     redirectTo: 'home',
+    //     pathMatch: 'full'
+    // },
     {
         path: 'home',
-        component: HomePageComponent
+        component: AppComponent
     },
     {
         path: 'health',
@@ -20,6 +26,11 @@ const routeLinks: Routes = [
     {
         path: 'ads',
         component: AdDisplayComponent
+    },
+    {
+        path: 'article/:id',
+        component: SingleArticleComponent,
+        // data: { pathId: 900 }
     }
 ];
 
@@ -35,4 +46,3 @@ const routeLinks: Routes = [
 
 export class AppRoutingModule {
 }
-export const routingComponents = [HomePageComponent, HealthHacksComponent ] ;

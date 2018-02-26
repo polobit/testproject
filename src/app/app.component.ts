@@ -1,4 +1,5 @@
-import { Component , OnInit } from '@angular/core';
+import { Component , OnInit, Input, OnChanges } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import * as $ from 'jquery';
 import { WOW } from 'wowjs/dist/wow.min';
 import 'slick-carousel';
@@ -11,7 +12,6 @@ import 'jquery-ticker';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
 public ngOnInit() {
 
 }

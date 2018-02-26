@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { RouterModule, Routes } from '@angular/router';
+ import { RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -26,21 +26,26 @@ import {
   MatNativeDateModule,
   MatChipsModule
 } from '@angular/material';
-import { HomePageComponent } from './home-page/home-page.component';
 import { HealthHacksComponent } from './health-hacks/health-hacks.component';
 import { AdDisplayComponent } from './ad-display/ad-display.component';
+import { HeaderComponent } from './header/header.component';
+import { RightPanelComponent } from './right-panel/right-panel.component';
+import { FooterComponent } from './footer/footer.component';
+import { SingleArticleComponent } from './single-article/single-article.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    // routingComponents
-    HomePageComponent,
     HealthHacksComponent,
-    AdDisplayComponent
+    AdDisplayComponent,
+    HeaderComponent,
+    RightPanelComponent,
+    FooterComponent,
+    SingleArticleComponent
   ],
   imports: [
     BrowserModule,
-    // RouterModule,
+     RouterModule,
     HttpModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -66,7 +71,7 @@ import { AdDisplayComponent } from './ad-display/ad-display.component';
     // MatExpansionModule,
     MatChipsModule
   ],
-  providers: [],
+  providers: [SingleArticleComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

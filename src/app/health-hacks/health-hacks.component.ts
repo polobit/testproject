@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {SingleArticleComponent} from '../single-article/single-article.component';
 @Component({
   selector: 'app-health-hacks',
   templateUrl: './health-hacks.component.html',
@@ -7,14 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HealthHacksComponent implements OnInit {
 
-  constructor() { }
+  constructor(public singleArticle: SingleArticleComponent ) {}
 
   ngOnInit() {
-   this.showAlert();
+  // this.showAlert();
   }
 
-  public showAlert() {
-     console.log('Health !!');
+  public showAlert(id) {
+    // this.singleArticle.goToPage(id);
   }
 
 }
