@@ -32,6 +32,7 @@ import { HeaderComponent } from './header/header.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { FooterComponent } from './footer/footer.component';
 import { SingleArticleComponent } from './single-article/single-article.component';
+import { RelatedPostsComponent } from './related-posts/related-posts.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { SingleArticleComponent } from './single-article/single-article.componen
     HeaderComponent,
     RightPanelComponent,
     FooterComponent,
-    SingleArticleComponent
+    SingleArticleComponent,
+    RelatedPostsComponent
   ],
   imports: [
     BrowserModule,
