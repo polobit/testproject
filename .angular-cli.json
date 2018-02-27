@@ -25,9 +25,9 @@
                     "../node_modules/bootstrap/dist/js/bootstrap.js",
                     "../node_modules/wowjs/dist/wow.js" ,
                     "../node_modules/slick-carousel/slick/slick.min.js",
-                    "../node_modules/jquery-ticker/jquery.ticker.min.js",
                 "../node_modules/fancybox/dist/js/jquery.fancybox.pack.js",
-            "../node_modules/autoscroll.js/dist/autoscroll.min.js"],
+            "../node_modules/autoscroll.js/dist/autoscroll.min.js",
+"../node_modules/jquery.marquee/jQuery.Marquee/jquery.marquee.min.js"],
         "environmentSource": "environments/environment.ts",
         "environments": {
             "dev": "environments/environment.ts",

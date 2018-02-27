@@ -33,6 +33,7 @@ import { RightPanelComponent } from './right-panel/right-panel.component';
 import { FooterComponent } from './footer/footer.component';
 import { SingleArticleComponent } from './single-article/single-article.component';
 import { RelatedPostsComponent } from './related-posts/related-posts.component';
+import { LatestPostComponent } from './latest-post/latest-post.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { RelatedPostsComponent } from './related-posts/related-posts.component';
     RightPanelComponent,
     FooterComponent,
     SingleArticleComponent,
-    RelatedPostsComponent
+    RelatedPostsComponent,
+    LatestPostComponent
   ],
   imports: [
     BrowserModule,
